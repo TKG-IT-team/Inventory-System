@@ -14,7 +14,7 @@ def get_all_orders():
     last=0
     orders=pd.DataFrame()
     while True:
-        url = f"https://1da062b3aea0f3a1a3eed35d52510c20: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@TheKettleGourmet.myshopify.com/admin/api/2022-04/orders.json"
+        url = f"https://1da062b3aea0f3a1a3eed35d52510c20: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@TheKettleGourmet.myshopify.com/admin/api/2022-04/orders.json?limit=250&since_id={last}"
         #?limit=250&fulfillment_status=any&status=any&since_id={last}
     
         response = requests.request("GET", url)
@@ -24,10 +24,10 @@ def get_all_orders():
         last=df['id'].iloc[-1]
         if len(df)<250:
             break
+    orders.to_excel(r"RAW Order Data.xlsx", index=False)
     return(orders)
 
 df = pd.DataFrame(get_all_orders())
-df. to_csv("RAWoutput_orders.csv", index= False)
 
 def add_to_dictProduct(dictProduct, output):
     if 'product_id' in dictProduct.keys():
@@ -57,13 +57,13 @@ df = df.reset_index(drop=True)
 for i, series in df.iterrows():
     dataRow = convertSeriesToDict(series)
     dataRow = dataRow["customer"]
-    name = ""
     if str(type(dataRow)) != "<class 'dict'>":
-        df.at[i, "name"] = name
+        df.at[i, "name"] = ""
+        df.at[i, "Customer_id"] = ""
         continue
     if "default_address" in dataRow.keys():
-        name = dataRow["default_address"]["name"]
-    df.at[i, "name"] = name.lower()
+        df.at[i, "name"] = dataRow["default_address"]["name"].lower()
+        df.at[i, "Customer_id"] = dataRow["default_address"]["customer_id"]
 
 df.drop('customer', axis=1, inplace=True)
 
@@ -115,19 +115,14 @@ for i, series in df.iterrows():
     df.at[i, "product"] = str(dictProduct)
 
 df.drop('line_items', axis=1, inplace=True)
-# df.to_excel("output_cleaned7.xlsx", index= False)
 
 def getDefaultQty(): 
     defaultQtyDf = pd.read_excel("setting.xlsx")
-    #.drop("title", axis=1, inplace=True)
-    # print(defaultQtyDf.columns)
     return defaultQtyDf
 
 def generateFullOrderDf(defaultQtyDf):
-    # defaultQtyDf = colAsKeys(defaultQtyDf, "id")
     unmatchedProducts = []
     for i, orderSeries in df.iterrows():
-        print(i)
         orderStr = orderSeries["product"]
         orderDict = ast.literal_eval(orderStr)
         for product_id, qty in orderDict.items():

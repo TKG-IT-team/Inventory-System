@@ -22,7 +22,8 @@ class ShopifyCustomerAPI:
         customers=pd.DataFrame()
 
         while True:
-            url = f"https://{self.apiKey}:{self.password}@{self.hostname}/admin/api/{self.version}/customers.json?limit=250&fulfillment_status=any&since_id={last}&status=any"
+            url = f"https://{self.apiKey}:{self.password}@{self.hostname}/admin/api/{self.version}/customers.json?limit=250&since_id={last}&"
+            #?limit=250&fulfillment_status=any&status=any&since_id={last}
             response = requests.request("GET", url)
             
             df=pd.DataFrame(response.json()['customers'])
@@ -39,7 +40,6 @@ class ShopifyCustomerAPI:
 
         while True:
             url = f"https://{self.apiKey}:{self.password}@{self.hostname}/admin/api/{self.version}/customers.json?limit=250&fulfillment_status=any&since_id={last}&status=any"
-            #?limit=250&fulfillment_status=unfulfilled&since_id={last}
             response = requests.request("GET", url)
             
             df=pd.DataFrame(response.json()['customers'])
@@ -47,43 +47,42 @@ class ShopifyCustomerAPI:
             last=df['id'].iloc[-1]
             if len(df)<250:
                 break
+        customers.to_excel(r"RAW Customer Data.xlsx", index=False)
         return(customers)
 
     #Clean Data
     def clean(self, rawData): 
         cleanedData = rawData[['id','addresses', 'note', 'email','default_address']]
+        cleanedData = cleanedData.reset_index(drop=True)
 
-        addresses = []
-        hps = []
-        birthdays = []
-        names = []
         # rowsToDelete = []
         
         for index, series in cleanedData.iterrows():
             if not series.empty:
-                # cleanedData["Name"] = cleanedData['first_name'] + " " + cleanedData['last_name']
+                
                 if (not pd.isna(series["default_address"])):
-                    names.append(series["default_address"]["name"].lower())
+                    cleanedData.at[index, "Name"] = series["default_address"]["name"].lower()
+                    cleanedData.at[index, "Customer_id"] = series["default_address"]["customer_id"]
                 else:
-                    names.append("-")
+                    cleanedData.at[index, "Name"] = "-"
                 
                 if len(series["addresses"])>0 and "address1" in series["addresses"][0].keys():
                     address = series['addresses'][0]["address1"]
-                    addresses.append(address)
+                    cleanedData.at[index, "Address"] = address
                 else:
-                    addresses.append("-")
+                    cleanedData.at[index, "Address"] = "-"
 
                 if len(series["addresses"])>0 and "phone" in series["addresses"][0].keys():
                     hp = series['addresses'][0]["phone"]
-                    hps.append(hp)
+                    cleanedData.at[index, "HP"] = hp
                 else:
-                    hps.append("-")   
+                    cleanedData.at[index, "HP"] = "-"   
 
                 if (series["note"]!=None):
-                    birthdays.append(series['note'][10:-1])
+                    cleanedData.at[index, "Birthday"] = series['note'][10:-1]
                 else:
-                    birthdays.append("-")
-                
+                    cleanedData.at[index, "Birthday"] = "-"
+                                    
                 #Remove rows with no values 
                 # if (names[-1]=="" or names[-1]=="-") and (addresses[-1]=="" or addresses[-1]=="-") and (hps[-1]=="" or hps[-1]=="-") and (birthdays[-1]=="" or birthdays[-1]=="-"):
                 #     del names[-1]
@@ -93,18 +92,12 @@ class ShopifyCustomerAPI:
                 #     rowsToDelete.append(index)
         
         # cleanedData = cleanedData.drop(cleanedData.index[rowsToDelete])
-
-        cleanedData["Address"] = addresses
-        cleanedData["HP"] = hps
-        cleanedData["Birthday"] = birthdays
-        cleanedData["Name"] = names
         del cleanedData['addresses']
         del cleanedData['note']
         del cleanedData['default_address']
         cleanedData = cleanedData.rename(columns={"email":"Email"})
-        cleanedData = cleanedData[["Name", "HP", "Birthday", "Address", "Email"]]
+        cleanedData = cleanedData[["Customer_id", "Name", "HP", "Birthday", "Address", "Email"]]
 
-        print(cleanedData)
         return cleanedData
 
     #Adding on to existing Customer List
