@@ -10,6 +10,18 @@ password = "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" #CONFIDENTIAL
 hostname = "TheKettleGourmet.myshopify.com"
 version = "2022-04"
 
+#Column Names
+colCustomerID = "Customer_id"
+colHP = "HP"
+colAddress = "Address"
+colBirthday = "Birthday"
+colEmail = "Email"
+
+#FilePath
+settingFP = "Setting.xlsx"
+combinedData = "Combined data.xlsx"
+
+
 currTime = str(datetime.now())
 formattedCurrTime = currTime[:9] + "T" + currTime[11:18]
 
@@ -32,15 +44,15 @@ def colAsKeys(df, colName):
 
 #Combines dataframes of both customers and orders
 def combineOrdersCustDf(customerDf, orderDf):
-    custNameKeyDf = colAsKeys(customerDf, "Customer_id")
+    custNameKeyDf = colAsKeys(customerDf, colCustomerID)
 
     #Combining Order and Customer DF
     for index, series in orderDf.iterrows():
-        if series["Customer_id"] in custNameKeyDf.keys():
-            orderDf.at[index, "HP"] = custNameKeyDf[series["Customer_id"]][0]
-            orderDf.at[index, "Address"] = custNameKeyDf[series["Customer_id"]][1]
-            orderDf.at[index, "Birthday"] = custNameKeyDf[series["Customer_id"]][2]
-            orderDf.at[index, "Email"] = custNameKeyDf[series["Customer_id"]][3]
+        if series[colCustomerID] in custNameKeyDf.keys():
+            orderDf.at[index, colHP] = custNameKeyDf[series[colCustomerID]][0]
+            orderDf.at[index, colAddress] = custNameKeyDf[series[colCustomerID]][1]
+            orderDf.at[index, colBirthday] = custNameKeyDf[series[colCustomerID]][2]
+            orderDf.at[index, colEmail] = custNameKeyDf[series[colCustomerID]][3]
         else:
             print(series["name"] + " Not Found in Customer Data")
 
@@ -50,25 +62,23 @@ def combineOrdersCustDf(customerDf, orderDf):
 #Returns the default qty in pandas Dataframe
 #Note: Default quantity Excel File MUST be within the same directory 
 def getDefaultQty(): 
-    defaultQtyDf = pd.read_excel("setting.xlsx")
+    defaultQtyDf = pd.read_excel(settingFP)
     return defaultQtyDf
 
 if __name__ == "__main__":
     ###Shopify
     #Get customers database
     ShopifyFullCustDf = ShopifyCustomerAPI(apiKey, password, hostname, version).generateFullCustDf()
-    ShopifyFullCustDf.to_excel(r"Customer Data.xlsx", index=False)
 
     #Get orders database
     defaultQtyDf = getDefaultQty()
     ShopifyFullOrderDf, unmatchedProducts = ShopifyOrderAPI.generateFullOrderDf(defaultQtyDf)
-    ShopifyFullOrderDf.to_excel(r"Order Data.xlsx", index=False)
-    
+   
     #Combine Customer and Order Df
     shopifyCombined = combineOrdersCustDf(ShopifyFullCustDf, ShopifyFullOrderDf)
 
     #Combining platforms
     combinedDf = combineDfs(shopifyCombined)
-    combinedDf.to_excel(r"Combined Data.xlsx", index=False)
+    combinedDf.to_excel(combinedData, index=False)
 
     #Updating Inventory
