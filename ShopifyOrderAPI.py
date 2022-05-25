@@ -6,6 +6,7 @@ import pandas as pd
 import ast
 from tkinter import messagebox
 
+#Converts pandas dataframe series to dictionary
 def convertSeriesToDict(series):
     diction = series.to_dict()
     return diction
