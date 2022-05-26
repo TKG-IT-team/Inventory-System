@@ -18,7 +18,7 @@ colBirthday = "Birthday"
 colEmail = "Email"
 
 #FilePath
-settingFP = "Product Setting.xlsx"
+settingFP = "Setting.xlsx"
 customerData = "Customer data.xlsx"
 combinedData = "Combined data.xlsx"
 
@@ -70,6 +70,7 @@ if __name__ == "__main__":
     ###Shopify
     #Get customers database
     ShopifyFullCustDf = ShopifyCustomerAPI(apiKey, password, hostname, version).generateFullCustDf()
+    ShopifyFullCustDf.to_excel(customerData, index=False)
 
     #Get orders database
     defaultQtyDf = getDefaultQty()
@@ -77,7 +78,6 @@ if __name__ == "__main__":
    
     #Combine Customer and Order Df
     shopifyCombined = combineOrdersCustDf(ShopifyFullCustDf, ShopifyFullOrderDf)
-    combinedDf.to_excel(customerData, index=False)
 
     #Combining platforms
     combinedDf = combineDfs(shopifyCombined)

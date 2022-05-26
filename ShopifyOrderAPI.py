@@ -117,7 +117,7 @@ for i, series in df.iterrows():
 df.drop('line_items', axis=1, inplace=True)
 
 def getDefaultQty(): 
-    defaultQtyDf = pd.read_excel("Product Setting.xlsx")
+    defaultQtyDf = pd.read_excel("Setting.xlsx")
     return defaultQtyDf
 
 def generateFullOrderDf(defaultQtyDf):
