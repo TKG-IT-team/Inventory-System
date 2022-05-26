@@ -47,7 +47,6 @@ class ShopifyCustomerAPI:
             last=df['id'].iloc[-1]
             if len(df)<250:
                 break
-        customers.to_excel(r"RAW Customer Data.xlsx", index=False)
         return(customers)
 
     #Clean Data

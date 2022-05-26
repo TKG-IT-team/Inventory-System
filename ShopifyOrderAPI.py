@@ -25,7 +25,6 @@ def get_all_orders():
         last=df['id'].iloc[-1]
         if len(df)<250:
             break
-    orders.to_excel(r"RAW Order Data.xlsx", index=False)
     return(orders)
 
 df = pd.DataFrame(get_all_orders())
@@ -118,7 +117,7 @@ for i, series in df.iterrows():
 df.drop('line_items', axis=1, inplace=True)
 
 def getDefaultQty(): 
-    defaultQtyDf = pd.read_excel("setting.xlsx")
+    defaultQtyDf = pd.read_excel("Product Setting.xlsx")
     return defaultQtyDf
 
 def generateFullOrderDf(defaultQtyDf):
