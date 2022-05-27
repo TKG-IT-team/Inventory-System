@@ -20,19 +20,13 @@ colEmail = "Email"
 
 #FilePath
 pathSettingFP = "Path Setting.xlsx"
-settingFP = "Product Setting.xlsx"
-customerData = "Customer data.xlsx"
-combinedData = "Combined data.xlsx"
+global settingFP = "Product Setting.xlsx"
+global customerData = "Customer data.xlsx"
+global combinedData = "Combined data.xlsx"
 
 
 currTime = str(datetime.now())
 formattedCurrTime = currTime[:9] + "T" + currTime[11:18]
-
-#Reads path setting from args (setting in excel)
-def initSettingPath(CustomerDataFP, CombinedDataFP, SettingDataFP):
-    customerData = CustomerDataFP
-    combinedData = CombinedDataFP
-    settingFP = SettingDataFP
 
 #Combines dataframes
 def combineDfs(*args): #Takes in pandas dataframe
