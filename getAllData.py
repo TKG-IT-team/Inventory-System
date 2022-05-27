@@ -3,6 +3,7 @@ from datetime import datetime
 from ShopifyCustomerAPI import ShopifyCustomerAPI
 import ShopifyOrderAPI
 import json
+import sys
 
 #Shopify
 apiKey = "1da062b3aea0f3a1a3eed35d52510c20"
@@ -18,13 +19,20 @@ colBirthday = "Birthday"
 colEmail = "Email"
 
 #FilePath
-settingFP = "Setting.xlsx"
+pathSettingFP = "Path Setting.xlsx"
+settingFP = "Product Setting.xlsx"
 customerData = "Customer data.xlsx"
 combinedData = "Combined data.xlsx"
 
 
 currTime = str(datetime.now())
 formattedCurrTime = currTime[:9] + "T" + currTime[11:18]
+
+#Reads path setting from args (setting in excel)
+def initSettingPath(CustomerDataFP, CombinedDataFP, SettingDataFP):
+    customerData = CustomerDataFP
+    combinedData = CombinedDataFP
+    settingFP = SettingDataFP
 
 #Combines dataframes
 def combineDfs(*args): #Takes in pandas dataframe
@@ -66,7 +74,18 @@ def getDefaultQty():
     defaultQtyDf = pd.read_excel(settingFP)
     return defaultQtyDf
 
+#Returns the default path for setting
+def getDefaultPath():
+    defaultPath = pd.read_excel(pathSettingFP, index_col = 0)
+    settingFP = pd.at["SettingFilePath", 0]
+    customerData = pd.at["CustomerDataFilePath", 0]
+    combinedData = pd.at["CombinedDataFilePath", 0]
+    
+    return defaultPath
+
 if __name__ == "__main__":
+
+    
     ###Shopify
     #Get customers database
     ShopifyFullCustDf = ShopifyCustomerAPI(apiKey, password, hostname, version).generateFullCustDf()
