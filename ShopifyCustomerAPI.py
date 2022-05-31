@@ -51,7 +51,7 @@ class ShopifyCustomerAPI:
 
     #Clean Data
     def clean(self, rawData): 
-        cleanedData = rawData[['id','addresses', 'note', 'email','default_address']]
+        cleanedData = rawData[['id','addresses', 'note', 'email','default_address','phone']]
         cleanedData = cleanedData.reset_index(drop=True)
 
         # rowsToDelete = []
@@ -71,11 +71,11 @@ class ShopifyCustomerAPI:
                 else:
                     cleanedData.at[index, "Address"] = "-"
 
-                if len(series["addresses"])>0 and "phone" in series["addresses"][0].keys():
-                    hp = series['addresses'][0]["phone"]
-                    cleanedData.at[index, "HP"] = hp
-                else:
-                    cleanedData.at[index, "HP"] = "-"   
+                # if len(series["addresses"])>0 and "phone" in series["addresses"][0].keys():
+                #     hp = series['addresses'][0]["phone"]
+                #     cleanedData.at[index, "HP"] = hp
+                # else:
+                #     cleanedData.at[index, "HP"] = "-"   
 
                 if (series["note"]!=None):
                     cleanedData.at[index, "Birthday"] = series['note'][10:-1]
@@ -94,7 +94,7 @@ class ShopifyCustomerAPI:
         del cleanedData['addresses']
         del cleanedData['note']
         del cleanedData['default_address']
-        cleanedData = cleanedData.rename(columns={"email":"Email"})
+        cleanedData = cleanedData.rename(columns={"email":"Email", "phone":"HP"})
         cleanedData = cleanedData[["Customer_id", "Name", "HP", "Birthday", "Address", "Email"]]
 
         return cleanedData

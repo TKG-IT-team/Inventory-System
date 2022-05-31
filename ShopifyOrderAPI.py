@@ -4,7 +4,7 @@ from numpy import true_divide
 import requests
 import pandas as pd
 import ast
-from tkinter import messagebox
+from tkinter import Place, messagebox
 
 #Converts pandas dataframe series to dictionary
 def convertSeriesToDict(series):
@@ -15,7 +15,7 @@ def get_all_orders():
     last=0
     orders=pd.DataFrame()
     while True:
-        url = f"https://1da062b3aea0f3a1a3eed35d52510c20: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@TheKettleGourmet.myshopify.com/admin/api/2022-04/orders.json?limit=250&since_id={last}"
+        url = f"https://1da062b3aea0f3a1a3eed35d52510c20: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@TheKettleGourmet.myshopify.com/admin/api/2022-04/orders.json?limit=250&fulfillment_status=any&status=any&since_id={last}"
         #?limit=250&fulfillment_status=any&status=any&since_id={last}
     
         response = requests.request("GET", url)
@@ -48,10 +48,19 @@ from datetime import datetime
 df = df[['order_number','created_at' ,'financial_status' , 'fulfillment_status', 'note', 'customer', 'line_items', 'total_price_set', 'shipping_address']]
 
 # Mutates columns
-df['order_number'] = 'S' + df['order_number'].astype(str)
+# df['order_number'] = 'S' + df['order_number'].astype(str)
 df['created_at'] = df['created_at'].apply(lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S%z').strftime('%Y-%m-%d %I:%M:%S %p'))
-
 df = df.reset_index(drop=True)
+
+
+#Change fulfillment status to fulfilled for orders in 2021 and before
+for i, series in df.iterrows():    
+    if series["fulfillment_status"] == None:
+        if series["created_at"].startswith(("2021","2020")):
+            df.at[i, "fulfillment_status"] = "fulfilled"
+        else:
+            df.at[i, "fulfillment_status"] = "unfulfilled"
+
 
 #Gets the name from customer
 for i, series in df.iterrows():
@@ -122,13 +131,20 @@ def getDefaultQty():
 
 def generateFullOrderDf(defaultQtyDf):
     unmatchedProducts = []
+    PLATFORM = 'Shopify'
+    platform = []
     for i, orderSeries in df.iterrows():
         orderStr = orderSeries["product"]
         orderDict = ast.literal_eval(orderStr)
+        platform.append(PLATFORM)
+        pdtComponents = {}
         for product_id, qty in orderDict.items():
             if (product_id in defaultQtyDf["id"].tolist()):
                 for flavour in defaultQtyDf.columns:
-                    df.at[i,flavour] = qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["id"]==product_id].index.values[0], flavour]
+                    if flavour not in pdtComponents.keys():
+                        pdtComponents[flavour] = qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["id"]==product_id].index.values[0], flavour]
+                    else:
+                        pdtComponents[flavour] += qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["id"]==product_id].index.values[0], flavour]
             else:
                 if len(unmatchedProducts) == 0:
                     unmatchedProducts.append(product_id)
@@ -136,10 +152,14 @@ def generateFullOrderDf(defaultQtyDf):
                     unmatchedProducts.append(product_id)
                 else:
                     pass
-
+        for component, componentQty in pdtComponents.items():
+            df.at[i,component] = componentQty
+    
+    df["Platform"] = platform
     if len(unmatchedProducts) > 0:
-        print(unmatchedProducts)
+        print("Unmatched Products: " + str(unmatchedProducts))
         # messagebox.showinfo("Unmatched Products", "There are unmatched products. Please check Settings to verify all product inputs.")
+
     return df, pd.Series(unmatchedProducts, name = "Unmatched Products")
 
 # fullOrderDf, unmatchedProducts = generateFullOrderDf(getDefaultQty())

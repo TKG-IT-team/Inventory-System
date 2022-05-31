@@ -53,12 +53,19 @@ def combineOrdersCustDf(customerDf, orderDf):
     #Combining Order and Customer DF
     for index, series in orderDf.iterrows():
         if series[colCustomerID] in custNameKeyDf.keys():
-            orderDf.at[index, colHP] = custNameKeyDf[series[colCustomerID]][0]
-            orderDf.at[index, colAddress] = custNameKeyDf[series[colCustomerID]][1]
+            orderDf.at[index, colHP] = custNameKeyDf[series[colCustomerID]][1]
+            orderDf.at[index, colAddress] = custNameKeyDf[series[colCustomerID]][3]
             orderDf.at[index, colBirthday] = custNameKeyDf[series[colCustomerID]][2]
-            orderDf.at[index, colEmail] = custNameKeyDf[series[colCustomerID]][3]
+            orderDf.at[index, colEmail] = custNameKeyDf[series[colCustomerID]][4]
         else:
             print(series["name"] + " Not Found in Customer Data")
+        
+    #Dropping unecessary columns, reordering columns (For Shopify)
+    orderDf.drop(['financial_status', 'address1', 'address2', 'Customer_id', 'id'],axis=1,inplace=True) #'product'
+    orderDf = orderDf.rename(columns={'order_number': 'Order No.', 'created_at': 'Created At', 'note' : 'Notes', 'name': 'Name', 'currency_code': 'Currency', 'title': 'Product Orders', 'amount':'Amount Spent', 'fulfillment_status': "Fulfillment Status"})
+    cols = orderDf.columns.tolist()
+    cols = cols[0:4] + cols[-4:] + cols[4:-4]
+    orderDf = orderDf[cols]
 
     return orderDf #Combined Order and Customer DF
                 
@@ -92,7 +99,7 @@ if __name__ == "__main__":
     #Gets orders database
     defaultQtyDf = getDefaultQty()
     ShopifyFullOrderDf, unmatchedProducts = ShopifyOrderAPI.generateFullOrderDf(defaultQtyDf)
-   
+
     #Combines Customer and Order Df
     shopifyCombined = combineOrdersCustDf(ShopifyFullCustDf, ShopifyFullOrderDf)
 
