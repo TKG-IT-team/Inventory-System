@@ -4,6 +4,7 @@ from ShopifyCustomerAPI import ShopifyCustomerAPI
 import ShopifyOrderAPI
 import json
 import sys
+import os
 
 #Shopify
 apiKey = "1da062b3aea0f3a1a3eed35d52510c20"
@@ -19,10 +20,10 @@ colBirthday = "Birthday"
 colEmail = "Email"
 
 #FilePath
-pathSettingFP = "Path Setting.xlsx"
-global settingFP = "Product Setting.xlsx"
-global customerData = "Customer data.xlsx"
-global combinedData = "Combined data.xlsx"
+pathSettingFP = os.path.dirname(os.path.realpath(__file__)) + "\Path Setting.xlsx"
+settingFP = "Product Setting.xlsx"
+customerData = "Customer Data.xlsx"
+combinedData = "Combined Data.xlsx"
 
 
 currTime = str(datetime.now())
@@ -70,30 +71,33 @@ def getDefaultQty():
 
 #Returns the default path for setting
 def getDefaultPath():
-    defaultPath = pd.read_excel(pathSettingFP, index_col = 0)
-    settingFP = pd.at["SettingFilePath", 0]
-    customerData = pd.at["CustomerDataFilePath", 0]
-    combinedData = pd.at["CombinedDataFilePath", 0]
-    
-    return defaultPath
+    defaultPathDF = pd.read_excel(pathSettingFP, index_col = 0)
+    global settingFP
+    global customerData
+    global combinedData
+    settingFP =  defaultPathDF.at["SettingFilePath", "Path"]
+    customerData =  defaultPathDF.at["CustomerDataFilePath", "Path"]
+    combinedData = defaultPathDF.at["CombinedDataFilePath", "Path"]
 
 if __name__ == "__main__":
 
-    
+    #Gets path setting
+    getDefaultPath()
+
     ###Shopify
-    #Get customers database
+    #Gets customers database
     ShopifyFullCustDf = ShopifyCustomerAPI(apiKey, password, hostname, version).generateFullCustDf()
     ShopifyFullCustDf.to_excel(customerData, index=False)
 
-    #Get orders database
+    #Gets orders database
     defaultQtyDf = getDefaultQty()
     ShopifyFullOrderDf, unmatchedProducts = ShopifyOrderAPI.generateFullOrderDf(defaultQtyDf)
    
-    #Combine Customer and Order Df
+    #Combines Customer and Order Df
     shopifyCombined = combineOrdersCustDf(ShopifyFullCustDf, ShopifyFullOrderDf)
 
-    #Combining platforms
+    #Combines platforms
     combinedDf = combineDfs(shopifyCombined)
     combinedDf.to_excel(combinedData, index=False)
 
-    #Updating Inventory
+    #Updates Inventory
