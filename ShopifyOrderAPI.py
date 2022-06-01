@@ -70,11 +70,15 @@ for i, series in df.iterrows():
         df.at[i, "name"] = ""
         df.at[i, "Customer_id"] = ""
         continue
-    if "default_address" in dataRow.keys():
-        df.at[i, "name"] = dataRow["default_address"]["name"].lower()
-        df.at[i, "Customer_id"] = dataRow["default_address"]["customer_id"]
+    fullName = ""
+    firstName = dataRow["first_name"].lower()
+    lastName = dataRow["last_name"].lower()
+    fullName = firstName + " " + lastName
+    df.at[i, "name"] = fullName
+    df.at[i, "Customer_id"] = dataRow["default_address"]["customer_id"]
 
 df.drop('customer', axis=1, inplace=True)
+
 
 #Gets the amount and currency from total_price_set
 df.reset_index() 
@@ -125,10 +129,12 @@ for i, series in df.iterrows():
 
 df.drop('line_items', axis=1, inplace=True)
 
+#Get the pandas dataframe for product setting
 def getDefaultQty(): 
     defaultQtyDf = pd.read_excel("Setting.xlsx")
     return defaultQtyDf
 
+#Add flavours to the product based on product setting
 def generateFullOrderDf(defaultQtyDf):
     unmatchedProducts = []
     PLATFORM = 'Shopify'
