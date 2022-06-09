@@ -106,5 +106,3 @@ if __name__ == "__main__":
     #Combines platforms
     combinedDf = combineDfs(shopifyCombined)
     combinedDf.to_excel(combinedData, index=False)
-
-    #Updates Inventory

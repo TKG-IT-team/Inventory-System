@@ -1,15 +1,10 @@
 import pandas as pd
 from datetime import datetime
-from ShopifyCustomerAPI import ShopifyCustomerAPI
 import ShopifyOrderAPI
 import dateutil.parser as parser
 import os
 
-#Shopify
-apiKey = "1da062b3aea0f3a1a3eed35d52510c20"
-password = "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" #CONFIDENTIAL
-hostname = "TheKettleGourmet.myshopify.com"
-version = "2022-04"
+import credentials
 
 #Column Names
 colCustomerID = "Customer_id"
@@ -23,7 +18,6 @@ pathSettingFP = os.path.dirname(os.path.realpath(__file__)) + "\Path Setting.xls
 settingFP = "Product Setting.xlsx"
 customerData = "Customer Data.xlsx"
 combinedData = "Combined Data.xlsx"
-currentOrder = "Current Order Data.xlsx"
 
 
 currTime = str(datetime.now())
@@ -38,6 +32,7 @@ def combineDfs(*args): #Takes in pandas dataframe
     combinedDf = listOfDfs[0]
     for idx in range(len(listOfDfs) - 1):
         combinedDf.append(list[idx + 1])
+        # combinedDf = combinedDf.concat(list[id  x + 1])
 
     return combinedDf
 
@@ -91,27 +86,56 @@ def convertISO(date):
     convertedDate = date.isoformat()
     return convertedDate
 
+def getLatestDate(combinedOrderDf):
+    listOfDates = []
+    platformCount = []
+    currPlatform = combinedOrderDf["Platform"].iloc[0]
+    for i, series in combinedOrderDf.iterrows():
+        if i != len(combinedOrderDf) - 1:
+            if combinedOrderDf["Platform"].iloc[i + 1] == currPlatform and currPlatform not in platformCount:
+                if series["Fulfillment Status"] == "unfulfilled":
+                    listOfDates.append(series["Created At"])
+                    platformCount.append(currPlatform)
+            elif combinedOrderDf["Platform"].iloc[i+1]!=currPlatform and currPlatform not in platformCount:
+                listOfDates.append(series["Created At"])
+                currPlatform = combinedOrderDf["Platform"].iloc[i + 1]
+            else:
+                currPlatform = combinedOrderDf["Platform"].iloc[i+1]
+        elif currPlatform not in platformCount:
+            listOfDates.append(series["Created At"])
+    return listOfDates
+
+
 if __name__ == "__main__":
 
     #Gets path setting
     getDefaultPath()
+    
+    #Get default quantities
+    defaultQtyDf = getDefaultQty() 
+    
+    #Gets customer database
+    shopifyFullCustDf = pd.read_excel(customerData)
+
+    #Gets old orders database
+    oldCombinedOrderDf = pd.read_excel(combinedData)
+    listOfDates = getLatestDate(oldCombinedOrderDf)
+    print(convertISO(listOfDates[0]))
 
     ###Shopify
-    #Gets customers database
-    ShopifyFullCustDf = ShopifyCustomerAPI(apiKey, password, hostname, version).generateFullCustDf()
-    ShopifyFullCustDf.to_excel(customerData, index=False)
-
-    #Gets orders database
-    defaultQtyDf = getDefaultQty()
-    #For testing purposes
-    currentOrderDf = pd.read_excel(currentOrder)
-    ShopifyFullOrderDf, unmatchedProducts = ShopifyOrderAPI.generateNewOrderDf(defaultQtyDf, convertISO(currentOrderDf["created_at"].iloc[-1]))
+    shopifyNewOrderDf, unmatchedProducts = ShopifyOrderAPI.generateNewOrderDf(defaultQtyDf, convertISO(listOfDates[0]))
+    # shopifyNewOrderDf.to_excel(r"C:\Users\zychi\OneDrive - National University of Singapore\The Kettle Gourmet Internship\Github\New Order.xlsx", index=False)
 
     #Combines Customer and Order Df
-    shopifyCombined = combineOrdersCustDf(ShopifyFullCustDf, ShopifyFullOrderDf)
-
+    shopifyCombined = combineOrdersCustDf(shopifyFullCustDf, shopifyNewOrderDf)
+    shopifyCombined.to_excel("Test_new_combined_data.xlsx", index=False)
     #Combines platforms
-    combinedDf = combineDfs(shopifyCombined)
-    combinedDf.to_excel(currentOrder, index=False)
+    newCombinedOrderDf = combineDfs(shopifyCombined)
 
-    #Updates Inventory
+    #Combines with old CombinedOrderDf
+    # newCombinedOrderDf.to_excel("Test_new_combined_data.xlsx", index=False)
+    oldCombinedOrderDf.to_excel("Test_old_combined_data.xlsx", index=False)
+    updatedCombinedDf = combineDfs(oldCombinedOrderDf, newCombinedOrderDf)
+    updatedCombinedDf.to_excel("Test_combined_data.xlsx", index=False)
+    # updatedCombinedDf.to_excel(r"C:\Users\zychi\OneDrive - National University of Singapore\The Kettle Gourmet Internship\Github\New Combined Order.xlsx", index=False)
+
