@@ -40,7 +40,7 @@ def get_new_orders(lastDate): #lastDate in ISO 8601 format
     last = lastDate
     orders=pd.DataFrame()
     # while True:
-    url = f"https://1da062b3aea0f3a1a3eed35d52510c20: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@TheKettleGourmet.myshopify.com/admin/api/2022-04/orders.json?limit=250&fulfillment_status=any&status=any&updated_at_min={last}"
+    url = f"https://1da062b3aea0f3a1a3eed35d52510c20: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@TheKettleGourmet.myshopify.com/admin/api/2022-04/orders.json?limit=250&fulfillment_status=any&status=any&created_at_min={last}"
     
     response = requests.request("GET", url)
     df=pd.DataFrame(response.json()['orders'])
