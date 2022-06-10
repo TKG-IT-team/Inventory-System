@@ -118,8 +118,8 @@ def test2():
 
     print(response.text)
 
-#print(generateAuthorisationUrl2())
-test()
+print(generateAuthorisationUrl2())
+# test()
 #ShopeeAPI().getOrderList()
 #test2()
 
