@@ -148,8 +148,8 @@ def test():
     print ("access_token: " + access_token)
     getOrderList(access_token)
 
-#print(generateAuthorisationUrl2())
-test()
+print(generateAuthorisationUrl2())
+# test()
 #ShopeeAPI().getOrderList()
 
 #print(int(time.time()))
