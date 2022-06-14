@@ -12,7 +12,7 @@ password = "856a2e675f662ee0"
 # open the url retrieved
 # pls retrieve the respective driver file path and enter below
 driver = webdriver.Chrome(r"C:\Users\user\Downloads\chromedriver")
-driver.get('https://partner.test-stable.shopeemobile.com/api/v2/shop/auth_partner?partner_id=1007820&timestamp=1654854694&sign=554070f6b7bc7e0d1d93ca706502db4a30d7c54ae08921f13ad82902c46e523a&redirect=https://www.google.com/')
+driver.get('https://partner.test-stable.shopeemobile.com/api/v2/shop/auth_partner?partner_id=1007820&timestamp=1655088262&sign=d4aa63bc6084d8e78e84081cc52ff624cfddf412bcd993381e37af4e9266270d&redirect=https://www.google.com/')
 
 # To key in username and password
 # 1. pls selct input box right click inspect
@@ -20,10 +20,9 @@ driver.get('https://partner.test-stable.shopeemobile.com/api/v2/shop/auth_partne
 
 # <div class="shopee-input__inner shopee-input__inner--normal"><!----> <input type="text" placeholder="Email / Phone / Username" resize="vertical" rows="2" minrows="2" autocomplete="off" restrictiontype="input" class="shopee-input__input"> <!----></div>
 # <input type="text" placeholder="Email / Phone / Username" resize="vertical" rows="2" minrows="2" autocomplete="off" restrictiontype="input" class="shopee-input__input">
-# by_xpath("//div[contains(@class, 'shopee-input')]")
-# body > div > main > div > div > div > div > div > div > div > div:nth-child(1) > div > div.form-content > div > div.username-item.form-item > div > div
+# //div[contains(@class,'password-group')]//following::div//input[@type='phone']
 
-element = driver.find_element_by_xpath("//div[contains(@class, 'shopee-input__inner shopee-input__inner--normal')]//input[contains(@placeholder, 'Email / Phone / Username')]")
+element = driver.find_element_by_xpath("//input[contains(@placeholder = 'Email / Phone / Username')]")
 element.send_keys(user_name)
 # element = driver.find_element_by_id("passwordInput")
 # element.send_keys(password)
@@ -36,8 +35,8 @@ element.send_keys(user_name)
 
 
 # click confirm authorisation
-button = driver.find_element_by_css_selector('paste the CSS selector here')
-button.click()
+# button = driver.find_element_by_css_selector('paste the CSS selector here')
+# button.click()
 
 # Retrieve url
 auth_access_token = driver.current_url

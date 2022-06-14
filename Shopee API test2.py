@@ -3,35 +3,6 @@ import time
 import requests
 import hashlib
 import json
-import configparser
-
-def writeConfig(access_token, refresh_token):
-    
-    # CREATE OBJECT
-    config_file = configparser.ConfigParser()
-
-    # ADD SECTION
-    config_file.add_section("Token")
-
-    # ADD SETTINGS TO SECTION
-    config_file.set("Token", "access_token", access_token)
-    config_file.set("Token", "refresh_token", refresh_token)
-
-    # SAVE CONFIG FILE
-    with open(r"configurations.ini", 'w') as configfileObj:
-        config_file.write(configfileObj)
-        configfileObj.flush()
-        configfileObj.close()
-
-def readConfig():
-
-    # CREATE OBJECT
-    config_file = configparser.ConfigParser()
-
-    # READ CONFIG FILE
-    config_file.read("configurations.ini")
-
-    return config_file["Token"]["access_token"], config_file["Token"]["refresh_token"]
 
 test_host = "https://partner.test-stable.shopeemobile.com"
 live_host = "https://partner.shopeemobile.com"
@@ -66,7 +37,7 @@ def generateAuthorisationUrl2(): #V2
     return url
     
 
-#Gets token for shop level
+#Get token for shop level
 def get_token_shop_level(code, partner_id, partner_key, shop_id): #v2
     timest = int(time.time())
     body = {"code": code, "shop_id": shop_id, "partner_id": partner_id}
@@ -84,30 +55,23 @@ def get_token_shop_level(code, partner_id, partner_key, shop_id): #v2
     new_refresh_token = ret.get("refresh_token")
     return access_token, new_refresh_token
 
-#Refreshes the token
-def refresh_token_shop_level(refresh_token,partner_id, partner_key, shop_id): #v2
-    print("refresh token")
+#Get token for account level 
+def get_token_account_level(code, partner_id, partner_key, main_account_id): #v2
     timest = int(time.time())
+    body = {"code": code, "main_account_id": main_account_id, "partner_id": partner_id}
     host = test_host
-    path = "/api/v2/auth/access_token/get"
-    body = {"shop_id": shop_id, "refresh_token": refresh_token, "partner_id": partner_id}
-
+    path = "/api/v2/auth.token/get"
     base_string = "%s%s%s"%(partner_id, path, timest)
     sign = hmac.new(partner_key.encode(encoding = 'UTF-8', errors = 'strict'), base_string.encode(encoding = 'UTF-8', errors = 'strict'), hashlib.sha256).hexdigest()
     url = host + path + "?partner_id=%s&timestamp=%s&sign=%s"%(partner_id, timest, sign)
-
-    print(url)
-
-    headers = { "Content-Type": "application/json"}
+    headers = {"Content-Type": "application/json"}
     resp = requests.post(url, json=body, headers=headers)
     ret = json.loads(resp.content)
-    print(ret)
     access_token = ret.get("access_token")
     new_refresh_token = ret.get("refresh_token")
-    return access_token, new_refresh_token
-
+    return access_token, new_refresh_token, sign
     
-# Gets order list
+# Get order list
 def getOrderList(access_token): #Get new customers after the existing newest customer ID in database
     # while True:
     timest = int(time.time())
@@ -137,20 +101,26 @@ def getOrderList(access_token): #Get new customers after the existing newest cus
         #         break
         # return(response.content) 
 def test():
-    access_token, refresh_token = readConfig()
-    if (len(refresh_token) == 0):
-        print("Please get token from authorization")
-        access_token, refresh_token = get_token_shop_level("6261625a504879506a427a75784a6e6c", test_partner_id, test_partner_key, shop_test_id)
-    else:
-        access_token, refresh_token = refresh_token_shop_level(refresh_token, test_partner_id, test_partner_key, shop_test_id)
-    writeConfig(access_token, refresh_token)
-    print("refresh token: " + refresh_token)
-    print ("access_token: " + access_token)
+    #access_token, new_refresh_token, sign = self.get_token_shop_level(self.redirect_url, self.live_partner_id, self.live_partner_key, self.shop_id)
+    access_token, new_refresh_token = get_token_shop_level("63565356684849516e727153737a4e65", test_partner_id, test_partner_key, shop_test_id)
     getOrderList(access_token)
+   
+    
+def test2():
+    
+    url = "https://partner.test-stable.shopeemobile.com/api/v2/order/get_order_list?access_token=524c536f7178665259584876774d4443&order_status=%22READY_TO_SHIP%22&page_size=20&partner_id=1007820&response_optional_fields=%22order_status%22&shop_id=52362&sign=sign&time_from=1607235072&time_range_field=%22create_time%22&time_to=1608271872&timestamp=timestamp"
+  
+    payload={}
+    headers = {
+
+    }
+    response = requests.request("GET",url,headers=headers, data=payload, allow_redirects=False)
+
+    print(response.text)
 
 print(generateAuthorisationUrl2())
 # test()
 #ShopeeAPI().getOrderList()
+#test2()
 
 #print(int(time.time()))
-
