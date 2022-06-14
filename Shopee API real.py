@@ -4,6 +4,8 @@ import requests
 import hashlib
 import json
 import configparser
+import pandas as pd
+from datetime import datetime
 
 #Writes access_token and refresh_token onto config
 def writeConfig(access_token, refresh_token):
@@ -44,7 +46,9 @@ shop_id = 2421911
 shop_test_id = 52362
 access_token = ""
 sign = ""
-    
+
+
+#Generates an authorisation url which will give a code lasting 1 year
 def generateAuthorisationUrl2(): #V2
     timest = int(time.time())
     base_string = "%s%s%s"%(partner_id, v2_path, timest)
@@ -82,19 +86,16 @@ def refresh_token_shop_level(refresh_token): #v2
     sign = hmac.new(partner_key.encode(encoding = 'UTF-8', errors = 'strict'), base_string.encode(encoding = 'UTF-8', errors = 'strict'), hashlib.sha256).hexdigest()
     url = host + path + "?partner_id=%s&timestamp=%s&sign=%s"%(partner_id, timest, sign)
 
-    print(url)
-
     headers = { "Content-Type": "application/json"}
     resp = requests.post(url, json=body, headers=headers)
     ret = json.loads(resp.content)
-    print(ret)
     access_token = ret.get("access_token")
     new_refresh_token = ret.get("refresh_token")
     return access_token, new_refresh_token
 
     
-# Gets order list
-def getOrderList(access_token): #Get new customers after the existing newest customer ID in database
+#Gets order list
+def getOrderList(access_token, time_from, time_to): #Get new customers after the existing newest customer ID in database
     # while True:
     timest = int(time.time())
     path = "/api/v2/order/get_order_list"
@@ -102,8 +103,8 @@ def getOrderList(access_token): #Get new customers after the existing newest cus
     sign = hmac.new(partner_key.encode(encoding = 'UTF-8', errors = 'strict'), base_string.encode(encoding = 'UTF-8', errors = 'strict'), hashlib.sha256).hexdigest()
   
     time_range_field = "create_time"
-    time_from = 1610391652
-    time_to = 1611687652
+    #time_from = 1
+    #time_to = 1296000
     page_size = 20
 
     payload={}
@@ -111,12 +112,48 @@ def getOrderList(access_token): #Get new customers after the existing newest cus
 
     }
 
-    url = f"{host}/api/v2/order/get_order_list?timestamp={timest}&time_range_field={time_range_field}&sign={sign}&access_token={access_token}&shop_id={shop_id}&time_from={time_from}&time_to={time_to}&page_size={page_size}&partner_id={partner_id}"
-
+    url = f"{host}{path}?timestamp={timest}&time_range_field={time_range_field}&sign={sign}&access_token={access_token}&shop_id={shop_id}&time_from={time_from}&time_to={time_to}&page_size={page_size}&partner_id={partner_id}"
     response = requests.request("GET", url)
+    print("getOrderList:")
     print(response.content)
-         
-def test():
+    dictResponse = json.loads(response.content)
+    listOrder = dictResponse['response']['order_list']
+    newListOrder = []
+    for order in listOrder:
+        newListOrder.append(order['order_sn'])
+    strListOrder="".join(elem + "," for elem in newListOrder)
+    return strListOrder
+
+#Gets the detail of the order   
+def getOrderDetail(access_token, order_sn_list):
+    timest = int(time.time())
+    path = "/api/v2/order/get_order_detail"
+    base_string = "%s%s%s%s%s"%(partner_id, path, timest, access_token, shop_id)
+    sign = hmac.new(partner_key.encode(encoding = 'UTF-8', errors = 'strict'), base_string.encode(encoding = 'UTF-8', errors = 'strict'), hashlib.sha256).hexdigest()
+  
+    response_optional_fields = "item_list"
+    payload={}
+    headers = {
+
+    }
+    
+    url = f"{host}{path}?timestamp={timest}&response_optional_fields={response_optional_fields}&order_sn_list={order_sn_list}&sign={sign}&access_token={access_token}&shop_id={shop_id}&partner_id={partner_id}"
+    response = requests.request("GET", url)
+    dictResponse = json.loads(response.content.decode())
+    listOrder = dictResponse['response']['order_list']
+    df = pd.DataFrame() #empty dataframe
+    for order in listOrder:
+        order_df = pd.DataFrame.from_dict(order)
+        item_df = pd.DataFrame.from_dict(order["item_list"])
+        #print(order_df)
+        order_df = order_df.join(item_df)
+        #print(order_df)
+        
+        df = pd.concat([df,order_df])
+    return df
+
+#Gets the orders from shopee and convert it to an excel file
+def getOrder():
     access_token, refresh_token = readConfig()
     if (len(refresh_token) == 0):
         print("Please get code from authorization")
@@ -126,10 +163,18 @@ def test():
     writeConfig(access_token, refresh_token)
     print("refresh token: " + refresh_token)
     print ("access_token: " + access_token)
-    getOrderList(access_token)
+    df = pd.DataFrame() #empty dataframe
+    for i in range(1577808000, int(datetime.timestamp(datetime.now())), 1296000): #from 2020-1-1 to now, step: 15 days
+        strOrderList = getOrderList(access_token, i, i + 1296000)
+        if len(strOrderList) > 0:
+            df = pd.concat([df,getOrderDetail(access_token, strOrderList)])
+    df.to_excel("test.xlsx", index =False)
 
+def test2():
+    print(datetime.timestamp(datetime.now()))
 #print(generateAuthorisationUrl2())
-test()
+getOrder()
+#test2()
 #ShopeeAPI().getOrderList()
 
 #print(int(time.time()))
