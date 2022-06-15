@@ -20,3 +20,7 @@ selenium/webdriver/common/action_chains.py
 Shopee API real.py
 ~$oblems.docx
 configurations.ini
+Shopify/__pycache__/ShopifyCustomerAPI.cpython-310.pyc
+Shopify/__pycache__/ShopifyOrderAPI.cpython-310.pyc
+Shopee/__pycache__/config_tools.cpython-310.pyc
+__pycache__/config_tools.cpython-310.pyc

@@ -1,10 +1,11 @@
 import pandas as pd
 from datetime import datetime
-from ShopifyCustomerAPI import ShopifyCustomerAPI
-import ShopifyOrderAPI
+from Shopify.ShopifyCustomerAPI import ShopifyCustomerAPI
+import Shopify.ShopifyOrderAPI as ShopifyOrderAPI
 import json
 import sys
 import os
+import config_tools
 
 #Shopify
 apiKey = "1da062b3aea0f3a1a3eed35d52510c20"
@@ -78,14 +79,14 @@ def getDefaultQty():
 
 #Returns the default path for setting
 def getDefaultPath():
-    defaultPathDF = pd.read_excel(pathSettingFP, index_col = 0)
+    dictPath = config_tools.readConfig()
     global settingFP
     global customerData
     global combinedData
-    settingFP =  defaultPathDF.at["SettingFilePath", "Path"]
-    customerData =  defaultPathDF.at["CustomerDataFilePath", "Path"]
-    combinedData = defaultPathDF.at["CombinedDataFilePath", "Path"]
-
+    settingFP = dictPath["SettingFilePath"]
+    customerData = dictPath["CustomerDataFilePath"]
+    combinedData = dictPath["CombinedDataFilePath"]
+    
 if __name__ == "__main__":
 
     #Gets path setting
