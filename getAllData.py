@@ -1,7 +1,7 @@
 import pandas as pd
 from datetime import datetime
-from ShopifyCustomerAPI import ShopifyCustomerAPI
-import ShopifyOrderAPI
+from Shopify.ShopifyCustomerAPI import ShopifyCustomerAPI
+from Shopify import ShopifyOrderAPI
 import json
 import sys
 import os

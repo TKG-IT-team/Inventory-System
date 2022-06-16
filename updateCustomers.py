@@ -1,5 +1,4 @@
-import pandas as pd
-from ShopifyCustomerAPI import ShopifyCustomerAPI
+from Shopify.ShopifyCustomerAPI import ShopifyCustomerAPI
 
 
 #Shopify

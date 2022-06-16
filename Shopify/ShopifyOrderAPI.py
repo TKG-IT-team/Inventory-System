@@ -154,9 +154,8 @@ def clean(df):
 
     #Drop rows with financial status = refunded or voided
     for i, series in df.iterrows():
-        print(series["order_number"] + series["financial_status"])
         if series["financial_status"] == "refunded" or series["financial_status"] == "voided":
-            df.drop(index=i, axis=0)
+            df.drop(index=i, axis=0, inplace=True)
 
     return df
 

@@ -1,10 +1,8 @@
 import pandas as pd
 from datetime import datetime
-import ShopifyOrderAPI
+from Shopify import ShopifyOrderAPI
 import dateutil.parser as parser
 import os
-
-import credentials
 
 #Column Names
 colCustomerID = "Customer_id"
@@ -25,13 +23,9 @@ formattedCurrTime = currTime[:9] + "T" + currTime[11:18]
 
 #Combines dataframes
 def combineDfs(*args): #Takes in pandas dataframe
-    listOfDfs = []
+    combinedDf = pd.DataFrame()
     for arg in args:
-        listOfDfs.append(arg)
-
-    combinedDf = listOfDfs[0]
-    for idx in range(len(listOfDfs) - 1):
-        combinedDf.append(list[idx + 1])
+        combinedDf = pd.concat([combinedDf, arg])
         # combinedDf = combinedDf.concat(list[id  x + 1])
 
     return combinedDf
@@ -81,30 +75,40 @@ def getDefaultPath():
     customerData =  defaultPathDF.at["CustomerDataFilePath", "Path"]
     combinedData = defaultPathDF.at["CombinedDataFilePath", "Path"]
 
+
+#Converts date to ISO8601 format
 def convertISO(date):
     date = parser.parse(date)
     convertedDate = date.isoformat()
     return convertedDate
 
-def getLatestDate(combinedOrderDf):
-    listOfDates = []
-    platformCount = []
-    currPlatform = combinedOrderDf["Platform"].iloc[0]
+
+#Split df into multiple platforms based on dates, returns a list of Dfs
+def splitPlatforms(combinedOrderDf):
+    platformOrderDfs = {}
+    lastIndex = 0
     for i, series in combinedOrderDf.iterrows():
         if i != len(combinedOrderDf) - 1:
-            if combinedOrderDf["Platform"].iloc[i + 1] == currPlatform and currPlatform not in platformCount:
-                if series["Fulfillment Status"] == "unfulfilled":
-                    listOfDates.append(series["Created At"])
-                    platformCount.append(currPlatform)
-            elif combinedOrderDf["Platform"].iloc[i+1]!=currPlatform and currPlatform not in platformCount:
-                listOfDates.append(series["Created At"])
-                currPlatform = combinedOrderDf["Platform"].iloc[i + 1]
-            else:
-                currPlatform = combinedOrderDf["Platform"].iloc[i+1]
-        elif currPlatform not in platformCount:
-            listOfDates.append(series["Created At"])
-    return listOfDates
+            if combinedOrderDf["Platform"].iloc[i] != combinedOrderDf["Platform"].iloc[i + 1]:
+                platformOrderDfs[combinedOrderDf["Platform"].iloc[i]] = combinedOrderDf.iloc[lastIndex:i, : ]
+                lastIndex = i + 1
+        else:
+            platformOrderDfs[combinedOrderDf["Platform"].iloc[i]] = combinedOrderDf.iloc[lastIndex: , : ]
+    return platformOrderDfs
 
+#Get Latest Date
+def getLatestDate(orderDf):
+    for i, series in orderDf.iterrows():
+        if series["Fulfillment Status"] == "unfulfilled":
+            return series["Created At"]
+    return orderDf["Created At"].iloc[-1]
+
+#Remove rows after a given date
+def removeRowsAfterDate(orderDf, date): #Given date must be in ISO format
+    for i, series in orderDf.iterrows():
+        if convertISO(series["Created At"]) > date:
+            return orderDf.iloc[0 : i - 1, : ]
+    return orderDf
 
 if __name__ == "__main__":
 
@@ -118,24 +122,27 @@ if __name__ == "__main__":
     shopifyFullCustDf = pd.read_excel(customerData)
 
     #Gets old orders database
-    oldCombinedOrderDf = pd.read_excel(combinedData)
-    listOfDates = getLatestDate(oldCombinedOrderDf)
-    print(convertISO(listOfDates[0]))
+    oldCombined = pd.read_excel(combinedData)
+    
+    platformDict = splitPlatforms(oldCombined)
+    dateDict = {}
+    for platform, df in platformDict.items():
+        date = getLatestDate(df)
+        convertedDate = convertISO(date)
+        dateDict[platform] = convertedDate
+
 
     ###Shopify
-    shopifyNewOrderDf, unmatchedProducts = ShopifyOrderAPI.generateNewOrderDf(defaultQtyDf, convertISO(listOfDates[0]))
-    # shopifyNewOrderDf.to_excel(r"C:\Users\zychi\OneDrive - National University of Singapore\The Kettle Gourmet Internship\Github\New Order.xlsx", index=False)
+    shopifyNewOrderDf, unmatchedProducts = ShopifyOrderAPI.generateNewOrderDf(defaultQtyDf, dateDict["Shopify"])
 
     #Combines Customer and Order Df
-    shopifyCombined = combineOrdersCustDf(shopifyFullCustDf, shopifyNewOrderDf)
-    shopifyCombined.to_excel("Test_new_combined_data.xlsx", index=False)
-    #Combines platforms
-    newCombinedOrderDf = combineDfs(shopifyCombined)
+    newShopify = combineOrdersCustDf(shopifyFullCustDf, shopifyNewOrderDf)
+    
+    #Combines old and new Shopify Df
+    oldShopify = removeRowsAfterDate(platformDict["Shopify"], dateDict["Shopify"])
+    updatedShopify = combineDfs(oldShopify, newShopify)
 
-    #Combines with old CombinedOrderDf
-    # newCombinedOrderDf.to_excel("Test_new_combined_data.xlsx", index=False)
-    oldCombinedOrderDf.to_excel("Test_old_combined_data.xlsx", index=False)
-    updatedCombinedDf = combineDfs(oldCombinedOrderDf, newCombinedOrderDf)
-    updatedCombinedDf.to_excel("Test_combined_data.xlsx", index=False)
-    # updatedCombinedDf.to_excel(r"C:\Users\zychi\OneDrive - National University of Singapore\The Kettle Gourmet Internship\Github\New Combined Order.xlsx", index=False)
+    #Combines platforms
+    newCombined = combineDfs(updatedShopify)
+    newCombined.to_excel(combinedData, index=False)
 
