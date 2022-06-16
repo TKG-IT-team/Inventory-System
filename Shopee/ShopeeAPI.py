@@ -4,7 +4,7 @@ import requests
 import hashlib
 import json
 import pandas as pd
-import config_tools
+import config_tools_shopee as config_tools
 from datetime import datetime
 from functions import generate_qty_table, get_default_qty
 

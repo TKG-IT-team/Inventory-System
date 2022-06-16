@@ -1,4 +1,5 @@
 import configparser
+import os
 
 #Writes access_token and refresh_token onto config
 def writeConfig(access_token, refresh_token):
@@ -14,7 +15,7 @@ def writeConfig(access_token, refresh_token):
     config_file.set("Token", "refresh_token", refresh_token)
 
     # Save config file
-    with open(r"Shopee/configurations.ini", 'w') as configfileObj:
+    with open(os.path.dirname(__file__) + '/' + "configurations.ini", 'w') as configfileObj:
         config_file.write(configfileObj)
         configfileObj.flush()
         configfileObj.close()
@@ -26,7 +27,7 @@ def readConfig():
     config_file = configparser.ConfigParser()
 
     # Read config file
-    config_file.read(r"Shopee/configurations.ini")
-    print(config_file.sections())
+    config_file.read(os.path.dirname(__file__) + '/' + "configurations.ini")
+
     return config_file["Token"]["access_token"], config_file["Token"]["refresh_token"]
 
