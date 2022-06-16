@@ -5,7 +5,7 @@ import Shopify.ShopifyOrderAPI as ShopifyOrderAPI
 import json
 import sys
 import os
-import config_tools
+import config_tools_data
 
 #Shopify
 apiKey = "1da062b3aea0f3a1a3eed35d52510c20"
@@ -79,7 +79,9 @@ def getDefaultQty():
 
 #Returns the default path for setting
 def getDefaultPath():
-    dictPath = config_tools.readConfig()
+    
+    dictPath = config_tools_data.readConfig()
+   
     global settingFP
     global customerData
     global combinedData
@@ -88,7 +90,7 @@ def getDefaultPath():
     combinedData = dictPath["CombinedDataFilePath"]
     
 if __name__ == "__main__":
-
+    
     #Gets path setting
     getDefaultPath()
 
