@@ -124,7 +124,7 @@ class ShopifyCustomerAPI:
     
     #Generate new xlsx backend file to read, replaces old version if there is
     #note: will be slower but old customers' details will be updated
-    def generateFullCustDf(self): 
+    def generate_full_cust_df(self): 
         customers = self.getAllCusts()
         cleanedData = self.clean(customers)
         return cleanedData

@@ -1,15 +1,13 @@
 ## 1. API data extraction
-
 from wsgiref.simple_server import demo_app
-from numpy import true_divide
 import requests
 import pandas as pd
-import ast
 from datetime import datetime, timedelta
 import dateutil.parser as parser
+from functions import generate_qty_table
 
 #Converts pandas dataframe series to dictionary
-def convertSeriesToDict(series):
+def convert_series_to_dict(series):
     diction = series.to_dict()
     return diction
 
@@ -30,24 +28,19 @@ def get_all_orders():
             break
     return(orders)
 
-def convertISO(date):
-    date = parser.parse(date)
-    convertedDate = date.isoformat()
-    return convertedDate
-
 #Minus 8 hours
-def convertISOGMT(date):
+def convert_ISOGMT(date):
     date = parser.parse(date) + timedelta(hours=-8)
     convertedDate = date.isoformat()
     return convertedDate
 
 #Get new orders
-def get_new_orders(lastDate): #lastDate in ISO 8601 format
-    lastDate = convertISOGMT(lastDate)
+def get_new_orders(last_date): #lastDate in ISO 8601 format
+    last_date = convert_ISOGMT(last_date)
     orders=pd.DataFrame()
     lastId = 0
     while True:
-        url = f"https://1da062b3aea0f3a1a3eed35d52510c20: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@TheKettleGourmet.myshopify.com/admin/api/2022-04/orders.json?limit=250&fulfillment_status=any&status=any&created_at_min={lastDate}&since_id={lastId}"
+        url = f"https://1da062b3aea0f3a1a3eed35d52510c20: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@TheKettleGourmet.myshopify.com/admin/api/2022-04/orders.json?limit=250&fulfillment_status=any&status=any&created_at_min={last_date}&since_id={lastId}"
         #?limit=250&fulfillment_status=any&status=any&since_id={last}
 
         response = requests.request("GET", url)
@@ -59,8 +52,9 @@ def get_new_orders(lastDate): #lastDate in ISO 8601 format
             break
     orders.to_excel("test.xlsx", index=False)
     return(orders)
+
   
-def add_to_dictProduct(dictProduct, output):
+def add_to_dict_product(dictProduct, output):
     if 'product_id' in dictProduct.keys():
         product_name = dictProduct['product_id']
         qty = dictProduct['quantity']
@@ -91,7 +85,7 @@ def clean(df):
 
     #Gets the name from customer
     for i, series in df.iterrows():
-        dataRow = convertSeriesToDict(series)
+        dataRow = convert_series_to_dict(series)
         dataRow = dataRow["customer"]
         if str(type(dataRow)) != "<class 'dict'>":
             df.at[i, "name"] = ""
@@ -106,7 +100,7 @@ def clean(df):
     #Gets the amount and currency from total_price_set
     df.reset_index() 
     for i, series in df.iterrows():
-        dataRow = convertSeriesToDict(series)
+        dataRow = convert_series_to_dict(series)
         dataRow = dataRow["total_price_set"]
         amount = ""
         currency = ""   
@@ -119,7 +113,7 @@ def clean(df):
 
     #Gets the address from shipping_address
     for i, series in df.iterrows():
-        dataRow = convertSeriesToDict(series)
+        dataRow = convert_series_to_dict(series)
         dataRow = dataRow["shipping_address"]
         address = ""
         if str(type(dataRow)) != "<class 'dict'>":
@@ -137,7 +131,7 @@ def clean(df):
     df.reset_index() 
     for i, series in df.iterrows():
         dictProduct = {}
-        dataRow = convertSeriesToDict(series)
+        dataRow = convert_series_to_dict(series)
         dataRow = dataRow["line_items"]
         if str(type(dataRow)) != "<class 'list'>":
             df.at[i, "product"] = str(dictProduct)
@@ -145,9 +139,9 @@ def clean(df):
         for j in range(len(dataRow)):
             if str(type(dataRow[j])) == "<class 'list'>":
                 for z in range(len(dataRow[j])):
-                    dictProduct = add_to_dictProduct(dataRow[j][z] , dictProduct)
+                    dictProduct = add_to_dict_product(dataRow[j][z] , dictProduct)
             else:
-                dictProduct = add_to_dictProduct(dataRow[j], dictProduct)
+                dictProduct = add_to_dict_product(dataRow[j], dictProduct)
         df.at[i, "product"] = str(dictProduct)
 
     df.drop('line_items', axis=1, inplace=True)
@@ -159,78 +153,16 @@ def clean(df):
 
     return df
 
-def getDefaultQty(): 
-    defaultQtyDf = pd.read_excel("Product Setting.xlsx")
-    return defaultQtyDf
-
-def generateFullOrderDf(defaultQtyDf):
+#Generate Full Order Df
+def generate_full_order_df(default_qty_df):
     df = pd.DataFrame(get_all_orders())
     df = clean(df)
-    unmatchedProducts = []
-    PLATFORM = 'Shopify'
-    platform = []
-    for i, orderSeries in df.iterrows():
-        orderStr = orderSeries["product"]
-        orderDict = ast.literal_eval(orderStr)
-        platform.append(PLATFORM)
-        pdtComponents = {}
-        for product_id, qty in orderDict.items():
-            if (product_id in defaultQtyDf["id"].tolist()):
-                for flavour in defaultQtyDf.columns:
-                    if flavour not in pdtComponents.keys():
-                        pdtComponents[flavour] = qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["id"]==product_id].index.values[0], flavour]
-                    else:
-                        pdtComponents[flavour] += qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["id"]==product_id].index.values[0], flavour]
-            else:
-                if len(unmatchedProducts) == 0:
-                    unmatchedProducts.append(product_id)
-                elif product_id not in unmatchedProducts:
-                    unmatchedProducts.append(product_id)
-                else:
-                    pass
-        for component, componentQty in pdtComponents.items():
-            df.at[i,component] = componentQty
-    
-    df["Platform"] = platform
-    if len(unmatchedProducts) > 0:
-        print("Unmatched Products: " + str(unmatchedProducts))
-        # messagebox.showinfo("Unmatched Products", "There are unmatched products. Please check Settings to verify all product inputs.")
-
-    return df, pd.Series(unmatchedProducts, name = "Unmatched Products")
-
+    df, unmatchedProducts = generate_qty_table(df, default_qty_df)
+    return df, unmatchedProducts
 
 #Returns a dataframe of orders since last input date
-def generateNewOrderDf(defaultQtyDf, lastDate): #lastDate in ISO 8601 format
-    df = get_new_orders(lastDate)
+def generate_new_order_df(default_qty_df, last_date): #lastDate in ISO 8601 format
+    df = get_new_orders(last_date)
     df = clean(df)
-    unmatchedProducts = []
-    PLATFORM = 'Shopify'
-    platform = []
-    for i, orderSeries in df.iterrows():
-        orderStr = orderSeries["product"]
-        orderDict = ast.literal_eval(orderStr)
-        platform.append(PLATFORM)
-        pdtComponents = {}
-        for product_id, qty in orderDict.items():
-            if (product_id in defaultQtyDf["id"].tolist()):
-                for flavour in defaultQtyDf.columns:
-                    if flavour not in pdtComponents.keys():
-                        pdtComponents[flavour] = qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["id"]==product_id].index.values[0], flavour]
-                    else:
-                        pdtComponents[flavour] += qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["id"]==product_id].index.values[0], flavour]
-            else:
-                if len(unmatchedProducts) == 0:
-                    unmatchedProducts.append(product_id)
-                elif product_id not in unmatchedProducts:
-                    unmatchedProducts.append(product_id)
-                else:
-                    pass
-        for component, componentQty in pdtComponents.items():
-            df.at[i,component] = componentQty
-    
-    df["Platform"] = platform
-    if len(unmatchedProducts) > 0:
-        print("Unmatched Products: " + str(unmatchedProducts))
-        # messagebox.showinfo("Unmatched Products", "There are unmatched products. Please check Settings to verify all product inputs.")
-
-    return df, pd.Series(unmatchedProducts, name = "Unmatched Products")
+    df, unmatchedProducts = generate_qty_table(df, default_qty_df)
+    return df, unmatchedProducts

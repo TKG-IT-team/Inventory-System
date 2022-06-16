@@ -6,6 +6,7 @@ import json
 import pandas as pd
 import config_tools
 from datetime import datetime
+from functions import generate_qty_table, get_default_qty
 
 host = "https://partner.shopeemobile.com"
 v2_path = "/api/v2/shop/auth_partner"
@@ -60,10 +61,9 @@ def refresh_token_shop_level(refresh_token): #v2
     access_token = ret.get("access_token")
     new_refresh_token = ret.get("refresh_token")
     return access_token, new_refresh_token
-
     
 #Gets order list
-def getOrderList(access_token, time_from, time_to):
+def get_order_list(access_token, time_from, time_to):
     timest = int(time.time())
     path = "/api/v2/order/get_order_list"
     base_string = "%s%s%s%s%s"%(partner_id, path, timest, access_token, shop_id)
@@ -88,7 +88,7 @@ def getOrderList(access_token, time_from, time_to):
     return strListOrder
 
 #Gets the detail of the order   
-def getOrderDetail(access_token, order_sn_list):
+def get_order_detail(access_token, order_sn_list):
     timest = int(time.time())
     path = "/api/v2/order/get_order_detail"
     base_string = "%s%s%s%s%s"%(partner_id, path, timest, access_token, shop_id)
@@ -118,7 +118,7 @@ def getOrderDetail(access_token, order_sn_list):
     return df
 
 #Gets the orders from shopee and convert it to an excel file
-def getOrder():
+def get_all_orders():
     access_token, refresh_token = config_tools.readConfig()
     if (len(refresh_token) == 0):
         print("Please get code from authorization")
@@ -130,15 +130,37 @@ def getOrder():
     print ("access_token: " + access_token)
     df = pd.DataFrame() #empty dataframe
     for i in range(1577808000, int(datetime.timestamp(datetime.now())), 1296000): #from 2020-1-1 to now, step: 15 days
-        strOrderList = getOrderList(access_token, i, i + 1296000)
-        if len(strOrderList) > 0:
-            df = pd.concat([df,getOrderDetail(access_token, strOrderList)])
-    df = cleanDf(df)
-    df["Platform"] = "Shopee"
-    df.to_excel("test.xlsx", index=False)
+        str_order_list = get_order_list(access_token, i, i + 1296000)
+        if len(str_order_list) > 0:
+            df = pd.concat([df,get_order_detail(access_token, str_order_list)])
+    # df = clean_df(df)
+    # df["Platform"] = "Shopee"
+    # df.to_excel("test.xlsx", index=False)
+    return df
+
+def get_new_orders(last_date): #date given in epoch time
+    access_token, refresh_token = config_tools.readConfig()
+    if (len(refresh_token) == 0):
+        print("Please get code from authorization")
+        access_token, refresh_token = get_token_shop_level("4b6a73647a437562495a6a4849526f61")
+    else:
+        access_token, refresh_token = refresh_token_shop_level(refresh_token)
+    config_tools.writeConfig(access_token, refresh_token)
+    print("refresh token: " + refresh_token)
+    print ("access_token: " + access_token)
+    df = pd.DataFrame() #empty dataframe
+    for i in range(last_date, int(datetime.timestamp(datetime.now())), 1296000): #from last given date to now, step: 15 days
+        str_order_list = get_order_list(access_token, i, i + 1296000)
+        if len(str_order_list) > 0:
+            df = pd.concat([df,get_order_detail(access_token, str_order_list)])
+    # df = clean_df(df)
+    # df["Platform"] = "Shopee"
+    # df.to_excel("test.xlsx", index=False)
+    return df
+
 
 #Cleans data in the dataframe
-def cleanDf(df):
+def clean_df(df):
     df.drop(['cod', 'days_to_ship', 'reverse_shipping_fee', 'update_time', 'region', 'ship_by_date'], axis=1, inplace=True) #Removes unused columns
     df = df.rename(columns={"create_time":"Created At", "order_sn":"Order No.","order_status":"Fulfillment Status", #Renames columns
     "message_to_seller":"Notes","currency":"Currency","item_name":"Product", "name":"Name", "phone":"HP",
@@ -146,7 +168,22 @@ def cleanDf(df):
     df["Created At"]  = df["Created At"].apply(datetime.fromtimestamp)#Changes timestamp to datetime
     df = df.reindex(columns=["Order No.", "Created At", "Fulfillment Status", "Notes", "HP", "Address", "Name",
     "recipient_address", "Currency", "Product", "Platform"]) #Reorder Columns
+
     return df
 
+#Generate full order df
+def generate_full_order_df(defaultQtyDf):
+    df = get_all_orders()
+    df = clean_df(df)
+    df, unmatchedProducts = generate_qty_table(df, defaultQtyDf)
+    return df, unmatchedProducts
+
+#Returns a dataframe of orders since last input date
+def generate_new_order_df(defaultQtyDf, lastDate): #lastDate in ISO 8601 format
+    df = get_new_orders(lastDate)
+    df = clean_df(df)
+    df, unmatchedProducts = generate_qty_table(df, defaultQtyDf)
+    return df, unmatchedProducts
+
 #print(generateAuthorisationUrl2())
-getOrder()
+get_all_orders()

@@ -16,5 +16,5 @@ if __name__ == "__main__":
 
     ###Shopify
     #Gets customers database
-    ShopifyFullCustDf = ShopifyCustomerAPI(apiKey, password, hostname, version).generateFullCustDf()
+    ShopifyFullCustDf = ShopifyCustomerAPI(apiKey, password, hostname, version).generate_full_cust_df()
     ShopifyFullCustDf.to_excel(customerData, index=False)
