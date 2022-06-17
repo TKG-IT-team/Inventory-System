@@ -1,6 +1,5 @@
 from Shopify.ShopifyCustomerAPI import ShopifyCustomerAPI
 import Shopify.ShopifyOrderAPI as ShopifyOrderAPI
-import pandas as pd
 from functions import get_default_path, get_default_qty, combine_orders_cust_df, combine_dfs
 from functions import API_KEY, PASSWORD, HOSTNAME, VERSION, CUSTOMER_DATA, COMBINED_DATA
 

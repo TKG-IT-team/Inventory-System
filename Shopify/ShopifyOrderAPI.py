@@ -151,6 +151,14 @@ def clean(df):
         if series["financial_status"] == "refunded" or series["financial_status"] == "voided":
             df.drop(index=i, axis=0, inplace=True)
 
+    #Add platform name to dataframe
+    df["Platform"] = "Shopify"
+
+    #Dropping unecessary columns and renaming them
+    df.drop(['financial_status', 'address1', 'address2'],axis=1,inplace=True) #'product', 'id', 'Customer_id'
+    df = df.rename(columns={'order_number': 'Order No.', 'created_at': 'Created At', 'note' : 'Notes', 'name': 'Name', 'currency_code': 'Currency', 'title': 'Product Orders', 'amount':'Amount Spent', 'fulfillment_status': "Fulfillment Status", "product": "Product"})
+    
+    print(df.columns)
     return df
 
 #Generate Full Order Df
@@ -158,6 +166,7 @@ def generate_full_order_df(default_qty_df):
     df = pd.DataFrame(get_all_orders())
     df = clean(df)
     df, unmatchedProducts = generate_qty_table(df, default_qty_df)
+    print(df.columns)
     return df, unmatchedProducts
 
 #Returns a dataframe of orders since last input date

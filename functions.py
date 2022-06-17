@@ -48,11 +48,12 @@ def combine_orders_cust_df(customerDf, orderDf):
             orderDf.at[index, COL_BIRTHDAY] = custNameKeyDf[series[COL_CUSTOMER_ID]][2]
             orderDf.at[index, COL_EMAIL] = custNameKeyDf[series[COL_CUSTOMER_ID]][4]
         else:
-            print(series["name"] + " Not Found in Customer Data")
-        
-    #Dropping unecessary columns, reordering columns (For Shopify)
-    orderDf.drop(['financial_status', 'address1', 'address2', 'Customer_id', 'id'],axis=1,inplace=True) #'product'
-    orderDf = orderDf.rename(columns={'order_number': 'Order No.', 'created_at': 'Created At', 'note' : 'Notes', 'name': 'Name', 'currency_code': 'Currency', 'title': 'Product Orders', 'amount':'Amount Spent', 'fulfillment_status': "Fulfillment Status"})
+            print(series["Name"] + " Not Found in Customer Data")
+    
+    #Drop customer_id col
+    orderDf.drop([COL_CUSTOMER_ID],axis=1,inplace=True)
+
+    #Reordering columns
     cols = orderDf.columns.tolist()
     cols = cols[0:4] + cols[-4:] + cols[4:-4]
     orderDf = orderDf[cols]
@@ -81,16 +82,14 @@ def get_default_path():
 #Generate quantity table based on the product dictionary
 def generate_qty_table(df, defaultQtyDf):
     unmatchedProducts = []
-    PLATFORM = 'Shopify'
-    platform = []
+    # df.columns = map(str.lower, df.columns)
     for i, orderSeries in df.iterrows():
-        orderStr = orderSeries["product"]
+        orderStr = orderSeries["Product"]
         orderDict = ast.literal_eval(orderStr)
-        platform.append(PLATFORM)
         pdtComponents = {}
         for product_id, qty in orderDict.items():
             if (product_id in defaultQtyDf["id"].tolist()):
-                for flavour in defaultQtyDf.columns:
+                for flavour in defaultQtyDf.columns.tolist()[2:]:
                     if flavour not in pdtComponents.keys():
                         pdtComponents[flavour] = qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["id"]==product_id].index.values[0], flavour]
                     else:
@@ -105,7 +104,7 @@ def generate_qty_table(df, defaultQtyDf):
         for component, componentQty in pdtComponents.items():
             df.at[i,component] = componentQty
     
-    df["Platform"] = platform
+
     if len(unmatchedProducts) > 0:
         print("Unmatched Products: " + str(unmatchedProducts))
         # messagebox.showinfo("Unmatched Products", "There are unmatched products. Please check Settings to verify all product inputs.")

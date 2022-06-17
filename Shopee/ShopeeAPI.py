@@ -175,6 +175,8 @@ def clean_df(df):
     df = df.reindex(columns=["Order No.", "Created At", "Fulfillment Status", "Notes", "HP", "Address", "Name",
     "recipient_address", "Currency", "Product", "Platform"]) #Reorder Columns
 
+    #Add platform name to dataframe
+    df["Platform"] = "Shopee"
     return df
 
 #Generate full order df
