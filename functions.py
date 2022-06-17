@@ -19,9 +19,9 @@ COL_EMAIL = "Email"
 
 #FilePath
 PATH_SETTING_FP = os.path.dirname(os.path.realpath(__file__)) + "\Path Setting.xlsx"
-SETTING_FP = "Product Setting.xlsx"
-CUSTOMER_DATA = "Customer Data.xlsx"
-COMBINED_DATA = "Combined Data.xlsx"
+SETTING_FP = os.path.dirname(os.path.realpath(__file__)) +  "\Product Setting.xlsx"
+CUSTOMER_DATA = os.path.dirname(os.path.realpath(__file__)) + "\Customer Data.xlsx"
+COMBINED_DATA = os.path.dirname(os.path.realpath(__file__)) + "\Combined Data.xlsx"
 
 #Combines dataframes
 def combine_dfs(*args): #Takes in pandas dataframe
@@ -75,9 +75,9 @@ def get_default_path():
     global settingFP
     global customerData
     global combinedData
-    settingFP = dictPath["SettingFilePath"]
-    customerData = dictPath["CustomerDataFilePath"]
-    combinedData = dictPath["CombinedDataFilePath"]
+    SETTING_FP = dictPath["SettingFilePath"]
+    CUSTOMER_DATA = dictPath["CustomerDataFilePath"]
+    COMBINED_DATA = dictPath["CombinedDataFilePath"]
 
 #Generate quantity table based on the product dictionary
 def generate_qty_table(df, defaultQtyDf):
