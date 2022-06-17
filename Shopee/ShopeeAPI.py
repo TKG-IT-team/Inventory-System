@@ -7,9 +7,10 @@ import pandas as pd
 import config_tools_shopee as config_tools
 from datetime import datetime
 import sys
+import os
   
 # setting path
-sys.path.append('../TKG Inventory')
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from functions import generate_qty_table
 
