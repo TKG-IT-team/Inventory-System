@@ -55,8 +55,8 @@ def get_new_orders(last_date): #lastDate in ISO 8601 format
 
   
 def add_to_dict_product(dictProduct, output):
-    if 'product_id' in dictProduct.keys():
-        product_name = dictProduct['product_id']
+    if "title" in dictProduct.keys():
+        product_name = dictProduct["title"]
         qty = dictProduct['quantity']
         if not product_name in output.keys():
             output[product_name] = qty
@@ -146,6 +146,7 @@ def clean(df):
 
     df.drop('line_items', axis=1, inplace=True)
 
+    
     #Drop rows with financial status = refunded or voided
     for i, series in df.iterrows():
         if series["financial_status"] == "refunded" or series["financial_status"] == "voided":
@@ -157,8 +158,7 @@ def clean(df):
     #Dropping unecessary columns and renaming them
     df.drop(['financial_status', 'address1', 'address2'],axis=1,inplace=True) #'product', 'id', 'Customer_id'
     df = df.rename(columns={'order_number': 'Order No.', 'created_at': 'Created At', 'note' : 'Notes', 'name': 'Name', 'currency_code': 'Currency', 'title': 'Product Orders', 'amount':'Amount Spent', 'fulfillment_status': "Fulfillment Status", "product": "Product"})
-    
-    print(df.columns)
+
     return df
 
 #Generate Full Order Df
@@ -166,7 +166,6 @@ def generate_full_order_df(default_qty_df):
     df = pd.DataFrame(get_all_orders())
     df = clean(df)
     df, unmatchedProducts = generate_qty_table(df, default_qty_df)
-    print(df.columns)
     return df, unmatchedProducts
 
 #Returns a dataframe of orders since last input date

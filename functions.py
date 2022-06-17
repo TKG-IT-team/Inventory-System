@@ -82,23 +82,22 @@ def get_default_path():
 #Generate quantity table based on the product dictionary
 def generate_qty_table(df, defaultQtyDf):
     unmatchedProducts = []
-    # df.columns = map(str.lower, df.columns)
     for i, orderSeries in df.iterrows():
         orderStr = orderSeries["Product"]
         orderDict = ast.literal_eval(orderStr)
         pdtComponents = {}
-        for product_id, qty in orderDict.items():
-            if (product_id in defaultQtyDf["id"].tolist()):
+        for product_name, qty in orderDict.items():
+            if (product_name in defaultQtyDf["title"].tolist()):
                 for flavour in defaultQtyDf.columns.tolist()[2:]:
                     if flavour not in pdtComponents.keys():
-                        pdtComponents[flavour] = qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["id"]==product_id].index.values[0], flavour]
+                        pdtComponents[flavour] = qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["title"]==product_name].index.values[0], flavour]
                     else:
-                        pdtComponents[flavour] += qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["id"]==product_id].index.values[0], flavour]
+                        pdtComponents[flavour] += qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["title"]==product_name].index.values[0], flavour]
             else:
                 if len(unmatchedProducts) == 0:
-                    unmatchedProducts.append(product_id)
-                elif product_id not in unmatchedProducts:
-                    unmatchedProducts.append(product_id)
+                    unmatchedProducts.append(product_name)
+                elif product_name not in unmatchedProducts:
+                    unmatchedProducts.append(product_name)
                 else:
                     pass
         for component, componentQty in pdtComponents.items():

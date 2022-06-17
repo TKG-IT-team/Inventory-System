@@ -1,16 +1,19 @@
+
 import hmac
 import time
 import requests
 import hashlib
 import json
 import pandas as pd
-import config_tools_shopee as config_tools
+
 from datetime import datetime
 import sys
 import os
-  
 # setting path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
+import config_tools_shopee as config_tools
+
 
 from functions import generate_qty_table
 
@@ -177,6 +180,7 @@ def clean_df(df):
 
     #Add platform name to dataframe
     df["Platform"] = "Shopee"
+    df = df.reset_index(drop=True)
     return df
 
 #Generate full order df
