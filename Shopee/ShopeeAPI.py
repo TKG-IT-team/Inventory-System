@@ -6,7 +6,12 @@ import json
 import pandas as pd
 import config_tools_shopee as config_tools
 from datetime import datetime
-from functions import generate_qty_table, get_default_qty
+import sys
+  
+# setting path
+sys.path.append('../TKG Inventory')
+
+from functions import generate_qty_table
 
 host = "https://partner.shopeemobile.com"
 v2_path = "/api/v2/shop/auth_partner"
