@@ -1,4 +1,5 @@
 from Shopify.ShopifyCustomerAPI import ShopifyCustomerAPI
+import os
 
 
 #Shopify
@@ -9,7 +10,7 @@ version = "2022-04"
 
 
 #FilePath
-customerData = "Customer Data.xlsx"
+customerData = os.path.dirname(os.path.realpath(__file__)) + "\Customer Data.xlsx"
 
 
 if __name__ == "__main__":
