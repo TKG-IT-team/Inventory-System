@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import dateutil.parser as parser
 import ast
+import config_tools_data
 
 #Shopify
 API_KEY = "1da062b3aea0f3a1a3eed35d52510c20"
@@ -67,13 +68,15 @@ def get_default_qty():
 
 #Returns the default path for setting
 def get_default_path():
-    defaultPathDF = pd.read_excel(PATH_SETTING_FP, index_col = 0)
-    global SETTING_FP
-    global CUSTOMER_DATA
-    global COMBINED_DATA
-    SETTING_FP =  defaultPathDF.at["SettingFilePath", "Path"]
-    CUSTOMER_DATA =  defaultPathDF.at["CustomerDataFilePath", "Path"]
-    COMBINED_DATA = defaultPathDF.at["CombinedDataFilePath", "Path"]
+    
+    dictPath = config_tools_data.readConfig()
+   
+    global settingFP
+    global customerData
+    global combinedData
+    settingFP = dictPath["SettingFilePath"]
+    customerData = dictPath["CustomerDataFilePath"]
+    combinedData = dictPath["CombinedDataFilePath"]
 
 #Generate quantity table based on the product dictionary
 def generate_qty_table(df, defaultQtyDf):

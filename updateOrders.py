@@ -4,7 +4,7 @@ from Shopify import ShopifyOrderAPI
 import dateutil.parser as parser
 from functions import get_default_path, get_default_qty, combine_orders_cust_df, combine_dfs, convert_ISO, convert_epoch
 from functions import CUSTOMER_DATA, COMBINED_DATA
-from Shopee import ShopeeAPI
+# from Shopee import ShopeeAPI
 
 #Split df into multiple platforms based on dates, returns a list of Dfs
 def split_platforms(combinedOrderDf):
@@ -65,14 +65,14 @@ if __name__ == "__main__":
     old_shopify = remove_rows_after_date(platformDict["Shopify"], date_dict["Shopify"])
     updated_shopify = combine_dfs(old_shopify, new_shopify)
 
-    ###Shopee
-    new_shopee, unmatched_products = ShopeeAPI.generate_new_order_df(defaultQtyDf, convert_epoch(date_dict["Shopify"]))
+    # ###Shopee
+    # new_shopee, unmatched_products = ShopeeAPI.generate_new_order_df(defaultQtyDf, convert_epoch(date_dict["Shopify"]))
 
-    #Combines old and new Shopify Df
-    old_shopee = remove_rows_after_date(platformDict["Shopee"], date_dict["Shopee"])
-    updated_shopee = combine_dfs(old_shopee, new_shopee)
+    # #Combines old and new Shopify Df
+    # old_shopee = remove_rows_after_date(platformDict["Shopee"], date_dict["Shopee"])
+    # updated_shopee = combine_dfs(old_shopee, new_shopee)
 
     #Combines platforms
-    newCombined = combine_dfs(updated_shopify, updated_shopee)
+    newCombined = combine_dfs(updated_shopify)
     newCombined.to_excel(COMBINED_DATA, index=False)
 
