@@ -143,8 +143,8 @@ def get_all_orders():
         if len(str_order_list) > 0:
             df = pd.concat([df,get_order_detail(access_token, str_order_list)])
     # df = clean_df(df)
-    # df["Platform"] = "Shopee"
-    # df.to_excel("test.xlsx", index=False)
+    #df["Platform"] = "Shopee"
+    #df.to_excel("test.xlsx", index=False)
     return df
 
 def get_new_orders(last_date): #date given in epoch time
@@ -164,7 +164,7 @@ def get_new_orders(last_date): #date given in epoch time
             df = pd.concat([df,get_order_detail(access_token, str_order_list)])
     # df = clean_df(df)
     # df["Platform"] = "Shopee"
-    # df.to_excel("test.xlsx", index=False)
+    df.to_excel("test.xlsx", index=False)
     return df
 
 
