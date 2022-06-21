@@ -112,11 +112,14 @@ def generate_qty_table(df, defaultQtyDf):
 
 #Converts date to ISO8601 format
 def convert_ISO(date):
-    date = parser.parse(date)
+    try:
+        date = parser.parse(date)
+    except:
+        pass
     convertedDate = date.isoformat()
     return convertedDate
 
 #Converts date from ISO to epoch format
 def convert_epoch(date):
     date = parser.isoparse(date).timestamp()
-    return date
+    return int(date)

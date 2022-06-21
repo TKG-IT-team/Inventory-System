@@ -15,7 +15,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 import config_tools_shopee as config_tools
 
 
-from functions import generate_qty_table
+from functions import generate_qty_table, convert_epoch
 
 host = "https://partner.shopeemobile.com"
 v2_path = "/api/v2/shop/auth_partner"
@@ -164,9 +164,8 @@ def get_new_orders(last_date): #date given in epoch time
             df = pd.concat([df,get_order_detail(access_token, str_order_list)])
     # df = clean_df(df)
     # df["Platform"] = "Shopee"
-    df.to_excel("test.xlsx", index=False)
+    # df.to_excel("test.xlsx", index=False)
     return df
-
 
 #Cleans data in the dataframe
 def clean_df(df):
@@ -176,12 +175,25 @@ def clean_df(df):
     "full_address":"Address", })
     df["Created At"]  = df["Created At"].apply(datetime.fromtimestamp)#Changes timestamp to datetime
     df = df.reindex(columns=["Order No.", "Created At", "Fulfillment Status", "Notes", "HP", "Address", "Name",
-    "recipient_address", "Currency", "Product", "Platform"]) #Reorder Columns
+    "Currency", "Product", "Platform"]) #Reorder Columns, "recipient_address"
 
     #Add platform name to dataframe
     df["Platform"] = "Shopee"
     df = df.reset_index(drop=True)
+
+    #Sort by date
+    df = df.sort_values(by="Created At")
     return df
+
+#Remove customer data from cleaned data
+def clean_wo_customer_data(old_df, new_df):
+    new_df['HP'].truncate(before=len(old_df) - 1) 
+    new_df['Address'].truncate(before=len(old_df) - 1) 
+    new_df['Name'].truncate(before=len(old_df) - 1)
+    new_df['HP'] =  pd.concat([old_df['HP'], new_df['HP']])
+    new_df['Address'] =  pd.concat([old_df['Address'],new_df['Address']])
+    new_df['Name'] =  pd.concat([old_df['Name'], new_df['Name']])
+    return new_df
 
 #Generate full order df
 def generate_full_order_df(defaultQtyDf):
@@ -191,11 +203,14 @@ def generate_full_order_df(defaultQtyDf):
     return df, unmatchedProducts
 
 #Returns a dataframe of orders since last input date
-def generate_new_order_df(defaultQtyDf, lastDate): #lastDate in ISO 8601 format
-    df = get_new_orders(lastDate)
-    df = clean_df(df)
+def generate_new_order_df(defaultQtyDf, lastDate, old_df): #lastDate in IS08601 format
+    epoch_date = convert_epoch(lastDate)
+    new_df = get_new_orders(epoch_date)
+    new_df = clean_df(new_df)
+    new_df.to_excel("new_df.xlsx")
+    df = clean_wo_customer_data(old_df, new_df)
     df, unmatchedProducts = generate_qty_table(df, defaultQtyDf)
     return df, unmatchedProducts
 
 #print(generateAuthorisationUrl2())
-get_all_orders()
+# get_all_orders()
