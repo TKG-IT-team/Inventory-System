@@ -65,6 +65,8 @@ if __name__ == "__main__":
     #Combines old and new Shopify Df
     split = split_df_based_on_date(platformDict["Shopify"], date_dict["Shopify"])
     old_shopify = split[0]
+    old_shopify.to_excel("old.xlsx", index=False)
+    new_shopify.to_excel("new.xlsx", index=False)
     updated_shopify = combine_dfs(old_shopify, new_shopify)
 
     ###Shopee

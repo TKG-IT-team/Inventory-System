@@ -69,11 +69,11 @@ def clean(df):
     # Keeps the columns we need
     df = df[['order_number','created_at' ,'financial_status' , 'fulfillment_status', 'note', 'customer', 'line_items', 'total_price_set', 'shipping_address']]
 
-    # Mutates columns
-    # df['order_number'] = 'S' + df['order_number'].astype(str)
-    df['created_at'] = df['created_at'].apply(lambda x: datetime.strptime(x, '%Y-%m-%dT%H:%M:%S%z').strftime('%Y-%m-%d %I:%M:%S %p'))
-    df = df.reset_index(drop=True)
+    # Mutates columns (change date format)
 
+    df = df.assign(created_at=[datetime.strptime(x, '%Y-%m-%dT%H:%M:%S%z').strftime('%Y-%m-%d %I:%M:%S %p') for x in df.created_at])
+    
+    df = df.reset_index(drop=True)
     #Change fulfillment status to fulfilled for orders in 2021 and before
     for i, series in df.iterrows():    
         if series["fulfillment_status"] == None:
@@ -138,7 +138,7 @@ def clean(df):
         for j in range(len(dataRow)):
             if str(type(dataRow[j])) == "<class 'list'>":
                 for z in range(len(dataRow[j])):
-                    dictProduct = add_to_dict_product(dataRow[j][z] , dictProduct)
+                    dictProduct = add_to_dict_product (dataRow[j][z] , dictProduct)
             else:
                 dictProduct = add_to_dict_product(dataRow[j], dictProduct)
         df.at[i, "product"] = str(dictProduct)
