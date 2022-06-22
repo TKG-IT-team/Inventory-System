@@ -50,7 +50,6 @@ def get_new_orders(last_date): #lastDate in ISO 8601 format
         lastId = df['id'].iloc[-1]
         if len(df)<250:
             break
-    orders.to_excel("test.xlsx", index=False)
     return(orders)
 
   

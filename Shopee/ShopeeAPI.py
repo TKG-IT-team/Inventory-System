@@ -187,6 +187,7 @@ def clean_df(df):
 
 #Remove customer data from cleaned data
 def clean_wo_customer_data(old_df, new_df):
+    new_df = new_df.reset_index(drop=True)
     new_df['HP'].truncate(before=len(old_df) - 1) 
     new_df['Address'].truncate(before=len(old_df) - 1) 
     new_df['Name'].truncate(before=len(old_df) - 1)
@@ -207,7 +208,6 @@ def generate_new_order_df(defaultQtyDf, lastDate, old_df): #lastDate in IS08601 
     epoch_date = convert_epoch(lastDate)
     new_df = get_new_orders(epoch_date)
     new_df = clean_df(new_df)
-    new_df.to_excel("new_df.xlsx")
     df = clean_wo_customer_data(old_df, new_df)
     df, unmatchedProducts = generate_qty_table(df, defaultQtyDf)
     return df, unmatchedProducts
