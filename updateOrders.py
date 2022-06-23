@@ -1,7 +1,7 @@
 import pandas as pd
 from Shopify import ShopifyOrderAPI
 from Shopee import ShopeeAPI
-from functions import get_default_path, get_default_qty, combine_orders_cust_df, combine_dfs, convert_ISO
+from functions import get_default_path, get_default_qty, combine_orders_cust_df, combine_dfs, convert_ISO, add_one_sec_ISO
 from functions import CUSTOMER_DATA, COMBINED_DATA
 
 
@@ -25,7 +25,8 @@ def get_latest_date(order_df):
     for i, series in order_df.iterrows():
         if series["Fulfillment Status"] in UNFULFILLED_STATUS:
             return series["Created At"]
-    return order_df["Created At"].iloc[-1]
+   
+    return add_one_sec_ISO(order_df["Created At"].iloc[-1])
 
 #Split dataframe after a given date
 def split_df_based_on_date(order_df, date): #Given date must be in ISO format
@@ -65,12 +66,11 @@ if __name__ == "__main__":
     #Combines old and new Shopify Df
     split = split_df_based_on_date(platformDict["Shopify"], date_dict["Shopify"])
     old_shopify = split[0]
-    old_shopify.to_excel("old.xlsx", index=False)
-    new_shopify.to_excel("new.xlsx", index=False)
     updated_shopify = combine_dfs(old_shopify, new_shopify)
 
     ###Shopee
     split = split_df_based_on_date(platformDict["Shopee"], date_dict["Shopee"])
+    split[0].to_excel("testOLD.xlsx", index=False)
     new_shopee, unmatched_products = ShopeeAPI.generate_new_order_df(defaultQtyDf, date_dict["Shopee"], split[1])
 
     #Combines old and new Shopify Df

@@ -3,6 +3,7 @@ import os
 import dateutil.parser as parser
 import ast
 import config_tools_data
+from datetime import timedelta
 
 #Shopify
 API_KEY = "1da062b3aea0f3a1a3eed35d52510c20"
@@ -110,6 +111,10 @@ def generate_qty_table(df, defaultQtyDf):
         # messagebox.showinfo("Unmatched Products", "There are unmatched products. Please check Settings to verify all product inputs.")
 
     return df, pd.Series(unmatchedProducts, name = "Unmatched Products")
+
+#Adds one second to date
+def add_one_sec_ISO(str_date):
+    return pd.to_datetime(str_date) + timedelta(seconds=1)
 
 #Converts date to ISO8601 format
 def convert_ISO(date):

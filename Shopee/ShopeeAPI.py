@@ -131,7 +131,7 @@ def get_all_orders():
     access_token, refresh_token = config_tools.readConfig()
     if (len(refresh_token) == 0):
         print("Please get code from authorization")
-        access_token, refresh_token = get_token_shop_level("4b6a73647a437562495a6a4849526f61")
+        access_token, refresh_token = get_token_shop_level("4a6c4353426f70736858664669426575")
     else:
         access_token, refresh_token = refresh_token_shop_level(refresh_token)
     config_tools.writeConfig(access_token, refresh_token)
@@ -187,13 +187,20 @@ def clean_df(df):
 
 #Remove customer data from cleaned data
 def clean_wo_customer_data(old_df, new_df):
+    #check old df is correct, use left join instead
+    old_df.to_excel("testToBeDelete.xlsx", index=False)
     new_df = new_df.reset_index(drop=True)
-    new_df['HP'].truncate(before=len(old_df) - 1) 
-    new_df['Address'].truncate(before=len(old_df) - 1) 
     new_df['Name'].truncate(before=len(old_df) - 1)
-    new_df['HP'] =  pd.concat([old_df['HP'], new_df['HP']])
-    new_df['Address'] =  pd.concat([old_df['Address'],new_df['Address']])
-    new_df['Name'] =  pd.concat([old_df['Name'], new_df['Name']])
+    if 'HP' in old_df.keys():
+        new_df['HP'].truncate(before=len(old_df) - 1) 
+        new_df['HP'] =  pd.concat([old_df['HP'], new_df['HP']])
+    if 'Address' in old_df.keys():
+        new_df['Address'].truncate(before=len(old_df) - 1)
+        new_df['Address'] =  pd.concat([old_df['Address'],new_df['Address']])
+    if 'Name' in old_df.keys():
+        new_df['Name'].truncate(before=len(old_df) - 1)
+        new_df['Name'] =  pd.concat([old_df['Name'], new_df['Name']])
+    
     return new_df
 
 #Generate full order df
@@ -213,4 +220,4 @@ def generate_new_order_df(defaultQtyDf, lastDate, old_df): #lastDate in IS08601 
     return df, unmatchedProducts
 
 #print(generateAuthorisationUrl2())
-# get_all_orders()
+#get_all_orders()
