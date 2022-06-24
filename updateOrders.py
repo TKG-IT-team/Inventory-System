@@ -3,7 +3,7 @@ from Shopify import ShopifyOrderAPI
 from Shopee import ShopeeAPI
 from functions import get_default_path, get_default_qty, combine_orders_cust_df, combine_dfs, convert_ISO, add_one_sec_ISO
 from functions import CUSTOMER_DATA, COMBINED_DATA
-
+import sys
 
 UNFULFILLED_STATUS = ["unfulfilled", "TO_CONFIRM_RECEIVE", "PROCESSED"]
 
@@ -32,7 +32,7 @@ def get_latest_date(order_df):
 def split_df_based_on_date(order_df, date): #Given date must be in ISO format
     order_df = order_df.reset_index(drop=True)
     for i, series in order_df.iterrows():
-        if convert_ISO(series["Created At"]) > date:
+        if convert_ISO(series["Created At"]) >= date:
             return order_df.iloc[0 : i - 1, : ], order_df.iloc[i : , : ]
     return order_df, pd.DataFrame()
 
@@ -70,7 +70,9 @@ if __name__ == "__main__":
 
     ###Shopee
     split = split_df_based_on_date(platformDict["Shopee"], date_dict["Shopee"])
-    split[0].to_excel("testOLD.xlsx", index=False)
+    if split[1].empty:
+        split[0].to_excel(COMBINED_DATA, index=False) #no new data to get
+        sys.exit()
     new_shopee, unmatched_products = ShopeeAPI.generate_new_order_df(defaultQtyDf, date_dict["Shopee"], split[1])
 
     #Combines old and new Shopify Df

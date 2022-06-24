@@ -188,18 +188,9 @@ def clean_df(df):
 #Remove customer data from cleaned data
 def clean_wo_customer_data(old_df, new_df):
     #check old df is correct, use left join instead
-    old_df.to_excel("testToBeDelete.xlsx", index=False)
+    new_df.drop(['HP', 'Address', 'Name'], axis=1, inplace=True)
+    new_df = pd.merge(new_df, old_df[['Order No.', 'HP', 'Address', 'Name']], on='Order No.', how='left')
     new_df = new_df.reset_index(drop=True)
-    new_df['Name'].truncate(before=len(old_df) - 1)
-    if 'HP' in old_df.keys():
-        new_df['HP'].truncate(before=len(old_df) - 1) 
-        new_df['HP'] =  pd.concat([old_df['HP'], new_df['HP']])
-    if 'Address' in old_df.keys():
-        new_df['Address'].truncate(before=len(old_df) - 1)
-        new_df['Address'] =  pd.concat([old_df['Address'],new_df['Address']])
-    if 'Name' in old_df.keys():
-        new_df['Name'].truncate(before=len(old_df) - 1)
-        new_df['Name'] =  pd.concat([old_df['Name'], new_df['Name']])
     
     return new_df
 

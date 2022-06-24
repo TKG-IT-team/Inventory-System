@@ -38,7 +38,6 @@ def col_as_keys(df, colName):
     return result
 
 #Combines dataframes of both customers and orders
-###Check why does this function create a duplicate of row for xia long (not found in customer data)
 def combine_orders_cust_df(customerDf, orderDf):
     custNameKeyDf = col_as_keys(customerDf, COL_CUSTOMER_ID)
 
@@ -104,7 +103,6 @@ def generate_qty_table(df, defaultQtyDf):
                     pass
         for component, componentQty in pdtComponents.items():
             df.at[i,component] = componentQty
-    
 
     if len(unmatchedProducts) > 0:
         print("Unmatched Products: " + str(unmatchedProducts))
