@@ -3,6 +3,7 @@ import os
 import dateutil.parser as parser
 import ast
 import config_tools_data
+from datetime import timedelta
 
 #Shopify
 API_KEY = "1da062b3aea0f3a1a3eed35d52510c20"
@@ -37,7 +38,6 @@ def col_as_keys(df, colName):
     return result
 
 #Combines dataframes of both customers and orders
-###Check why does this function create a duplicate of row for xia long (not found in customer data)
 def combine_orders_cust_df(customerDf, orderDf):
     custNameKeyDf = col_as_keys(customerDf, COL_CUSTOMER_ID)
 
@@ -103,13 +103,16 @@ def generate_qty_table(df, defaultQtyDf):
                     pass
         for component, componentQty in pdtComponents.items():
             df.at[i,component] = componentQty
-    
 
     if len(unmatchedProducts) > 0:
         print("Unmatched Products: " + str(unmatchedProducts))
         # messagebox.showinfo("Unmatched Products", "There are unmatched products. Please check Settings to verify all product inputs.")
 
     return df, pd.Series(unmatchedProducts, name = "Unmatched Products")
+
+#Adds one second to date
+def add_one_sec_ISO(str_date):
+    return pd.to_datetime(str_date) + timedelta(seconds=1)
 
 #Converts date to ISO8601 format
 def convert_ISO(date):
