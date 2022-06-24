@@ -1,9 +1,14 @@
 ## 1. API data extraction
-from wsgiref.simple_server import demo_app
 import requests
 import pandas as pd
 from datetime import datetime, timedelta
 import dateutil.parser as parser
+
+import sys
+import os
+# setting path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 from functions import generate_qty_table
 
 #Converts pandas dataframe series to dictionary
