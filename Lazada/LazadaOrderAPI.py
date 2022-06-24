@@ -63,7 +63,7 @@ def get_order_list():
             break
         if not is_first_loop and len(df) < 99:
             break
-    # orders.to_excel("lazada_raw2.xlsx", index=False)
+    #orders.to_excel("lazada_raw2.xlsx", index=False)
     return orders
 
 #Get order details
@@ -79,12 +79,34 @@ def get_order_details(order_id):
     response = client.execute(request, access_token)
 
     order_details = pd.DataFrame([response.body['data'][0]])
-    print(response.body['data'][0].keys())
     return order_details
 
-def get_product_details(product_id):
-    
-    return 0
+#Cleans data in the dataframe
+def clean_df(df):
+    df.drop(['pick_up_store_info', 'tax_amount', 'voucher_seller', 'purchase_order_id', 'voucher_code_seller', 'voucher_code',
+             'variation', 'voucher_code_platform', 'purchase_order_number', 'is_reroute', 'stage_pay_status',
+             'tracking_code_pre', 'is_fbl', 'delivery_option_sof'], axis=1, inplace=True) #Removes unused columns
+    #df = df.rename(columns={"create_time":"Created At", "order_sn":"Order No.","order_status":"Fulfillment Status", #Renames columns
+    #"message_to_seller":"Notes","currency":"Currency","item_name":"Product", "name":"Name", "phone":"HP",
+    #"full_address":"Address", })
+    #df["Created At"]  = df["Created At"].apply(datetime.fromtimestamp)#Changes timestamp to datetime
+    #df = df.reindex(columns=["Order No.", "Created At", "Fulfillment Status", "Notes", "HP", "Address", "Name",
+    #"Currency", "Product", "Platform"]) #Reorder Columns, "recipient_address"
+
+    #Add platform name to dataframe
+    #df["Platform"] = "Shopee"
+    #df = df.reset_index(drop=True)
+
+    #Sort by date
+    #df = df.sort_values(by="Created At")
+    return df
 
 if __name__ == "__main__":
-    get_order_details(50220464779738)
+    order_list_df = get_order_list()
+    df = pd.DataFrame() #empty dataframe
+    #loops through every order id in order list dataframe and gets order detail
+    for order_id in order_list_df["order_id"]:
+        order_df = get_order_details(order_id)
+        df = pd.concat([df,order_df])
+    df = clean_df(df)
+    df.to_excel("test.xlsx", index=False)
