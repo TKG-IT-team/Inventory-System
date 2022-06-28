@@ -141,7 +141,7 @@ def get_all_orders():
         str_order_list = get_order_list(access_token, i, i + 1296000)
         if len(str_order_list) > 0:
             df = pd.concat([df,get_order_detail(access_token, str_order_list)])
-    # df = clean_df(df)
+    #df = clean_df(df)
     #df["Platform"] = "Shopee"
     #df.to_excel("test.xlsx", index=False)
     return df
@@ -208,6 +208,7 @@ def generate_new_order_df(defaultQtyDf, lastDate, old_df): #lastDate in IS08601 
     df = clean_wo_customer_data(old_df, new_df)
     df, unmatchedProducts = generate_qty_table(df, defaultQtyDf)
     return df, unmatchedProducts
+
 
 #print(generateAuthorisationUrl2())
 #get_all_orders()

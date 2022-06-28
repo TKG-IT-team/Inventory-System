@@ -1,6 +1,7 @@
 from Shopify.ShopifyCustomerAPI import ShopifyCustomerAPI
 import Shopify.ShopifyOrderAPI as ShopifyOrderAPI
 import Shopee.ShopeeAPI as ShopeeAPI
+import Lazada.LazadaOrderAPI as LazadaOrderAPI
 from functions import get_default_path, get_default_qty, combine_orders_cust_df, combine_dfs
 from functions import API_KEY, PASSWORD, HOSTNAME, VERSION, CUSTOMER_DATA, COMBINED_DATA
 
@@ -21,7 +22,9 @@ if __name__ == "__main__":
     ShopifyFullOrderDf, unmatchedProducts = ShopifyOrderAPI.generate_full_order_df(defaultQtyDf)
     #For Shopee
     ShopeeFullOrderDf, unmatchedProducts = ShopeeAPI.generate_full_order_df(defaultQtyDf)
-
+    #For Lazada
+    LazadaFullOrderDf, unmatchedProducts = LazadaOrderAPI.generate_full_order_df(defaultQtyDf)
+    
     #Combines Customer and Order Df
     shopifyCombined = combine_orders_cust_df(ShopifyFullCustDf, ShopifyFullOrderDf)
     

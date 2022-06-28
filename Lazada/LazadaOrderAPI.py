@@ -1,4 +1,9 @@
 from lazop_sdk import LazopClient, LazopRequest
+import sys
+import os
+# setting path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 import config_tools_lazada as config_tools
 import pandas as pd
 from LazadaAuthorisation import Authorisation
@@ -8,7 +13,8 @@ import os
 # setting path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
-from functions import convert_ISO
+from functions import convert_ISO, generate_qty_table
+
 
 #Get new access token
 def get_new_access_token():
@@ -43,8 +49,7 @@ def get_order_list():
         request.add_api_param('created_after', last_created_after) 
         request.add_api_param('limit', '100') #100 is the maximum number of orders per GET request
         response = client.execute(request, access_token)
-
-        if is_first_loop:  #Starts with first row   
+        if is_first_loop:  #Starts with first row
             df = pd.DataFrame([response.body['data']['orders'][0]])
             for i in range(len(response.body['data']['orders']) - 1):
                 temp_df = pd.DataFrame([response.body['data']['orders'][i + 1]])
@@ -83,30 +88,50 @@ def get_order_details(order_id):
 
 #Cleans data in the dataframe
 def clean_df(df):
-    df.drop(['pick_up_store_info', 'tax_amount', 'voucher_seller', 'purchase_order_id', 'voucher_code_seller', 'voucher_code',
-             'variation', 'voucher_code_platform', 'purchase_order_number', 'is_reroute', 'stage_pay_status',
-             'tracking_code_pre', 'is_fbl', 'delivery_option_sof'], axis=1, inplace=True) #Removes unused columns
-    #df = df.rename(columns={"create_time":"Created At", "order_sn":"Order No.","order_status":"Fulfillment Status", #Renames columns
-    #"message_to_seller":"Notes","currency":"Currency","item_name":"Product", "name":"Name", "phone":"HP",
-    #"full_address":"Address", })
-    #df["Created At"]  = df["Created At"].apply(datetime.fromtimestamp)#Changes timestamp to datetime
-    #df = df.reindex(columns=["Order No.", "Created At", "Fulfillment Status", "Notes", "HP", "Address", "Name",
-    #"Currency", "Product", "Platform"]) #Reorder Columns, "recipient_address"
 
-    #Add platform name to dataframe
-    #df["Platform"] = "Shopee"
-    #df = df.reset_index(drop=True)
+    df['address'] = df['address1'] + " " + df['post_code']    
+    df = df[['order_id', 'created_at',  'status', 'paid_price', 'currency', 'name' , 'phone', 'address', 'first_name']] # keep needed columns
 
-    #Sort by date
-    #df = df.sort_values(by="Created At")
+    df = df.rename(columns={"order_id":"Order No.", "created_at":"Created At","status":"Fulfillment Status", #Renames columns
+    "currency":"Currency","name":"Product", "first_name":"Name", "phone":"HP",
+    "address":"Address", })
+
+    df["Product"] = "{'" + df["Product"].values + "':1}"
+    df["Platform"] = "Lazada"
+
+    df = df.reset_index(drop=True)
+
     return df
 
-if __name__ == "__main__":
+#Splits one column into individual columns
+def split_column(df, column_header):
+    new_df = pd.DataFrame()
+    for dictItr in df[column_header]: #split item_list into individual columns
+        temp_df = pd.DataFrame.from_dict([dictItr])
+        new_df = pd.concat([temp_df,new_df])
+    return new_df
+
+#Generate full order df
+def generate_full_order_df(defaultQtyDf):
+    df = get_all_orders()
+    df = clean_df(df)
+    df, unmatchedProducts = generate_qty_table(df, defaultQtyDf)
+    return df, unmatchedProducts
+
+def get_all_orders():
     order_list_df = get_order_list()
+
     df = pd.DataFrame() #empty dataframe
+    
     #loops through every order id in order list dataframe and gets order detail
     for order_id in order_list_df["order_id"]:
         order_df = get_order_details(order_id)
         df = pd.concat([df,order_df])
-    df = clean_df(df)
-    df.to_excel("test.xlsx", index=False)
+    df = pd.merge(df, order_list_df[['order_id', 'address_billing']], on='order_id', how='left')
+    #splits address_billing into individual columns
+    address_df = split_column(df, "address_billing")
+    address_df['order_id'] = df['order_id'].values
+    df = pd.merge(df, address_df, on='order_id', how='left')
+    return df
+    
+#get_all_orders()
