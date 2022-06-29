@@ -82,19 +82,34 @@ def get_order_details(order_id):
     request = LazopRequest('/order/items/get','GET')
     request.add_api_param('order_id', order_id) 
     response = client.execute(request, access_token)
+    df = pd.DataFrame(response.body['data'])
+    df['order_id'] = order_id
+    return df
 
-    order_details = pd.DataFrame([response.body['data'][0]])
-    return order_details
+#Get order more detail, like address, remark
+def get_order_details2(order_id):
+    access_token = get_new_access_token()
+
+    url = f"https://api.lazada.sg/rest"
+    app_key, app_secret = config_tools.read_credentials_config()
+
+    client = LazopClient(url, app_key ,app_secret)
+    request = LazopRequest('/order/get','GET')
+    request.add_api_param('order_id', order_id) 
+    response = client.execute(request, access_token)
+    df = pd.DataFrame(response.body['data']['address_billing'], index=[0])
+    df['address'] = df['address1'] + " " + df['post_code']
+    df['Notes'] = response.body['data']['remarks']
+    df['order_id'] = order_id
+    return df
 
 #Cleans data in the dataframe
 def clean_df(df):
+  
+    df = df[['order_id', 'created_at',  'status', 'Notes', 'paid_price', 'currency', 'name' , 'phone', 'address', 'first_name']] # keep needed columns
 
-    df['address'] = df['address1'] + " " + df['post_code']    
-    df = df[['order_id', 'created_at',  'status', 'paid_price', 'currency', 'name' , 'phone', 'address', 'first_name']] # keep needed columns
-
-    df = df.rename(columns={"order_id":"Order No.", "created_at":"Created At","status":"Fulfillment Status", #Renames columns
-    "currency":"Currency","name":"Product", "first_name":"Name", "phone":"HP",
-    "address":"Address", })
+    df = df.rename(columns={"order_id":"Order No.", "created_at":"Created At","status":"Fulfillment Status", "remark":"Notes",  #Renames columns
+    "phone":"HP", "address":"Address", "first_name":"Name", "paid_price":"Amount Spent", "currency":"Currency","name":"Product" })
 
     df["Product"] = "{'" + df["Product"].values + "':1}"
     df["Platform"] = "Lazada"
@@ -126,12 +141,14 @@ def get_all_orders():
     #loops through every order id in order list dataframe and gets order detail
     for order_id in order_list_df["order_id"]:
         order_df = get_order_details(order_id)
+        order_df2 = get_order_details2(order_id)
+        order_df = pd.merge(order_df, order_df2, on='order_id', how='left')
         df = pd.concat([df,order_df])
-    df = pd.merge(df, order_list_df[['order_id', 'address_billing']], on='order_id', how='left')
+    #df = pd.merge(df, order_list_df[['order_id', 'address_billing']], on='order_id', how='left')
     #splits address_billing into individual columns
-    address_df = split_column(df, "address_billing")
-    address_df['order_id'] = df['order_id'].values
-    df = pd.merge(df, address_df, on='order_id', how='left')
+    #address_df = split_column(df, "address_billing")
+    #address_df['order_id'] = df['order_id'].values
+    #df = pd.merge(df, address_df, on='order_id', how='left')
     return df
     
-#get_all_orders()
+#clean_df(get_all_orders()).to_excel("test.xlsx", index=False)

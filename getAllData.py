@@ -29,5 +29,5 @@ if __name__ == "__main__":
     shopifyCombined = combine_orders_cust_df(ShopifyFullCustDf, ShopifyFullOrderDf)
     
     #Combines platforms
-    combinedDf = combine_dfs(shopifyCombined, ShopeeFullOrderDf)
+    combinedDf = combine_dfs(shopifyCombined, ShopeeFullOrderDf, LazadaFullOrderDf)
     combinedDf.to_excel(COMBINED_DATA, index=False)
