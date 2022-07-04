@@ -163,6 +163,9 @@ def clean(df):
     df.drop(['financial_status', 'address1', 'address2'],axis=1,inplace=True) #'product', 'id', 'Customer_id'
     df = df.rename(columns={'order_number': 'Order No.', 'created_at': 'Created At', 'note' : 'Notes', 'name': 'Name', 'currency_code': 'Currency', 'title': 'Product Orders', 'amount':'Amount Spent', 'fulfillment_status': "Fulfillment Status", "product": "Product"})
 
+    # insert admendment status column to dataframe
+    df.insert(len(df.columns),"Admend Status",0)
+    
     return df
 
 #Generate Full Order Df
@@ -178,3 +181,5 @@ def generate_new_order_df(default_qty_df, last_date): #lastDate in ISO 8601 form
     df = clean(df)
     df, unmatchedProducts = generate_qty_table(df, default_qty_df)
     return df, unmatchedProducts
+
+
