@@ -1,34 +1,41 @@
-
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
+from selenium.common.exceptions import NoSuchElementException
 
-# For test account
+# Login details for Redmart
 email = "czy199162@gmail.com"
 password = "Wrestlin2021"
 
-# open the url retrieved
-# pls retrieve the respective driver file path and enter below
+# pls retrieve the respective webdriver file path and enter below
 driver = webdriver.Chrome(r"C:\Users\user\Downloads\chromedriver")
-driver.get('https://www.google.com/')
-#driver.get('https://partners.redmart.com/login/index')
+
+# Enter Redmart login page URL 
+driver.get('https://partners.redmart.com/login/index')
 
 # To key in username and password
 # 1. pls selct input box right click inspect
 # 2. enter the respective element id naming
+# email_element = driver.find_element(By.CSS_SELECTOR, "input[id='account']")
+# email_element.send_keys(email)
 
-# //div[contains(@class,'password-group')]//following::div//input[@type='phone']
-# element = driver.find_element_by_xpath("//input[contains(@placeholder = 'Email / Phone / Username')]")
-# element.send_keys(user_name)
-# element = driver.find_element_by_id("passwordInput")
-# element.send_keys(password)
+# password_element = driver.find_element(By.CSS_SELECTOR,"input[id='password']")
+# password_element.send_keys(password)
+    
+try: 
+    # Locate web element
+    email_element = driver.find_element(By.CSS_SELECTOR, "input[id='account']")
+    email_element.send_keys(email)
+    
+    password_element = driver.find_element(By.CSS_SELECTOR,"input[id='password']")
+    password_element.send_keys(password)
+    #element = driver.find_element(By.XPATH, "//input[contains(@id, 'account')]")
+    
+    password_element.send_keys(Keys.RETURN) #press Enter
+    
+except NoSuchElementException:
+    print ("Unable to locate element")
 
-#element = driver.find_element_by_id("account")
-#element.send_keys(email)
-
-#element = driver.find_element_by_id("password")
-#element.send_keys(password)
-#element.send_keys(Keys.RETURN) #press Enter
 
 # If enter button does not work then need to click the button
 # for locating elements pls refer the the guide: https://selenium-python.readthedocs.io/locating-elements.html
