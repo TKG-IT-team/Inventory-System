@@ -8,7 +8,8 @@ email = "czy199162@gmail.com"
 password = "Wrestlin2021"
 
 # pls retrieve the respective webdriver file path and enter below
-driver = webdriver.Chrome(r"C:\Users\user\Downloads\chromedriver")
+driver = webdriver.Edge(r"C:\Users\Kaiwei\Desktop\TKG Inventory\webDriver\edgedriver_win64\msedgedriver.exe")
+#driver = webdriver.Chrome(r"C:\Users\user\Downloads\chromedriver")
 
 # Enter Redmart login page URL 
 driver.get('https://partners.redmart.com/login/index')
