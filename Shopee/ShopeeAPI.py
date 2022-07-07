@@ -171,6 +171,9 @@ def clean_df(df):
     df = df.reindex(columns=["Order No.", "Created At", "Fulfillment Status", "Notes", "HP", "Address", "Name",
     "Currency", "Product", "Platform"]) #Reorder Columns, "recipient_address"
 
+    # insert admendment status column to dataframe
+    df.insert(len(df.columns),"Admend Status",0)
+    
     #Add platform name to dataframe
     df["Platform"] = "Shopee"
     df = df.reset_index(drop=True)
