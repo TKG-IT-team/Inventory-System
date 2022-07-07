@@ -33,33 +33,33 @@ def combine_dfs(*args): #Takes in pandas dataframe
     return combinedDf
 
 #Use given column value as keys and rest of column values in list as values
-def col_as_keys(df, colName):
-    result = df.set_index(colName).T.to_dict('list')
+def col_as_keys(df, col_name):
+    result = df.set_index(col_name).T.to_dict('list')
     return result
 
 #Combines dataframes of both customers and orders
-def combine_orders_cust_df(customerDf, orderDf):
+def combine_orders_cust_df(customerDf, order_df):
     custNameKeyDf = col_as_keys(customerDf, COL_CUSTOMER_ID)
 
     #Combining Order and Customer DF
-    for index, series in orderDf.iterrows():
+    for index, series in order_df.iterrows():
         if series[COL_CUSTOMER_ID] in custNameKeyDf.keys():
-            orderDf.at[index, COL_HP] = custNameKeyDf[series[COL_CUSTOMER_ID]][1]
-            orderDf.at[index, COL_ADDRESS] = custNameKeyDf[series[COL_CUSTOMER_ID]][3]
-            orderDf.at[index, COL_BIRTHDAY] = custNameKeyDf[series[COL_CUSTOMER_ID]][2]
-            orderDf.at[index, COL_EMAIL] = custNameKeyDf[series[COL_CUSTOMER_ID]][4]
+            order_df.at[index, COL_HP] = custNameKeyDf[series[COL_CUSTOMER_ID]][1]
+            order_df.at[index, COL_ADDRESS] = custNameKeyDf[series[COL_CUSTOMER_ID]][3]
+            order_df.at[index, COL_BIRTHDAY] = custNameKeyDf[series[COL_CUSTOMER_ID]][2]
+            order_df.at[index, COL_EMAIL] = custNameKeyDf[series[COL_CUSTOMER_ID]][4]
         else:
             print(series["Name"] + " Not Found in Customer Data")
     
     #Drop customer_id col
-    orderDf.drop([COL_CUSTOMER_ID],axis=1,inplace=True)
+    order_df.drop([COL_CUSTOMER_ID],axis=1,inplace=True)
 
     #Reordering columns
-    cols = orderDf.columns.tolist()
+    cols = order_df.columns.tolist()
     cols = cols[0:4] + cols[-4:] + cols[4:-4]
-    orderDf = orderDf[cols]
+    order_df = order_df[cols]
 
-    return orderDf #Combined Order and Customer DF
+    return order_df #Combined Order and Customer DF
                 
 
 #Returns the default qty in pandas Dataframe
@@ -81,34 +81,34 @@ def get_default_path():
     COMBINED_DATA = dictPath["CombinedDataFilePath"]
 
 #Generate quantity table based on the product dictionary
-def generate_qty_table(df, defaultQtyDf):
-    unmatchedProducts = []
-    for i, orderSeries in df.iterrows():
-        orderStr = orderSeries["Product"]
-        orderDict = ast.literal_eval(orderStr)
-        pdtComponents = {}
-        for product_name, qty in orderDict.items():
-            if (product_name in defaultQtyDf["title"].tolist()):
-                for flavour in defaultQtyDf.columns.tolist()[2:]:
-                    if flavour not in pdtComponents.keys():
-                        pdtComponents[flavour] = qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["title"]==product_name].index.values[0], flavour]
+def generate_qty_table(df, default_qty_df, platform):
+    unmatched_products = []
+    for i, order_series in df.iterrows():
+        order_str = order_series["Product"]
+        order_dict = ast.literal_eval(order_str)
+        pdt_components = {}
+        for product_name, qty in order_dict.items():
+            if (product_name in default_qty_df["title"].tolist()):
+                for flavour in default_qty_df.columns.tolist()[2:]:
+                    if flavour not in pdt_components.keys():
+                        pdt_components[flavour] = qty * default_qty_df.at[default_qty_df[default_qty_df["title"]==product_name].index.values[0], flavour]
                     else:
-                        pdtComponents[flavour] += qty * defaultQtyDf.at[defaultQtyDf[defaultQtyDf["title"]==product_name].index.values[0], flavour]
+                        pdt_components[flavour] += qty * default_qty_df.at[default_qty_df[default_qty_df["title"]==product_name].index.values[0], flavour]
             else:
-                if len(unmatchedProducts) == 0:
-                    unmatchedProducts.append(product_name)
-                elif product_name not in unmatchedProducts:
-                    unmatchedProducts.append(product_name)
+                if len(unmatched_products) == 0:
+                    unmatched_products.append(product_name)
+                elif product_name not in unmatched_products:
+                    unmatched_products.append(product_name)
                 else:
                     pass
-        for component, componentQty in pdtComponents.items():
+        for component, componentQty in pdt_components.items():
             df.at[i,component] = componentQty
 
-    if len(unmatchedProducts) > 0:
-        print("Unmatched Products: " + str(unmatchedProducts))
+    if len(unmatched_products) > 0:
+        print(f"Unmatched Products for {platform}: " + str(unmatched_products))
         # messagebox.showinfo("Unmatched Products", "There are unmatched products. Please check Settings to verify all product inputs.")
 
-    return df, pd.Series(unmatchedProducts, name = "Unmatched Products")
+    return df, pd.Series(unmatched_products, name = "Unmatched Products")
 
 #Adds one second to date
 def add_one_sec_ISO(str_date):
