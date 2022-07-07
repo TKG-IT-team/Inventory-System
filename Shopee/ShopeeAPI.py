@@ -1,4 +1,5 @@
 import hmac
+from itertools import combinations_with_replacement
 import time
 import requests
 import hashlib
@@ -14,7 +15,7 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 import config_tools_shopee as config_tools
 
 
-from functions import generate_qty_table, convert_epoch
+from functions import combine_dfs, generate_qty_table, convert_epoch
 
 host = "https://partner.shopeemobile.com"
 v2_path = "/api/v2/shop/auth_partner"
@@ -130,7 +131,7 @@ def get_all_orders():
     access_token, refresh_token = config_tools.readConfig()
     if (len(refresh_token) == 0):
         print("Please get code from authorization")
-        access_token, refresh_token = get_token_shop_level("4a6c4353426f70736858664669426575")
+        access_token, refresh_token = get_token_shop_level("70524f4e484b45586c5270596f744977")
     else:
         access_token, refresh_token = refresh_token_shop_level(refresh_token)
     config_tools.writeConfig(access_token, refresh_token)
@@ -141,29 +142,23 @@ def get_all_orders():
         str_order_list = get_order_list(access_token, i, i + 1296000)
         if len(str_order_list) > 0:
             df = pd.concat([df,get_order_detail(access_token, str_order_list)])
-    #df = clean_df(df)
-    #df["Platform"] = "Shopee"
-    #df.to_excel("test.xlsx", index=False)
     return df
 
 def get_new_orders(last_date): #date given in epoch time
     access_token, refresh_token = config_tools.readConfig()
     if (len(refresh_token) == 0):
         print("Please get code from authorization")
-        access_token, refresh_token = get_token_shop_level("4b6a73647a437562495a6a4849526f61")
+        access_token, refresh_token = get_token_shop_level("70524f4e484b45586c5270596f744977")
     else:
         access_token, refresh_token = refresh_token_shop_level(refresh_token)
-    config_tools.writeConfig(access_token, refresh_token)
     print("refresh token: " + refresh_token)
     print ("access_token: " + access_token)
+    config_tools.writeConfig(access_token, refresh_token)
     df = pd.DataFrame() #empty dataframe
     for i in range(last_date, int(datetime.timestamp(datetime.now())), 1296000): #from last given date to now, step: 15 days
         str_order_list = get_order_list(access_token, i, i + 1296000)
         if len(str_order_list) > 0:
             df = pd.concat([df,get_order_detail(access_token, str_order_list)])
-    # df = clean_df(df)
-    # df["Platform"] = "Shopee"
-    # df.to_excel("test.xlsx", index=False)
     return df
 
 #Cleans data in the dataframe
@@ -190,8 +185,10 @@ def clean_df(df):
 #Remove customer data from cleaned data
 def clean_wo_customer_data(old_df, new_df):
     #check old df is correct, use left join instead
+    new_df = new_df.reset_index(drop=True)
+    old_df = old_df.reset_index(drop=True)
     new_df.drop(['HP', 'Address', 'Name'], axis=1, inplace=True)
-    new_df = pd.merge(new_df, old_df[['Order No.', 'HP', 'Address', 'Name']], on='Order No.', how='left')
+    new_df = new_df.merge(old_df[['Order No.', 'HP', 'Address', 'Name']], how="left", on="Order No.")
     new_df = new_df.reset_index(drop=True)
     
     return new_df
@@ -200,18 +197,32 @@ def clean_wo_customer_data(old_df, new_df):
 def generate_full_order_df(defaultQtyDf):
     df = get_all_orders()
     df = clean_df(df)
-    df, unmatchedProducts = generate_qty_table(df, defaultQtyDf)
+    df, unmatchedProducts = generate_qty_table(df, defaultQtyDf, "Shopee")
     return df, unmatchedProducts
 
 #Returns a dataframe of orders since last input date
-def generate_new_order_df(defaultQtyDf, lastDate, old_df): #lastDate in IS08601 format
+def generate_new_order_df(default_qty_df, lastDate, old_df): #lastDate in IS08601 format
     epoch_date = convert_epoch(lastDate)
     new_df = get_new_orders(epoch_date)
-    new_df = clean_df(new_df)
-    df = clean_wo_customer_data(old_df, new_df)
-    df, unmatchedProducts = generate_qty_table(df, defaultQtyDf)
-    return df, unmatchedProducts
 
+    if len(new_df)!=0: #If there are new orders since last_date
+        new_df = clean_df(new_df)
+        if len(old_df) != 0: #If there are any orders from outdated database to update
+            trimmed_df = new_df[new_df["Created At"] <= old_df["Created At"].iloc[-1]]
+            updated_old_df = clean_wo_customer_data(old_df, trimmed_df)
+            new_df = combine_dfs(updated_old_df, new_df[new_df["Created At"] > old_df["Created At"].iloc[-1]])
+        df, unmatched_products = generate_qty_table(new_df, default_qty_df, "Shopee")
+        return df, unmatched_products
+    else:
+        unmatched_products = pd.Series()
+        return new_df, unmatched_products
 
-#print(generateAuthorisationUrl2())
-#get_all_orders()
+# print(generateAuthorisationUrl2())
+# get_all_orders()
+
+# from functions import get_default_path, get_default_qty
+# get_default_path()
+# defaultQtyDf = get_default_qty()
+
+# #For Lazada
+# generate_full_order_df(defaultQtyDf)
