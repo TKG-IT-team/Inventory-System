@@ -12,9 +12,9 @@ if __name__ == "__main__":
     get_default_path()
     
     #Gets customers database
-    # ShopifyFullCustDf = ShopifyCustomerAPI(API_KEY, PASSWORD, HOSTNAME, VERSION).generate_full_cust_df()
-    ShopifyFullCustDf = pd.read_excel(CUSTOMER_DATA)
-    # ShopifyFullCustDf.to_excel(CUSTOMER_DATA, index=False)
+    ShopifyFullCustDf = ShopifyCustomerAPI(API_KEY, PASSWORD, HOSTNAME, VERSION).generate_full_cust_df()
+    # ShopifyFullCustDf = pd.read_excel(CUSTOMER_DATA)
+    ShopifyFullCustDf.to_excel(CUSTOMER_DATA, index=False)
 
     #Gets orders database
     get_default_path()

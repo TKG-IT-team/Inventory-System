@@ -8,8 +8,10 @@ import time
 email = "czy199162@gmail.com"
 password = "Wrestlin2021"
 
+PATH = "C:\Program Files (x86)\chromedriver_win32\chromedriver.exe"
+
 # pls retrieve the respective webdriver file path and enter below
-driver = webdriver.Chrome(r"C:\Users\user\Downloads\chromedriver")
+driver = webdriver.Chrome(PATH)
 
 # Enter Redmart login page URL 
 driver.get('https://partners.redmart.com/login/index')
@@ -22,20 +24,18 @@ driver.get('https://partners.redmart.com/login/index')
 
 # password_element = driver.find_element(By.CSS_SELECTOR,"input[id='password']")
 # password_element.send_keys(password)
-time.sleep(30)
     
 try: 
+    time.sleep(5)
     # Locate web element
     email_element = driver.find_element(By.CSS_SELECTOR, "input[id='account']")
     email_element.send_keys(email)
     
-    time.sleep(30)
     
     password_element = driver.find_element(By.CSS_SELECTOR,"input[id='password']")
     password_element.send_keys(password)
     #element = driver.find_element(By.XPATH, "//input[contains(@id, 'account')]")
-    
-    time.sleep(30)
+    time.sleep(5)
     
     password_element.send_keys(Keys.RETURN) #press Enter
     

@@ -131,7 +131,7 @@ def get_all_orders():
     access_token, refresh_token = config_tools.readConfig()
     if (len(refresh_token) == 0):
         print("Please get code from authorization")
-        access_token, refresh_token = get_token_shop_level("70524f4e484b45586c5270596f744977")
+        access_token, refresh_token = get_token_shop_level("6361456b765879525578736d68667042")
     else:
         access_token, refresh_token = refresh_token_shop_level(refresh_token)
     config_tools.writeConfig(access_token, refresh_token)
@@ -148,7 +148,7 @@ def get_new_orders(last_date): #date given in epoch time
     access_token, refresh_token = config_tools.readConfig()
     if (len(refresh_token) == 0):
         print("Please get code from authorization")
-        access_token, refresh_token = get_token_shop_level("70524f4e484b45586c5270596f744977")
+        access_token, refresh_token = get_token_shop_level("6361456b765879525578736d68667042")
     else:
         access_token, refresh_token = refresh_token_shop_level(refresh_token)
     print("refresh token: " + refresh_token)
