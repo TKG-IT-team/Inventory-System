@@ -1,5 +1,4 @@
 import hmac
-from itertools import combinations_with_replacement
 import time
 import requests
 import hashlib
@@ -15,7 +14,8 @@ sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
 import config_tools_shopee as config_tools
 
 
-from functions import combine_dfs, generate_qty_table, convert_epoch
+from functions import combine_dfs, generate_qty_table, convert_epoch, logger
+import ctypes
 
 host = "https://partner.shopeemobile.com"
 v2_path = "/api/v2/shop/auth_partner"
@@ -127,35 +127,24 @@ def get_order_detail(access_token, order_sn_list):
     return df
 
 #Gets the orders from shopee and convert it to an excel file
-def get_all_orders():
+#Returns all orders by default
+def get_orders(last_date = 1577808000): # by deafult, from 2020-1-1 to now, step: 15 days
     access_token, refresh_token = config_tools.readConfig()
     if (len(refresh_token) == 0):
-        print("Please get code from authorization")
-        access_token, refresh_token = get_token_shop_level("6361456b765879525578736d68667042")
+        critical_msg = f"Please get code from authorization using the URL: \n{generateAuthorisationUrl2()}"
+        print(critical_msg)
+        logger.critical(critical_msg) 
+        ctypes.windll.user32.MessageBoxW(0, f"Shopee API: {critical_msg}", "Error Message", 0)
+        access_token, refresh_token = get_token_shop_level("4957526567585762414c586b4c494567")
     else:
         access_token, refresh_token = refresh_token_shop_level(refresh_token)
-    config_tools.writeConfig(access_token, refresh_token)
+    print("Shopee:")
     print("refresh token: " + refresh_token)
     print ("access_token: " + access_token)
-    df = pd.DataFrame() #empty dataframe
-    for i in range(1577808000, int(datetime.timestamp(datetime.now())), 1296000): #from 2020-1-1 to now, step: 15 days
-        str_order_list = get_order_list(access_token, i, i + 1296000)
-        if len(str_order_list) > 0:
-            df = pd.concat([df,get_order_detail(access_token, str_order_list)])
-    return df
-
-def get_new_orders(last_date): #date given in epoch time
-    access_token, refresh_token = config_tools.readConfig()
-    if (len(refresh_token) == 0):
-        print("Please get code from authorization")
-        access_token, refresh_token = get_token_shop_level("6361456b765879525578736d68667042")
-    else:
-        access_token, refresh_token = refresh_token_shop_level(refresh_token)
-    print("refresh token: " + refresh_token)
-    print ("access_token: " + access_token)
+    print("\n")
     config_tools.writeConfig(access_token, refresh_token)
     df = pd.DataFrame() #empty dataframe
-    for i in range(last_date, int(datetime.timestamp(datetime.now())), 1296000): #from last given date to now, step: 15 days
+    for i in range(last_date, int(datetime.timestamp(datetime.now())), 1296000): 
         str_order_list = get_order_list(access_token, i, i + 1296000)
         if len(str_order_list) > 0:
             df = pd.concat([df,get_order_detail(access_token, str_order_list)])
@@ -195,7 +184,7 @@ def clean_wo_customer_data(old_df, new_df):
 
 #Generate full order df
 def generate_full_order_df(defaultQtyDf):
-    df = get_all_orders()
+    df = get_orders()
     df = clean_df(df)
     df, unmatchedProducts = generate_qty_table(df, defaultQtyDf, "Shopee")
     return df, unmatchedProducts
@@ -203,7 +192,7 @@ def generate_full_order_df(defaultQtyDf):
 #Returns a dataframe of orders since last input date
 def generate_new_order_df(default_qty_df, lastDate, old_df): #lastDate in IS08601 format
     epoch_date = convert_epoch(lastDate)
-    new_df = get_new_orders(epoch_date)
+    new_df = get_orders(epoch_date)
 
     if len(new_df)!=0: #If there are new orders since last_date
         new_df = clean_df(new_df)
@@ -214,7 +203,7 @@ def generate_new_order_df(default_qty_df, lastDate, old_df): #lastDate in IS0860
         df, unmatched_products = generate_qty_table(new_df, default_qty_df, "Shopee")
         return df, unmatched_products
     else:
-        unmatched_products = pd.Series()
+        unmatched_products = pd.Series(dtype=str)
         return new_df, unmatched_products
 
 # print(generateAuthorisationUrl2())

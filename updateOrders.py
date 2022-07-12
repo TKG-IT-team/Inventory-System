@@ -5,6 +5,7 @@ import Lazada.LazadaOrderAPI as LazadaOrderAPI
 from functions import get_default_path, get_default_qty, combine_orders_cust_df, combine_dfs, convert_ISO, add_one_sec_ISO
 from functions import CUSTOMER_DATA, COMBINED_DATA
 
+
 FINAL_FULFILLMENT_STATUS = ["fulfilled", "CANCELLED", "COMPLETED", "canceled", "delivered", "returned", "lost_by_3pl", "damaged_by_3pl"]
 
 #Split df into multiple platforms based on dates, returns a list of Dfs
@@ -55,7 +56,7 @@ if __name__ == "__main__":
         date = get_update_date(df)
         converted_date = convert_ISO(date)
         date_dict[platform] = converted_date
-    print(date_dict)
+    # print(date_dict)
 
     # ###Shopify
     shopify_new_order_df, unmatched_products = ShopifyOrderAPI.generate_new_order_df(defaultQtyDf, date_dict["Shopify"])
@@ -76,18 +77,14 @@ if __name__ == "__main__":
     old_shopee = split[0]
     updated_shopee = combine_dfs(old_shopee, new_shopee)
 
-    # ##Lazada
-    # split = split_df_based_on_date(platformDict["Lazada"], date_dict["Lazada"])
-    # # last_date = convert_ISO(platformDict["Lazada"]["Created At"].iloc[-1])
-    # # if split[1].empty:
-    # #     split[0].to_excel(COMBINED_DATA, index=False) #no new data to get
-    # #     sys.exit()
-    # new_lazada, unmatched_products = LazadaOrderAPI.generate_new_order_df(defaultQtyDf, date_dict["Lazada"], split[1])
+    ##Lazada
+    split = split_df_based_on_date(platformDict["Lazada"], date_dict["Lazada"])
+    new_lazada, unmatched_products = LazadaOrderAPI.generate_new_order_df(defaultQtyDf, date_dict["Lazada"], split[1])
 
-    # #Combines old and new lazada Df
-    # old_lazada = split[0]
-    # updated_lazada = combine_dfs(old_lazada, new_lazada)
+    #Combines old and new lazada Df
+    old_lazada = split[0]
+    updated_lazada = combine_dfs(old_lazada, new_lazada)
 
     #Combines platforms
-    newCombined = combine_dfs(updated_shopify, updated_shopee) #, updated_lazada 
-    newCombined.to_excel("test_combined_data2.xlsx", index=False)
+    newCombined = combine_dfs(updated_shopify, updated_shopee, updated_lazada) #
+    newCombined.to_excel(COMBINED_DATA, index=False)

@@ -1,9 +1,12 @@
+from stat import filemode
 import pandas as pd
 import os
 import dateutil.parser as parser
 import ast
 import config_tools_data
 from datetime import timedelta
+import ctypes 
+import logging
 
 #Shopify
 API_KEY = "1da062b3aea0f3a1a3eed35d52510c20"
@@ -24,6 +27,14 @@ SETTING_FP = os.path.dirname(os.path.realpath(__file__)) +  "\Product Setting.xl
 CUSTOMER_DATA = os.path.dirname(os.path.realpath(__file__)) + "\Customer Data.xlsx"
 COMBINED_DATA = os.path.dirname(os.path.realpath(__file__)) + "\Combined Data.xlsx"
 
+#Create a logger
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
+file_handler = logging.FileHandler(f"{os.path.dirname(__file__)}/error.log", mode="w")
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
 #Combines dataframes
 def combine_dfs(*args): #Takes in pandas dataframe
     combinedDf = pd.DataFrame()
@@ -42,6 +53,7 @@ def combine_orders_cust_df(customerDf, order_df):
     custNameKeyDf = col_as_keys(customerDf, COL_CUSTOMER_ID)
 
     #Combining Order and Customer DF
+    unmatched_names = ""
     for index, series in order_df.iterrows():
         if series[COL_CUSTOMER_ID] in custNameKeyDf.keys():
             order_df.at[index, COL_HP] = custNameKeyDf[series[COL_CUSTOMER_ID]][1]
@@ -49,8 +61,11 @@ def combine_orders_cust_df(customerDf, order_df):
             order_df.at[index, COL_BIRTHDAY] = custNameKeyDf[series[COL_CUSTOMER_ID]][2]
             order_df.at[index, COL_EMAIL] = custNameKeyDf[series[COL_CUSTOMER_ID]][4]
         else:
-            print(series["Name"] + " Not Found in Customer Data")
+            unmatched_names += series["Name"] + " Not Found in Customer Data\n"
+            print(series["Name"] + " not found in Customer Data\n")
     
+    logger.info(unmatched_names)
+
     #Drop customer_id col
     order_df.drop([COL_CUSTOMER_ID],axis=1,inplace=True)
 
@@ -105,8 +120,15 @@ def generate_qty_table(df, default_qty_df, platform):
             df.at[i,component] = componentQty
 
     if len(unmatched_products) > 0:
-        print(f"Unmatched Products for {platform}: " + str(unmatched_products))
-        # messagebox.showinfo("Unmatched Products", "There are unmatched products. Please check Settings to verify all product inputs.")
+        warning_msg = ""
+        for index in range(len(unmatched_products)):
+            warning_msg += f"{index + 1}. {unmatched_products[index]}\n" 
+        warning_msg = f"Unmatched products for {platform} API: \n{warning_msg}. \n\nPlease check Settings to verify all product inputs."
+        logger.warning(warning_msg)
+        print(warning_msg)
+        print("\n")
+        warning_msg = f"There are unmatched products for {platform.upper()}. \n\nPlease check Settings to verify all product inputs. Refer to the error log for more information."
+        ctypes.windll.user32.MessageBoxW(0, warning_msg, "Warning Message", 0)
 
     return df, pd.Series(unmatched_products, name = "Unmatched Products")
 
