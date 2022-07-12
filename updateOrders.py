@@ -6,6 +6,7 @@ from functions import get_default_path, get_default_qty, combine_orders_cust_df,
 from functions import CUSTOMER_DATA, COMBINED_DATA
 
 
+
 FINAL_FULFILLMENT_STATUS = ["fulfilled", "CANCELLED", "COMPLETED", "canceled", "delivered", "returned", "lost_by_3pl", "damaged_by_3pl"]
 
 #Split df into multiple platforms based on dates, returns a list of Dfs
@@ -59,6 +60,7 @@ if __name__ == "__main__":
     # print(date_dict)
 
     # ###Shopify
+    print("Updating Shopify orders...")
     shopify_new_order_df, unmatched_products = ShopifyOrderAPI.generate_new_order_df(defaultQtyDf, date_dict["Shopify"])
 
     #Combines Customer and Order Df
@@ -70,6 +72,7 @@ if __name__ == "__main__":
     updated_shopify = combine_dfs(old_shopify, new_shopify)
 
     ###Shopee
+    print("Updating Shopee orders...")
     split = split_df_based_on_date(platformDict["Shopee"], date_dict["Shopee"])
     new_shopee, unmatched_products = ShopeeAPI.generate_new_order_df(defaultQtyDf, date_dict["Shopee"], split[1])
 
@@ -78,6 +81,7 @@ if __name__ == "__main__":
     updated_shopee = combine_dfs(old_shopee, new_shopee)
 
     ##Lazada
+    print("Updating Lazada orders...")
     split = split_df_based_on_date(platformDict["Lazada"], date_dict["Lazada"])
     new_lazada, unmatched_products = LazadaOrderAPI.generate_new_order_df(defaultQtyDf, date_dict["Lazada"], split[1])
 

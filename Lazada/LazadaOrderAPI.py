@@ -3,11 +3,11 @@ from lazop_sdk import LazopClient, LazopRequest
 import sys
 import os
 # setting path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
-import config_tools_lazada as config_tools
+import pathlib
+sys.path.append(os.path.abspath(pathlib.Path.cwd()))
+import Lazada.config_tools_lazada as config_tools
 import pandas as pd
-from LazadaAuthorisation import Authorisation
+from Lazada.LazadaAuthorisation import Authorisation
 from requests.exceptions import ConnectionError
 from functions import combine_dfs, convert_ISO, generate_qty_table, logger
 

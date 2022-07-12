@@ -8,13 +8,14 @@ import pandas as pd
 from datetime import datetime
 import sys
 import os
+import pathlib
 # setting path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__))))
-import config_tools_shopee as config_tools
+# sys.path.append(os.path.abspath(os.path.join(pathlib.Path.cwd(), '..')))
+sys.path.append(os.path.abspath(pathlib.Path.cwd()))
+import Shopee.config_tools_shopee as config_tools
 
 
-from functions import combine_dfs, generate_qty_table, convert_epoch, logger
+from functions import combine_dfs, generate_qty_table, convert_epoch, get_default_qty, logger
 import ctypes
 
 host = "https://partner.shopeemobile.com"
@@ -110,20 +111,27 @@ def get_order_detail(access_token, order_sn_list):
     }
     
     url = f"{host}{path}?timestamp={timest}&response_optional_fields={response_optional_fields}&order_sn_list={order_sn_list}&sign={sign}&access_token={access_token}&shop_id={shop_id}&partner_id={partner_id}"
-    response = requests.request("GET", url)
-    dictResponse = json.loads(response.content.decode())
-    listOrder = dictResponse['response']['order_list']
-    df = pd.DataFrame() #empty dataframe
-    for order in listOrder: #split item_list into individual columns
-        order_df = pd.DataFrame.from_dict([order])
-        dictItem = {}
-        for item in order["item_list"]:
-            dictItem[item["item_name"]]  =  item["model_quantity_purchased"]
-        order_df["Product"] = str(dictItem)
-        repi_df = pd.DataFrame(order_df['recipient_address'][0], index=[0])
-        repi_df.drop(['region'], axis=1, inplace=True)
-        order_df = order_df.join(repi_df)
-        df = pd.concat([df,order_df])
+    try:
+        response = requests.request("GET", url)
+        dictResponse = json.loads(response.content.decode())
+        listOrder = dictResponse['response']['order_list']
+        df = pd.DataFrame() #empty dataframe
+        for order in listOrder: #split item_list into individual columns
+            order_df = pd.DataFrame.from_dict([order])
+            dictItem = {}
+            for item in order["item_list"]:
+                dictItem[item["item_name"]]  =  item["model_quantity_purchased"]
+            order_df["Product"] = str(dictItem)
+            repi_df = pd.DataFrame(order_df['recipient_address'][0], index=[0])
+            repi_df.drop(['region'], axis=1, inplace=True)
+            order_df = order_df.join(repi_df)
+            df = pd.concat([df,order_df])
+    except ConnectionError as connection_error:
+        error_msg = "Shopee API: Connection error while getting order details! Please refer to the error log for more information."
+        print(error_msg)
+        logger.error(f"Lazada API: Connection error while getting order details! \n{connection_error}")
+        ctypes.windll.user32.MessageBoxW(0,error_msg, "Error Message", 0)
+        df = pd.DataFrame()
     return df
 
 #Gets the orders from shopee and convert it to an excel file
@@ -206,6 +214,24 @@ def generate_new_order_df(default_qty_df, lastDate, old_df): #lastDate in IS0860
         unmatched_products = pd.Series(dtype=str)
         return new_df, unmatched_products
 
+#Returns a datafram of all uncensored customer information
+def generate_full_cust_df():
+    default_qty = get_default_qty()
+    orders, unmatched_products = generate_full_order_df(default_qty)
+    # orders = pd.read_excel("orders.xlsx")
+    boolean_list = []
+    for i, order in orders.iterrows():
+        if ("*" not in order["Name"] and 
+            "*" not in order["Address"]):
+            boolean_list.append(True)
+        else:
+            boolean_list.append(False)
+    cust_df = orders.loc[boolean_list, ["Name", "HP", "Address"]]
+    cust_df["Platform"] = "Shopee"
+    return cust_df
+
+# cust_df = generate_full_cust_df()
+# cust_df.to_excel("Test.xlsx", index=False)
 # print(generateAuthorisationUrl2())
 # get_all_orders()
 

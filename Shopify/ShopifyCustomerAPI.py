@@ -72,11 +72,6 @@ class ShopifyCustomerAPI:
                 else:
                     cleanedData.at[index, "Address"] = "-"
 
-                # if len(series["addresses"])>0 and "phone" in series["addresses"][0].keys():
-                #     hp = series['addresses'][0]["phone"]
-                #     cleanedData.at[index, "HP"] = hp
-                # else:
-                #     cleanedData.at[index, "HP"] = "-"
                 
                 #Get Note
                 if (series["note"]!=None):
@@ -110,7 +105,7 @@ class ShopifyCustomerAPI:
         del cleanedData['default_address']
         cleanedData = cleanedData.rename(columns={"email":"Email", "phone":"HP"})
         cleanedData = cleanedData[["Customer_id", "Name", "HP", "Birthday", "Address", "Email","Email Consent","SMS Consent"]]
-
+        cleanedData["Platform"] = "Shopify"
         return cleanedData
 
     #Adding on to existing Customer List

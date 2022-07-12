@@ -1,5 +1,5 @@
 from lazop_sdk import LazopClient, LazopRequest
-import config_tools_lazada as config_tools
+import Lazada.config_tools_lazada as config_tools
 
 class Authorisation:
     def __init__(self):

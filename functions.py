@@ -22,10 +22,11 @@ COL_BIRTHDAY = "Birthday"
 COL_EMAIL = "Email"
 
 #FilePath
-PATH_SETTING_FP = os.path.dirname(os.path.realpath(__file__)) + "\Path Setting.xlsx"
-SETTING_FP = os.path.dirname(os.path.realpath(__file__)) +  "\Product Setting.xlsx"
-CUSTOMER_DATA = os.path.dirname(os.path.realpath(__file__)) + "\Customer Data.xlsx"
-COMBINED_DATA = os.path.dirname(os.path.realpath(__file__)) + "\Combined Data.xlsx"
+import pathlib
+PATH_SETTING_FP = str(pathlib.Path.cwd()) + "\Path Setting.xlsx"
+SETTING_FP = str(pathlib.Path.cwd()) +  "\Product Setting.xlsx"
+CUSTOMER_DATA = str(pathlib.Path.cwd()) + "\Customer Data.xlsx"
+COMBINED_DATA = str(pathlib.Path.cwd()) + "\Combined Data.xlsx"
 
 #Create a logger
 logger = logging.getLogger(__name__)
