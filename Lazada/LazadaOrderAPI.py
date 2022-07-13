@@ -174,6 +174,9 @@ def clean_df(df):
     df["Platform"] = "Lazada"
 
     df = df.reset_index(drop=True)
+    
+    # insert amendment status column to dataframe
+    df.insert(len(df.columns),"Amend Status",0)
 
     return df
 

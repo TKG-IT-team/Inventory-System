@@ -167,9 +167,6 @@ def clean_df(df):
     df["Created At"]  = df["Created At"].apply(datetime.fromtimestamp)#Changes timestamp to datetime
     df = df.reindex(columns=["Order No.", "Created At", "Fulfillment Status", "Notes", "HP", "Address", "Name",
     "Currency", "Product", "Platform"]) #Reorder Columns, "recipient_address"
-
-    # insert admendment status column to dataframe
-    df.insert(len(df.columns),"Admend Status",0)
     
     #Add platform name to dataframe
     df["Platform"] = "Shopee"
@@ -177,6 +174,9 @@ def clean_df(df):
 
     #Sort by date
     df = df.sort_values(by="Created At")
+    
+    # insert amendment status column to dataframe
+    df.insert(len(df.columns),"Amend Status",0)
     return df
 
 #Remove customer data from cleaned data

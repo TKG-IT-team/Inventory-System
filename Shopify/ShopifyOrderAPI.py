@@ -163,8 +163,8 @@ def clean(df):
     df.drop(['financial_status', 'address1', 'address2'],axis=1,inplace=True) #'product', 'id', 'Customer_id'
     df = df.rename(columns={'order_number': 'Order No.', 'created_at': 'Created At', 'note' : 'Notes', 'name': 'Name', 'currency_code': 'Currency', 'title': 'Product Orders', 'amount':'Amount Spent', 'fulfillment_status': "Fulfillment Status", "product": "Product"})
 
-    # insert admendment status column to dataframe
-    df.insert(len(df.columns),"Admend Status",0)
+    # insert amendment status column to dataframe
+    df.insert(len(df.columns),"Amend Status",0)
     
     return df
 

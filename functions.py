@@ -151,3 +151,7 @@ def convert_ISO(date):
 def convert_epoch(date):
     date = parser.isoparse(date).timestamp()
     return int(date)
+
+def insert_amendment(df):
+    # insert amendment status column to dataframe
+    df.insert(len(df.columns),"Amend Status",0)
