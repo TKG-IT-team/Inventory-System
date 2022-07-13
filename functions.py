@@ -62,7 +62,7 @@ def combine_orders_cust_df(customerDf, order_df):
             order_df.at[index, COL_BIRTHDAY] = custNameKeyDf[series[COL_CUSTOMER_ID]][2]
             order_df.at[index, COL_EMAIL] = custNameKeyDf[series[COL_CUSTOMER_ID]][4]
         else:
-            unmatched_names += series["Name"] + " Not Found in Customer Data\n"
+            unmatched_names += "'" + series["Name"] + "'" + " not found in Customer Data\n"
             print(series["Name"] + " not found in Customer Data\n")
     
     logger.info(unmatched_names)
@@ -89,9 +89,6 @@ def get_default_path():
     
     dictPath = config_tools_data.readConfig()
    
-    global SETTING_FP
-    global CUSTOMER_DATA
-    global COMBINED_DATA
     SETTING_FP = dictPath["SettingFilePath"]
     CUSTOMER_DATA = dictPath["CustomerDataFilePath"]
     COMBINED_DATA = dictPath["CombinedDataFilePath"]
