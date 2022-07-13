@@ -180,8 +180,10 @@ def clean_df(df):
 #Generate full order df
 def generate_full_order_df(default_qty_df):
     df = get_orders()
-    df = clean_df(df)
-    df, unmatchedProducts = generate_qty_table(df, default_qty_df, "Lazada")
+    unmatchedProducts = []
+    if len(df) > 0:
+        df = clean_df(df)
+        df, unmatchedProducts = generate_qty_table(df, default_qty_df, "Lazada")
     return df, unmatchedProducts
 
 #Remove customer data from cleaned data
