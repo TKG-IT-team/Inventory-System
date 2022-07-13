@@ -1,4 +1,4 @@
-2022-07-13 11:36:13,650 - WARNING - Unmatched products for Shopify API: 
+2022-07-13 14:30:53,357 - WARNING - Unmatched products for Shopify API: 
 1. The Original Mini Pack Bundle (Assorted Single of 8 Packs x 30g)
 2. Customized Stickers
 3. Delivery Singapore
@@ -52,8 +52,8 @@
 . 
 
 Please check Settings to verify all product inputs.
-2022-07-13 11:36:41,959 - INFO - 
-2022-07-13 11:36:43,018 - WARNING - Unmatched products for Shopee API: 
+2022-07-13 14:30:55,185 - INFO - 
+2022-07-13 14:30:57,434 - WARNING - Unmatched products for Shopee API: 
 1. The Original Mini Pack Popcorn Bundle (Assorted Singles of 8 Packs x 30g)
 2. FREE POPCORN Giveaway
 3. The Original Mini Pack Popcorn Bundle Box (Assorted Singles of 8 Packs x 30g)
@@ -66,4 +66,3 @@ Please check Settings to verify all product inputs.
 . 
 
 Please check Settings to verify all product inputs.
-2022-07-13 11:36:49,254 - ERROR - App access frequency exceeds the limit. This ban will last 73391 seconds
