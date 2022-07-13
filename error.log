@@ -1,68 +1,232 @@
-2022-07-13 14:30:53,357 - WARNING - Unmatched products for Shopify API: 
-1. The Original Mini Pack Bundle (Assorted Single of 8 Packs x 30g)
-2. Customized Stickers
-3. Delivery Singapore
-4. Delivery - Phillipines (4 items)
-5. Delivery - Taiwan (1 Item)
-6. Delivery - Vietnam (5 Items)
-7. The Classic Snack Pack Bundle (Assorted Single of 8 Packs x 65g)
-8. Assorted Singles (6 Packs x 65g)
-9. 12 + 2 Bundle Set (14 Packs x 65g)
-10. The Original Mini Pack Bundle (Assortment of 8 Packs x 30g)
-11. The Kettle Gourmet Pokémon Gift Box
-12. The Classic Snack Pack Bundle (Assortment of 8 Packs x 65g)
-13. Pulut Hitam (Family Pack)
-14. Salted Caramel (Family Pack)
-15. Kaya Butter Toast (Family Pack)
-16. Chocolate (Family Pack)
-17. Kaya Butter Toast (6 Packs x 65g)
-18. Pokémon Gift Box (Bundle of 3 Packs x 80g with Collectible Cut-out)
-19. All-Time Classic Favourite (6 Packs x 65g)
-20. Chilli Crab (6 Packs x 65g)
-21. Chicken Floss (Family Pack)
-22. Double Happiness (Bundle)
-23. Nasi Lemak (Family Pack)
-24. Fish Head Curry (Family Pack)
-25. Stay At Home Family Package (Bundle of 2 packs x 330g + 4 packs x 65g)
-26. Chilli Crab (Family Pack)
-27. Crazy Asian Flavoured (6 Packs x 65g)
-28. Salted Caramel (6 Packs x 65g)
-29. Nasi Lemak (6 Packs x 65g)
-30. Chicken Floss (6 Packs x 65g)
-31. Pulut Hitam (6 Packs x 65g)
-32. Top Up
-33. Chocolate (6 Packs x 65g)
-34. Assorted Popcorn Flavours
-35. Salted Caramel 30g
-36. Chocolate 30g
-37. Kaya 30g
-38. 20 + 5 Bundle Set (25 Packs x 65g)
-39. All-Time Classic Favourite (8 Packs x 65g)
-40. Pulut Hitam (8 Packs x 65g)
-41. Kaya Butter Toast (8 Packs x 65g)
-42. Fish Head Curry (8 Packs x 65g)
-43. Assorted Singles (8 Packs x 65g)
-44. Chicken Floss (8 Packs x 65g)
-45. Assorted Popcorn Bundle
-46. Shipment to Fiji
-47. Covid Care Package (Bundle of 2 Packs x 65g + 2 Packs x 30g)
-48. Pokémon Popcorn Gift Box (Bundle of 3 Packs x 80g with Collectible Cut-out)
-49. Courier to Malaysia
-50. Tasty Veggie Treats (v)
+2022-07-13 17:10:52,866 - WARNING - Unmatched products for Shopify API: 
+1. Chocolate (Family Pack)
+2. Salted Caramel (Family Pack)
+3. Assorted Singles (Bundle)
+4. Assorted Snack Packs
+5. Salted Caramel (6-pack Set)
+6. Kaya Butter Toast (6-pack Set)
+7. Nasi Lemak (Family Pack)
+8. Chilli Crab (Family Pack)
+9. All-Time Classic Favourite (6-pack Set)
+10. Double Happiness (Bundle)
+11. Kaya Butter Toast (Family Pack)
+12. Chicken Floss (Family Pack)
+13. Crazy Asian Flavoured (6-pack Set)
+14. Chilli Crab (6-pack Set)
+15. Nasi Lemak (6-pack Set)
+16. Salted Caramel Popcorn
+17. Kaya Butter Toast Popcorn
+18. Nasi Lemak Popcorn
+19. Chocolate Popcorn
+20. Chocolate (6-pack Set)
+21. Chilli Crab Snack Monster
+22. Assorted Snack Monsters
+23. Chicken Floss (6-pack Set)
+24. 12 + 2 Bundle Set
+25. Assorted Singles (Gift Box of 6 Packs)
+26. Gift Box (Assorted Singles of 6 Packs)
+27. Golden Premium Packs
+28. Gift Box of 6 flavours
+29. Joyous Christmas Bundle (3 Gift Boxes of 6)
+30. Joyous Christmas Bundle 1 (3 Gift Boxes of 6)
+31. Joyous Christmas Bundle 2 (6 Gift Boxes of 6)
+32. Joyous Christmas Bundle 3 (9 Gift Boxes of 6)
+33. Joyous Christmas Bundle (3 Gift Boxes of 6 Assorted Singles)
+34. Joyous Christmas Bundle (Sets of 3 Gift Boxes with 6 Assorted Singles Each)
+35. Bags of 3
+36. Paper Bags
+37. Christmas & Countdown Bundle
+38. Courier
+39. CNY Golden Popcorn Gift Box (Assorted Singles of 6 Packs)
+40. CNY Assorted Gift Box
+41. Delivery
+42. Copy of Gift Box (Assorted Singles of 6 Packs)
+43. Gift Box Combos (Assorted Singles of 6 Packs)
+44. Mother's Day Exclusive Bundles
+45. Lockdown 2.0 Family Care Package
+46. Popcorn Delight
+47. Asian-Flavored Popcorn Mix
+48. Familiar Favorites Popcorn Mix
+49. Assorted Bundle
+50. Customized Stickers
+51. (Monthly Subscription) Assorted Singles 6-Pack Set
+52. The Kettle Gourmet Pokémon Gift Box
+53. Pokémon Gift Box (Bundle of 3 Packs with Collectible Card)
+54. Pokémon Gift Box (Bundle of 3 Packs with Collectible Cut-out)
+55. Local Delights Box
+56. Assorted Gift Box
+57. World Expo Bundle
+58. Sweet Tooth Bundle
+59. Pulut Hitam (6-pack Set)
+60. Pulut Hitam (Family Pack)
+61. New Flavours Bundle (6-pack Set)
+62. Fish Head Curry (6-pack Set)
+63. Fish Head Curry (Family Pack)
+64. Chilli Crab Popcorn
+65. International Shipping
+66. The Original Mini Pack Bundle (Assorted Single of 8 Packs x 30g)
+67. The Classic Snack Pack Bundle (Assorted Single of 8 Packs x 65g)
+68. 12 + 2 Bundle Set (14 Packs x 65g)
+69. Gift Box Combos (Assorted Singles of 8 Packs x 65g)
+70. Stay At Home Family Package (Bundle of 2 packs x 330g + 4 packs x 65g)
+71. Pokémon Gift Box (Bundle of 3 Packs x 80g with Collectible Cut-out)
+72. Assorted Singles (6 Packs x 65g)
+73. Golden Customized Bags
+74. Top Up: Xmas Standard Box
+75. Xmas Mini Gift Box
+76. Xmas Combo Gift Box
+77. Xmas Combo Mini Gift Box
+78. Urgent Delivery
+79. Xmas Mini Bundle
+80. Xmas Standard Gift Box
+81. Delivery Singapore
+82. Delivery - Phillipines (4 items)
+83. Delivery - Taiwan (1 Item)
+84. Delivery - Vietnam (5 Items)
+85. The Original Mini Pack Bundle (Assortment of 8 Packs x 30g)
+86. CNY Gift Box Combos (Assortment of 6 Packs x 65g)
+87. The Classic Snack Pack Bundle (Assortment of 8 Packs x 65g)
+88. General Gift Box Combo (Assortment of 8 Packs x 65g)
+89. Kaya Butter Toast (6 Packs x 65g)
+90. All-Time Classic Favourite (6 Packs x 65g)
+91. Chilli Crab (6 Packs x 65g)
+92. CNY Mini Gift Box Combos (Assortment of 8 Packs x 30g)
+93. Crazy Asian Flavoured (6 Packs x 65g)
+94. Salted Caramel (6 Packs x 65g)
+95. Nasi Lemak (6 Packs x 65g)
+96. Chicken Floss (6 Packs x 65g)
+97. Pulut Hitam (6 Packs x 65g)
+98. Healthy Living Snack Pack
+99. Game Night Snack Bundle
+100. Netflix & Chill Bundle
+101. Top Up
+102. Staycation Bundle
+103. Valentine's Day Gift Box (Assortment of 2 x 65g + 2 x 30g)
+104. Mid-Day Mood Booster Pack
+105. Lunar New Year 'Huat' Box
+106. Chocolate (6 Packs x 65g)
+107. Lunar New Year Mini 'Huat' Box
+108. Assorted Popcorn Flavours
+109. New Flavours Bundle (6 Packs x 65g)
+110. Awfully Chocolate Bundle
+111. Salted Caramel 30g
+112. Chocolate 30g
+113. Kaya 30g
+114. 20 + 5 Bundle Set (25 Packs x 65g)
+115. Chips & Crisps
+116. Cheesy Cheese
+117. All-Time Classic Favourite (8 Packs x 65g)
+118. Nuttylicious Nibbles
+119. Seaweed Delight
+120. Childhood Snacks
+121. Pulut Hitam (8 Packs x 65g)
+122. Kaya Butter Toast (8 Packs x 65g)
+123. Hot & Spicy
+124. Candy World
+125. Fish Head Curry (8 Packs x 65g)
+126. Assorted Singles (8 Packs x 65g)
+127. Chicken Floss (8 Packs x 65g)
+128. (Monthly Subscription) Assorted Singles 12 + 2-Pack Set
+129. Local Flavours
+130. Assorted Popcorn Bundle
+131. Shipment to Fiji
+132. Covid Care Package (Bundle of 2 Packs x 65g + 2 Packs x 30g)
+133. 12 + 2 Popcorn Bundle Set (14 Packs x 65g)
+134. Chilli Crab Popcorn (Family Pack)
+135. Fish Head Curry Popcorn (Family Pack)
+136. Nasi Lemak Popcorn (Family Pack)
+137. The Raya Bundle (Assortment of 8 Packs x 30g)
+138. Kaya Butter Toast Popcorn (Family Pack)
+139. Salted Caramel Popcorn (Family Pack)
+140. Breakfast On-The-Go
+141. Pulut Hitam Popcorn (8 Packs x 65g)
+142. Pulut Hitam Popcorn (Family Pack)
+143. The Raya Bundle
+144. Mid-Day Pick-Me-Up
+145. Chocolate Popcorn (Family Pack)
+146. Chicken Floss Popcorn (Family Pack)
+147. Aroma Therapy
+148. Salted Caramel Popcorn (8 Packs x 65g)
+149. Courier to Malaysia
+150. Chocolate Popcorn (8 Packs x 65g)
+151. The Original Mini Pack Popcorn Bundle (Assortment of 8 Packs x 30g)
+152. Tasty Veggie Treats (v)
 . 
 
 Please check Settings to verify all product inputs.
-2022-07-13 14:30:55,185 - INFO - 
-2022-07-13 14:30:57,434 - WARNING - Unmatched products for Shopee API: 
-1. The Original Mini Pack Popcorn Bundle (Assorted Singles of 8 Packs x 30g)
-2. FREE POPCORN Giveaway
-3. The Original Mini Pack Popcorn Bundle Box (Assorted Singles of 8 Packs x 30g)
-4. Kettle Gourmet Crazy Asian Popcorn Flavoured 3-Bundle
-5. Kaya Butter Toast Popcorn Family Pack
-6. Nasi Lemak Popcorn Family Pack
-7. Pulut Hitam Popcorn Family Pack
-8. Salted Caramel Popcorn Family Pack
-9. Chili Crab Popcorn Family Pack
+2022-07-13 17:11:53,968 - WARNING - Unmatched products for Shopee API: 
+1. 10 Packet Popcorn Bundle Teh Tarik/Cookies & Creme/Salted Caramel
+2. 3 Packet Popcorn Bundle
+3. 5 Packet Popcorn Bundle
+4. The Kettle Gourmet Salted Caramel Gourmet Popcorn [1 Packet x 90g]
+5. 10 Packet Popcorn Bundle
+6. The Kettle Gourmet Kaya Butter Toast Family Pack
+7. The Kettle Gourmet Salted Caramel Snack Monster
+8. The Kettle Gourmet Salted Caramel Family pack
+9. The Kettle Gourmet Kaya Butter Toast Snack Monster
+10. The Kettle Gourmet Chili Crab Snack Monster
+11. The Kettle Gourmet Nasi Lemak Snack Monster
+12. The Kettle Gourmet Chocolate Snack Monster
+13. The Kettle Gourmet Salted Caramel Family packs
+14. The Kettle Gourmet Nasi Lemak Family pack
+15. Assorted Singles Bundle
+16. Chocolate Snack Monster
+17. Kettle Gourmet Crazy Asian Popcorn Flavoured 3-Bundle with Free Shipping
+18. Kettle Gourmet Crazy Asian Popcorn Flavoured 6-Bundle with Free Shipping
+19. Kaya Butter Toast Family Pack
+20. )Free Shipping) Brand New Chicken Floss Popcorn Snack Monster
+21. (Free Shipping) Brand New Chicken Floss Popcorn Snack Monster
+22. Chicken Floss Family Pack
+23. 12 + 2 Bundle Set
+24. Joyous Christmas Bundle 1 (3 Gift Boxes of 6)
+25. Assorted Singles (Gift Box of 6 Packs)
+26. Joyous Christmas Bundles
+27. All-Time Classic Favourite (6-pack Set)
+28. Kaya Butter Toast (6-pack Set)
+29. Salted Caramel (6-pack Set)
+30. Chocolate (6-pack Set)
+31. Double Happiness Bundle
+32. Family Fun Combo
+33. CNY Golden Popcorn Gift Box (Assorted Singles of 6 Packs)
+34. CNY Golden Popcorn Gift Box Bundles
+35. Nasi Lemak (6-pack Set)
+36. Kettle Gourmet Crazy Asian Popcorn Flavoured 3-Bundle with FREE SHIPPING
+37. The Kettle Gourmet bundle of 12 packs of popcorn with FREE 2 packs perfect for families
+38. Kettle Gourmet Crazy Asian Popcorn Flavoured 3-Bundle
+39. The Kettle Gourmet Chicken Floss Popcorn (1-pack)
+40. Lockdown 2.0 Family Care Package (3-6 pax)
+41. Pokemon Gift Box
+42. Pulut Hitam (6-Pack Set)
+43. Chilli Crab (6-pack Set)
+44. The Original Mini Pack Bundle (Assorted Singles of 8 Packs x 30g)
+45. The Classic Snack Pack Bundle (Assorted Single of 8 Packs x 65g)
+46. Fish Head Curry (6-Pack Set)
+47. Assorted Singles (Gift Box of 8 Packs)
+48. CNY Mini Gift Box Combos (Assortment of 8 Packs x 30g)
+49. Valentine's Day Forever Love Gift Box
+50. Kaya Butter Toast (8-pack Set)
+51. 20 + 5 Bundle Set (25 Packs x 65g)
+52. Salted Caramel (8-pack Set)
+53. Savoury Flavours Bundle (8 Packs x 65g)
+54. Assorted Singles (8 Packs x 65g)
+55. Nasi Lemak (8-pack Set)
+56. Fish Head Curry (8-Pack Set)
+57. FREE POPCORN Giveaway
+58. Kaya Butter Toast Popcorn Family Pack
+59. Fish Head Curry Popcorn Family Pack
+60. The Original Mini Pack Popcorn Bundle (Assorted Singles of 8 Packs x 30g)
+61. Nasi Lemak Popcorn Family Pack
+62. Pokemon Popcorn Gift Box
+63. Pulut Hitam Popcorn Family Pack
+64. Salted Caramel Popcorn Family Pack
+65. The Raya Popcorn Bundle
+66. Chili Crab Popcorn Family Pack
+67. Chicken Floss Popcorn Family Pack
+68. The Classic Popcorn Pack Bundle (Assorted Single of 8 Packs x 65g)
+69. Chocolate Popcorn (8-pack Set)
+70. The Original Mini Pack Popcorn Bundle Box (Assorted Singles of 8 Packs x 30g)
 . 
 
 Please check Settings to verify all product inputs.
+2022-07-13 17:11:56,199 - ERROR - App access frequency exceeds the limit. This ban will last 53286 seconds
+2022-07-13 17:11:59,167 - INFO - 

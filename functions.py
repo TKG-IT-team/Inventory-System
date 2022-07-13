@@ -24,7 +24,6 @@ COL_EMAIL = "Email"
 #FilePath
 import pathlib
 PATH_SETTING_FP = str(pathlib.Path.cwd()) + "\Path Setting.xlsx"
-SETTING_FP = str(pathlib.Path.cwd()) +  "\Product Setting.xlsx"
 CUSTOMER_DATA = str(pathlib.Path.cwd()) + "\Customer Data.xlsx"
 COMBINED_DATA = str(pathlib.Path.cwd()) + "\Combined Data.xlsx"
 
@@ -50,6 +49,7 @@ def col_as_keys(df, col_name):
     return result
 
 #Combines dataframes of both customers and orders
+#For Shopify platform only
 def combine_orders_cust_df(customerDf, order_df):
     custNameKeyDf = col_as_keys(customerDf, COL_CUSTOMER_ID)
 
@@ -61,9 +61,9 @@ def combine_orders_cust_df(customerDf, order_df):
             order_df.at[index, COL_ADDRESS] = custNameKeyDf[series[COL_CUSTOMER_ID]][3]
             order_df.at[index, COL_BIRTHDAY] = custNameKeyDf[series[COL_CUSTOMER_ID]][2]
             order_df.at[index, COL_EMAIL] = custNameKeyDf[series[COL_CUSTOMER_ID]][4]
-        else:
-            unmatched_names += "'" + series["Name"] + "'" + " not found in Customer Data\n"
-            print(series["Name"] + " not found in Customer Data\n")
+        elif series[COL_CUSTOMER_ID] != "":
+            unmatched_names += series[COL_CUSTOMER_ID] + " not found in Customer Data\n"
+            print("Index: " + str(index) + "    " + "'" + series[COL_CUSTOMER_ID] + "'" + " not found in Customer Data\n")
     
     logger.info(unmatched_names)
 
@@ -80,7 +80,10 @@ def combine_orders_cust_df(customerDf, order_df):
 
 #Returns the default qty in pandas Dataframe
 #Note: Default quantity Excel File MUST be within the same directory 
-def get_default_qty(): 
+def get_default_qty():
+    dictPath = config_tools_data.readConfig()
+    SETTING_FP = dictPath["SettingFilePath"]
+    
     defaultQtyDf = pd.read_excel(SETTING_FP)
     return defaultQtyDf
 

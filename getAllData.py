@@ -4,6 +4,7 @@ import Shopee.ShopeeAPI as ShopeeAPI
 import Lazada.LazadaOrderAPI as LazadaOrderAPI
 from functions import get_default_path, get_default_qty, combine_orders_cust_df, combine_dfs
 from functions import API_KEY, PASSWORD, HOSTNAME, VERSION
+import pandas as pd
 
 if __name__ == "__main__":
     
@@ -27,10 +28,10 @@ if __name__ == "__main__":
     #For Lazada
     print("Getting orders from Lazada...")
     LazadaFullOrderDf, unmatchedProducts = LazadaOrderAPI.generate_full_order_df(defaultQtyDf)
-    
+
     #Combines Customer and Order Df
     shopifyCombined = combine_orders_cust_df(ShopifyFullCustDf, ShopifyFullOrderDf)
     
     #Combines platforms
-    combinedDf = combine_dfs(shopifyCombined, ShopeeFullOrderDf, LazadaFullOrderDf)
+    combinedDf = combine_dfs(shopifyCombined, ShopeeFullOrderDf, LazadaFullOrderDf) #
     combinedDf.to_excel(COMBINED_DATA, index=False)
