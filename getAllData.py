@@ -3,12 +3,12 @@ import Shopify.ShopifyOrderAPI as ShopifyOrderAPI
 import Shopee.ShopeeAPI as ShopeeAPI
 import Lazada.LazadaOrderAPI as LazadaOrderAPI
 from functions import get_default_path, get_default_qty, combine_orders_cust_df, combine_dfs
-from functions import API_KEY, PASSWORD, HOSTNAME, VERSION, CUSTOMER_DATA, COMBINED_DATA
+from functions import API_KEY, PASSWORD, HOSTNAME, VERSION
 
 if __name__ == "__main__":
     
     #Gets path setting
-    get_default_path()
+    CUSTOMER_DATA, COMBINED_DATA = get_default_path()
     
     # Gets customers database
     print("Getting customers from Shopify...")
@@ -17,7 +17,6 @@ if __name__ == "__main__":
     ShopifyFullCustDf.to_excel(CUSTOMER_DATA, index=False)
 
     #Gets orders database
-    get_default_path()
     defaultQtyDf = get_default_qty()
     #For Shopify
     print("Getting orders from Shopify...")

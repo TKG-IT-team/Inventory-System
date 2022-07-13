@@ -1,333 +1,69 @@
-2022-07-12 18:04:33,709 - WARNING - Unmatched products for Shopify API: 
-1. Chocolate (Family Pack)
-2. Salted Caramel (Family Pack)
-3. Assorted Singles (Bundle)
-4. Assorted Snack Packs
-5. Salted Caramel (6-pack Set)
-6. Kaya Butter Toast (6-pack Set)
-7. Nasi Lemak (Family Pack)
-8. Chilli Crab (Family Pack)
-9. All-Time Classic Favourite (6-pack Set)
-10. Double Happiness (Bundle)
-11. Kaya Butter Toast (Family Pack)
-12. Chicken Floss (Family Pack)
-13. Crazy Asian Flavoured (6-pack Set)
-14. Chilli Crab (6-pack Set)
-15. Nasi Lemak (6-pack Set)
-16. Salted Caramel Popcorn
-17. Kaya Butter Toast Popcorn
-18. Nasi Lemak Popcorn
-19. Chocolate Popcorn
-20. Chocolate (6-pack Set)
-21. Chilli Crab Snack Monster
-22. Assorted Snack Monsters
-23. Chicken Floss (6-pack Set)
-24. 12 + 2 Bundle Set
-25. Assorted Singles (Gift Box of 6 Packs)
-26. Gift Box (Assorted Singles of 6 Packs)
-27. Golden Premium Packs
-28. Gift Box of 6 flavours
-29. Joyous Christmas Bundle (3 Gift Boxes of 6)
-30. Joyous Christmas Bundle (3 Gift Boxes of 6 Assorted Singles)
-31. Joyous Christmas Bundle (Sets of 3 Gift Boxes with 6 Assorted Singles Each)
-32. Bags of 3
-33. Paper Bags
-34. Courier
-35. CNY Golden Popcorn Gift Box (Assorted Singles of 6 Packs)
-36. CNY Assorted Gift Box
-37. Delivery
-38. Copy of Gift Box (Assorted Singles of 6 Packs)
-39. Gift Box Combos (Assorted Singles of 6 Packs)
-40. Lockdown 2.0 Family Care Package
-41. Assorted Bundle
-42. Customized Stickers
-43. The Kettle Gourmet Pokémon Gift Box
-44. Pokémon Gift Box (Bundle of 3 Packs with Collectible Card)
-45. Pokémon Gift Box (Bundle of 3 Packs with Collectible Cut-out)
-46. Assorted Gift Box
-47. Pulut Hitam (6-pack Set)
-48. Pulut Hitam (Family Pack)
-49. New Flavours Bundle (6-pack Set)
-50. Fish Head Curry (6-pack Set)
-51. Fish Head Curry (Family Pack)
-52. Chilli Crab Popcorn
-53. International Shipping
-54. The Original Mini Pack Bundle (Assorted Single of 8 Packs x 30g)
-55. The Classic Snack Pack Bundle (Assorted Single of 8 Packs x 65g)
-56. 12 + 2 Bundle Set (14 Packs x 65g)
-57. Gift Box Combos (Assorted Singles of 8 Packs x 65g)
-58. Stay At Home Family Package (Bundle of 2 packs x 330g + 4 packs x 65g)
-59. Pokémon Gift Box (Bundle of 3 Packs x 80g with Collectible Cut-out)
-60. Assorted Singles (6 Packs x 65g)
-61. Golden Customized Bags
-62. Top Up: Xmas Standard Box
-63. Xmas Mini Gift Box
-64. Urgent Delivery
-65. Xmas Mini Bundle
-66. Xmas Standard Gift Box
-67. Delivery Singapore
-68. Delivery - Phillipines (4 items)
-69. Delivery - Taiwan (1 Item)
-70. Delivery - Vietnam (5 Items)
-71. The Original Mini Pack Bundle (Assortment of 8 Packs x 30g)
-72. The Classic Snack Pack Bundle (Assortment of 8 Packs x 65g)
-73. Kaya Butter Toast (6 Packs x 65g)
-74. All-Time Classic Favourite (6 Packs x 65g)
-75. Chilli Crab (6 Packs x 65g)
-76. Crazy Asian Flavoured (6 Packs x 65g)
-77. Salted Caramel (6 Packs x 65g)
-78. Nasi Lemak (6 Packs x 65g)
-79. Chicken Floss (6 Packs x 65g)
-80. Pulut Hitam (6 Packs x 65g)
-81. Top Up
-82. Chocolate (6 Packs x 65g)
-83. Assorted Popcorn Flavours
-84. Salted Caramel 30g
-85. Chocolate 30g
-86. Kaya 30g
-87. 20 + 5 Bundle Set (25 Packs x 65g)
-88. All-Time Classic Favourite (8 Packs x 65g)
-89. Pulut Hitam (8 Packs x 65g)
-90. Kaya Butter Toast (8 Packs x 65g)
-91. Fish Head Curry (8 Packs x 65g)
-92. Assorted Singles (8 Packs x 65g)
-93. Chicken Floss (8 Packs x 65g)
-94. Assorted Popcorn Bundle
-95. Shipment to Fiji
-96. Covid Care Package (Bundle of 2 Packs x 65g + 2 Packs x 30g)
-97. Pokémon Popcorn Gift Box (Bundle of 3 Packs x 80g with Collectible Cut-out)
-98. Courier to Malaysia
-99. Tasty Veggie Treats (v)
+2022-07-13 11:09:06,332 - WARNING - Unmatched products for Shopify API: 
+1. The Original Mini Pack Bundle (Assorted Single of 8 Packs x 30g)
+2. Customized Stickers
+3. Delivery Singapore
+4. Delivery - Phillipines (4 items)
+5. Delivery - Taiwan (1 Item)
+6. Delivery - Vietnam (5 Items)
+7. The Classic Snack Pack Bundle (Assorted Single of 8 Packs x 65g)
+8. Assorted Singles (6 Packs x 65g)
+9. 12 + 2 Bundle Set (14 Packs x 65g)
+10. The Original Mini Pack Bundle (Assortment of 8 Packs x 30g)
+11. The Kettle Gourmet Pokémon Gift Box
+12. The Classic Snack Pack Bundle (Assortment of 8 Packs x 65g)
+13. Pulut Hitam (Family Pack)
+14. Salted Caramel (Family Pack)
+15. Kaya Butter Toast (Family Pack)
+16. Chocolate (Family Pack)
+17. Kaya Butter Toast (6 Packs x 65g)
+18. Pokémon Gift Box (Bundle of 3 Packs x 80g with Collectible Cut-out)
+19. All-Time Classic Favourite (6 Packs x 65g)
+20. Chilli Crab (6 Packs x 65g)
+21. Chicken Floss (Family Pack)
+22. Double Happiness (Bundle)
+23. Nasi Lemak (Family Pack)
+24. Fish Head Curry (Family Pack)
+25. Stay At Home Family Package (Bundle of 2 packs x 330g + 4 packs x 65g)
+26. Chilli Crab (Family Pack)
+27. Crazy Asian Flavoured (6 Packs x 65g)
+28. Salted Caramel (6 Packs x 65g)
+29. Nasi Lemak (6 Packs x 65g)
+30. Chicken Floss (6 Packs x 65g)
+31. Pulut Hitam (6 Packs x 65g)
+32. Top Up
+33. Chocolate (6 Packs x 65g)
+34. Assorted Popcorn Flavours
+35. Salted Caramel 30g
+36. Chocolate 30g
+37. Kaya 30g
+38. 20 + 5 Bundle Set (25 Packs x 65g)
+39. All-Time Classic Favourite (8 Packs x 65g)
+40. Pulut Hitam (8 Packs x 65g)
+41. Kaya Butter Toast (8 Packs x 65g)
+42. Fish Head Curry (8 Packs x 65g)
+43. Assorted Singles (8 Packs x 65g)
+44. Chicken Floss (8 Packs x 65g)
+45. Assorted Popcorn Bundle
+46. Shipment to Fiji
+47. Covid Care Package (Bundle of 2 Packs x 65g + 2 Packs x 30g)
+48. Pokémon Popcorn Gift Box (Bundle of 3 Packs x 80g with Collectible Cut-out)
+49. Courier to Malaysia
+50. Tasty Veggie Treats (v)
 . 
 
 Please check Settings to verify all product inputs.
-2022-07-12 18:05:39,541 - WARNING - Unmatched products for Shopee API: 
-1. 10 Packet Popcorn Bundle Teh Tarik/Cookies & Creme/Salted Caramel
-2. 3 Packet Popcorn Bundle
-3. 5 Packet Popcorn Bundle
-4. The Kettle Gourmet Salted Caramel Gourmet Popcorn [1 Packet x 90g]
-5. 10 Packet Popcorn Bundle
-6. The Kettle Gourmet Kaya Butter Toast Family Pack
-7. The Kettle Gourmet Salted Caramel Snack Monster
-8. The Kettle Gourmet Salted Caramel Family pack
-9. The Kettle Gourmet Kaya Butter Toast Snack Monster
-10. The Kettle Gourmet Chili Crab Snack Monster
-11. The Kettle Gourmet Nasi Lemak Snack Monster
-12. The Kettle Gourmet Chocolate Snack Monster
-13. The Kettle Gourmet Salted Caramel Family packs
-14. The Kettle Gourmet Nasi Lemak Family pack
-15. Chili Crab Snack Monster
-16. Kaya Butter Toast Snack Monster
-17. Nasi Lemak Snack Monster
-18. Assorted Singles Bundle
-19. Chocolate Family Pack
-20. Salted Caramel Family Pack
-21. Salted Caramel Snack Monster
-22. Chocolate Snack Monster
-23. Kettle Gourmet Crazy Asian Popcorn Flavoured 3-Bundle with Free Shipping
-24. Kettle Gourmet Crazy Asian Popcorn Flavoured 6-Bundle with Free Shipping
-25. Kaya Butter Toast Family Pack
-26. Chili Crab Family Pack
-27. )Free Shipping) Brand New Chicken Floss Popcorn Snack Monster
-28. (Free Shipping) Brand New Chicken Floss Popcorn Snack Monster
-29. Chicken Floss Family Pack
-30. Nasi Lemak Family Pack
-31. 12 + 2 Bundle Set
-32. Assorted Singles (Gift Box of 6 Packs)
-33. Joyous Christmas Bundles
-34. All-Time Classic Favourite (6-pack Set)
-35. Kaya Butter Toast (6-pack Set)
-36. Salted Caramel (6-pack Set)
-37. Chocolate (6-pack Set)
-38. Double Happiness Bundle
-39. Family Fun Combo
-40. CNY Golden Popcorn Gift Box (Assorted Singles of 6 Packs)
-41. CNY Golden Popcorn Gift Box Bundles
-42. Nasi Lemak (6-pack Set)
-43. Kettle Gourmet Crazy Asian Popcorn Flavoured 3-Bundle with FREE SHIPPING
-44. The Kettle Gourmet bundle of 12 packs of popcorn with FREE 2 packs perfect for families
-45. Kettle Gourmet Crazy Asian Popcorn Flavoured 3-Bundle
-46. The Kettle Gourmet Chicken Floss Popcorn (1-pack)
-47. Lockdown 2.0 Family Care Package (3-6 pax)
-48. Pokemon Gift Box
-49. Fish Head Curry Family Pack
-50. Pulut Hitam Family Pack
-51. Pulut Hitam (6-Pack Set)
-52. Chilli Crab (6-pack Set)
-53. The Original Mini Pack Bundle (Assorted Singles of 8 Packs x 30g)
-54. The Classic Snack Pack Bundle (Assorted Single of 8 Packs x 65g)
-55. Fish Head Curry (6-Pack Set)
-56. Assorted Singles (Gift Box of 8 Packs)
-57. Valentine's Day Forever Love Gift Box
-58. Kaya Butter Toast (8-pack Set)
-59. 20 + 5 Bundle Set (25 Packs x 65g)
-60. Salted Caramel (8-pack Set)
-61. Savoury Flavours Bundle (8 Packs x 65g)
-62. Assorted Singles (8 Packs x 65g)
-63. Nasi Lemak (8-pack Set)
-64. Fish Head Curry (8-Pack Set)
-65. Pokémon Bulbasaur Kaya Butter Toast Flavoured Popcorn (1 Pack x 80g)
-66. FREE POPCORN Giveaway
-67. Kaya Butter Toast Popcorn Family Pack
-68. Fish Head Curry Popcorn Family Pack
-69. The Original Mini Pack Popcorn Bundle (Assorted Singles of 8 Packs x 30g)
-70. Nasi Lemak Popcorn Family Pack
-71. Pokemon Popcorn Gift Box
-72. Pulut Hitam Popcorn Family Pack
-73. Salted Caramel Popcorn Family Pack
-74. The Raya Popcorn Bundle
-75. Chili Crab Popcorn Family Pack
-76. Chicken Floss Popcorn Family Pack
-77. The Classic Popcorn Pack Bundle (Assorted Single of 8 Packs x 65g)
-78. Pokémon Charmander Chilli Crab Flavoured Popcorn (1 Pack x 80g)
-79. Pokémon Squirtle Chocolate Flavoured Popcorn (1 Pack x 80g)
-80. Chocolate Popcorn (8-pack Set)
-81. The Original Mini Pack Popcorn Bundle Box (Assorted Singles of 8 Packs x 30g)
+2022-07-13 11:09:08,151 - INFO - 
+2022-07-13 11:09:09,444 - WARNING - Unmatched products for Shopee API: 
+1. The Original Mini Pack Popcorn Bundle (Assorted Singles of 8 Packs x 30g)
+2. FREE POPCORN Giveaway
+3. The Original Mini Pack Popcorn Bundle Box (Assorted Singles of 8 Packs x 30g)
+4. Kettle Gourmet Crazy Asian Popcorn Flavoured 3-Bundle
+5. Kaya Butter Toast Popcorn Family Pack
+6. Nasi Lemak Popcorn Family Pack
+7. Pulut Hitam Popcorn Family Pack
+8. Salted Caramel Popcorn Family Pack
+9. Chili Crab Popcorn Family Pack
 . 
 
 Please check Settings to verify all product inputs.
-2022-07-12 18:07:30,228 - WARNING - Unmatched products for Lazada API: 
-1. Kettle Gourmet Crazy Asian Popcorn Flavoured 6-Bundle with Free Shipping
-2. Assorted Singles (Gift Box of 6-Pack)
-3. Crazy Asian Bundle (3-Pack Set)
-4. Salted Caramel Family Pack
-5. Kaya Butter Toast Family Pack
-6. Chicken Floss Snack Monster
-7. Kettle Gourmet Assorted Singles Bundle
-8. Family Bundle Wombo Combo
-9. Double Happiness Bundle
-10. Chocolate Family Pack
-11. Chocolate (6-pack Set)
-12. Nasi Lemak (6-pack Set)
-13. Lockdown 2.0 Family Care Package (3-6 pax)
-14. Chilli Crab Family Pack
-15. Kaya Butter Toast (6-pack Set)
-16. Chicken Floss Family Pack
-17. Salted Caramel (6-pack Set)
-18. Pokemon Gift Box
-19. All-Time Classic Favourite (6-pack Set)
-20. Nasi Lemak Family Pack
-21. Fish Head Curry Family Pack
-22. The Classic Snack Pack Bundle
-23. Pulut Hitam Family Pack
-24. The Original Mini Pack Bundle
-25. Savoury Flavours Bundle (8 Packs x 65g)
-26. Kaya Butter Toast (8-pack Set)
-. 
-
-Please check Settings to verify all product inputs.
-2022-07-12 18:09:44,753 - INFO -  Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
- Not Found in Customer Data
-
+2022-07-13 11:09:11,857 - ERROR - App access frequency exceeds the limit. This ban will last 75049 seconds
