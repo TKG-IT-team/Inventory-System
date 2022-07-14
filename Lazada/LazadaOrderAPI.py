@@ -147,7 +147,7 @@ def get_order_details2(order_id, access_token):
     return df
 
 #Returns all orders by default
-def get_orders(last_created_after = '2021-01-01T00:00:00+08:00'): 
+def get_orders(last_created_after = '2021-01-01T00:00:00+08:00'):
     order_list_df, access_token = get_order_list(last_created_after)
     if len(order_list_df) != 0: #If there are new orders since last_created_after
         df = pd.DataFrame() #empty dataframe

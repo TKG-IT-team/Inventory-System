@@ -62,8 +62,8 @@ def combine_orders_cust_df(customerDf, order_df):
             order_df.at[index, COL_BIRTHDAY] = custNameKeyDf[series[COL_CUSTOMER_ID]][2]
             order_df.at[index, COL_EMAIL] = custNameKeyDf[series[COL_CUSTOMER_ID]][4]
         elif series[COL_CUSTOMER_ID] != "":
-            unmatched_names += series[COL_CUSTOMER_ID] + " not found in Customer Data\n"
-            print("Index: " + str(index) + "    " + "'" + series[COL_CUSTOMER_ID] + "'" + " not found in Customer Data\n")
+            unmatched_names += str(series[COL_CUSTOMER_ID]) + " not found in Customer Data\n"
+            print("Index: " + str(index) + "    " + "'" + str(series[COL_CUSTOMER_ID]) + "'" + " not found in Customer Data\n")
     
     logger.info(unmatched_names)
 
@@ -99,8 +99,10 @@ def get_default_path():
 
 #Generate quantity table based on the product dictionary
 def generate_qty_table(df, default_qty_df, platform):
+    df = df.reset_index(drop=True)
     unmatched_products = []
     for i, order_series in df.iterrows():
+        input(i)
         order_str = order_series["Product"]
         order_dict = ast.literal_eval(order_str)
         pdt_components = {}
