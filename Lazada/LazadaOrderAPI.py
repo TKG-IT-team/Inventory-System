@@ -49,7 +49,7 @@ def get_order_list(last_created_after):
         request.add_api_param('limit', '100') #100 is the maximum number of orders per GET request
         try:
             response = client.execute(request, access_token)
-
+        
             if "code" in response.body.keys(): #If API call limit reached
                 if response.body["code"] == "AppCallLimit":
                     error_msg = response.body["message"]
@@ -57,6 +57,9 @@ def get_order_list(last_created_after):
                     logger.error(error_msg)
                     ctypes.windll.user32.MessageBoxW(0, f"Lazada API: {error_msg}", "Error Message", 0)
                     break
+                
+            if len(response.body['data']['orders']) == 0:
+                break
 
             if len(response.body['data']['orders']) != 0: #If there are new orders since last_created_after
                 if is_first_loop:  #Starts with first row
@@ -66,7 +69,7 @@ def get_order_list(last_created_after):
                         df = pd.concat([df, temp_df]) #For the particular loop of GET request
                     orders = pd.concat([orders, df])
 
-                    # print("First loop: " + str(len(df)))
+                    #print("First loop: " + str(len(df)))
                     if len(df)<100:
                         break
                     

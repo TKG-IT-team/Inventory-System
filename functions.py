@@ -102,13 +102,12 @@ def generate_qty_table(df, default_qty_df, platform):
     df = df.reset_index(drop=True)
     unmatched_products = []
     for i, order_series in df.iterrows():
-        input(i)
         order_str = order_series["Product"]
         order_dict = ast.literal_eval(order_str)
         pdt_components = {}
         for product_name, qty in order_dict.items():
             if (product_name in default_qty_df["title"].tolist()):
-                for flavour in default_qty_df.columns.tolist()[2:]:
+                for flavour in default_qty_df.columns.tolist()[1:]:
                     if flavour not in pdt_components.keys():
                         pdt_components[flavour] = qty * default_qty_df.at[default_qty_df[default_qty_df["title"]==product_name].index.values[0], flavour]
                     else:
