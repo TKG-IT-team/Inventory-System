@@ -44,7 +44,7 @@ if __name__ == "__main__":
     defaultQtyDf = get_default_qty() 
     
     #Gets customer database
-    shopify_full_cust_df = pd.read_excel(CUSTOMER_DATA)
+    # shopify_full_cust_df = pd.read_excel(CUSTOMER_DATA)
 
     #Gets old orders database
     oldCombined = pd.read_excel(COMBINED_DATA)
@@ -66,13 +66,13 @@ if __name__ == "__main__":
         print("Updating Shopify orders...")
         shopify_new_order_df, unmatched_products = ShopifyOrderAPI.generate_new_order_df(defaultQtyDf, date_dict["Shopify"])
 
-        #Combines Customer and Order Df
-        new_shopify = combine_orders_cust_df(shopify_full_cust_df, shopify_new_order_df)
+        # #Combines Customer and Order Df
+        # new_shopify = combine_orders_cust_df(shopify_full_cust_df, shopify_new_order_df)
         
         #Combines old and new Shopify Df
         split = split_df_based_on_date(platformDict["Shopify"], date_dict["Shopify"])
         old_shopify = split[0]
-        updated_shopify = combine_dfs(old_shopify, new_shopify)
+        updated_shopify = combine_dfs(old_shopify, shopify_new_order_df)
     else:
         updated_shopify, unmatchedProducts = ShopifyOrderAPI.generate_full_order_df(defaultQtyDf)
 

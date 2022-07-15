@@ -206,10 +206,10 @@ def generate_new_order_df(default_qty_df, update_date, old_df=pd.DataFrame()): #
 
     if len(new_df)!=0: #If there are new orders since last_date
         new_df = clean_df(new_df)
-        if len(old_df) != 0: #If there are any orders from outdated database to update
-            trimmed_df = new_df[new_df["Created At"] <= old_df["Created At"].iloc[-1]]
-            updated_old_df = clean_wo_customer_data(old_df, trimmed_df)
-            new_df = combine_dfs(updated_old_df, new_df[new_df["Created At"] > old_df["Created At"].iloc[-1]])
+        # if len(old_df) != 0: #If there are any orders from outdated database to update
+        #     trimmed_df = new_df[new_df["Created At"] <= old_df["Created At"].iloc[-1]]
+        #     updated_old_df = clean_wo_customer_data(old_df, trimmed_df)
+        #     new_df = combine_dfs(updated_old_df, new_df[new_df["Created At"] > old_df["Created At"].iloc[-1]])
         df, unmatched_products = generate_qty_table(new_df, default_qty_df, "Lazada")
     else:
         df = new_df
