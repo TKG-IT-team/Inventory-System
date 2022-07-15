@@ -1,4 +1,4 @@
-2022-07-15 08:50:36,877 - WARNING - Unmatched products for Shopify API: 
+2022-07-15 09:36:48,179 - WARNING - Unmatched products for Shopify API: 
 1. Chocolate (Family Pack)
 2. Salted Caramel (Family Pack)
 3. Assorted Singles (Bundle)
@@ -155,7 +155,7 @@
 . 
 
 Please check Settings to verify all product inputs.
-2022-07-15 08:51:17,651 - WARNING - Unmatched products for Shopee API: 
+2022-07-15 09:37:23,351 - WARNING - Unmatched products for Shopee API: 
 1. 10 Packet Popcorn Bundle Teh Tarik/Cookies & Creme/Salted Caramel
 2. 3 Packet Popcorn Bundle
 3. 5 Packet Popcorn Bundle
@@ -229,7 +229,7 @@ Please check Settings to verify all product inputs.
 . 
 
 Please check Settings to verify all product inputs.
-2022-07-15 08:52:33,642 - WARNING - Unmatched products for Lazada API: 
+2022-07-15 09:38:36,952 - WARNING - Unmatched products for Lazada API: 
 1. Kettle Gourmet Crazy Asian Popcorn Flavoured 6-Bundle with Free Shipping
 2. Assorted Singles (Gift Box of 6-Pack)
 3. Crazy Asian Bundle (3-Pack Set)
@@ -252,4 +252,3 @@ Please check Settings to verify all product inputs.
 . 
 
 Please check Settings to verify all product inputs.
-2022-07-15 08:52:34,100 - INFO - 

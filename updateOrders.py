@@ -73,8 +73,10 @@ if __name__ == "__main__":
         split = split_df_based_on_date(platformDict["Shopify"], date_dict["Shopify"])
         old_shopify = split[0]
         updated_shopify = combine_dfs(old_shopify, new_shopify)
-    
-    
+    else:
+        updated_shopify, unmatchedProducts = ShopifyOrderAPI.generate_full_order_df(defaultQtyDf)
+
+        
     if "Shopee" in platformDict.keys():
         ###Shopee
         print("Updating Shopee orders...")
@@ -84,6 +86,8 @@ if __name__ == "__main__":
         #Combines old and new Shopify Df
         old_shopee = split[0]
         updated_shopee = combine_dfs(old_shopee, new_shopee)
+    else:
+        updated_shopee, unmatchedProducts = ShopeeAPI.generate_full_order_df(defaultQtyDf)
 
     if "Lazada" in platformDict.keys():
         ##Lazada
@@ -94,6 +98,8 @@ if __name__ == "__main__":
         #Combines old and new lazada Df
         old_lazada = split[0]
         updated_lazada = combine_dfs(old_lazada, new_lazada)
+    else:
+        updated_lazada, unmatchedProducts = LazadaOrderAPI.generate_full_order_df(defaultQtyDf)
 
     #Combines platforms
     newCombined = combine_dfs(updated_shopify, updated_shopee, updated_lazada) #
