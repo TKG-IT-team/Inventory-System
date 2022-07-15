@@ -30,9 +30,9 @@ if __name__ == "__main__":
     CUSTOMER_DATA, COMBINED_DATA = get_default_path()
 
     # Gets customers database
-    print("Getting customers from Shopify...")
-    shopify_full_cust_df = ShopifyCustomerAPI(API_KEY, PASSWORD, HOSTNAME, VERSION).generate_full_cust_df()
-    shopify_full_cust_df.to_excel(CUSTOMER_DATA, index=False)
+    #print("Getting customers from Shopify...")
+    #shopify_full_cust_df = ShopifyCustomerAPI(API_KEY, PASSWORD, HOSTNAME, VERSION).generate_full_cust_df()
+    #shopify_full_cust_df.to_excel(CUSTOMER_DATA, index=False)
 
     #Gets orders database
     default_qty_df = get_default_qty()
@@ -60,8 +60,8 @@ if __name__ == "__main__":
         lazada_full_order_df, unmatched_products = LazadaOrderAPI.generate_new_order_df(default_qty_df, since_date)
 
     #Combines Customer and Order Df
-    shopifyCombined = combine_orders_cust_df(shopify_full_cust_df, shopify_full_order_df)
+    #shopifyCombined = combine_orders_cust_df(shopify_full_cust_df, shopify_full_order_df)
     
     #Combines platforms
-    combinedDf = combine_dfs(shopifyCombined, shopee_full_order_df, lazada_full_order_df) 
+    combinedDf = combine_dfs(shopify_full_order_df, shopee_full_order_df, lazada_full_order_df) 
     combinedDf.to_excel(COMBINED_DATA, index=False)

@@ -160,11 +160,8 @@ def clean(df):
     df["Platform"] = "Shopify"
 
     #Dropping unecessary columns and renaming them
-    df.drop(['financial_status', 'address1', 'address2', 'amount', 'currency_code'],axis=1,inplace=True) #'product', 'id', 'Customer_id'
+    df.drop(['financial_status', 'address1', 'address2', 'amount', 'currency_code', 'Customer_id'],axis=1,inplace=True) #'product', 'id', 'Customer_id'
     df = df.rename(columns={'order_number': 'Order No.', 'created_at': 'Created At', 'note' : 'Notes', 'name': 'Name', 'title': 'Product Orders', 'fulfillment_status': "Fulfillment Status", "product": "Product"})
-
-    # insert amendment status column to dataframe
-    df.insert(len(df.columns),"Amend Status",0)
     
     return df
 
