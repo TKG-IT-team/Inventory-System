@@ -131,7 +131,7 @@ def generate_qty_table(df, default_qty_df, platform):
         print(warning_msg)
         print("\n")
         warning_msg = f"There are unmatched products for {platform.upper()}. \n\nPlease check Settings to verify all product inputs. Refer to the error log for more information."
-        ctypes.windll.user32.MessageBoxW(0, warning_msg, "Warning Message", 0)
+        #ctypes.windll.user32.MessageBoxW(0, warning_msg, "Warning Message", 0)
 
     return df, pd.Series(unmatched_products, name = "Unmatched Products")
 
