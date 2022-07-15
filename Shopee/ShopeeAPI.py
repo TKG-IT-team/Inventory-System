@@ -198,7 +198,7 @@ def generate_full_order_df(defaultQtyDf):
     return df, unmatchedProducts
 
 #Returns a dataframe of orders since last input date
-def generate_new_order_df(default_qty_df, lastDate, old_df): #lastDate in IS08601 format
+def generate_new_order_df(default_qty_df, lastDate, old_df=pd.DataFrame()): #lastDate in IS08601 format
     epoch_date = convert_epoch(lastDate)
     new_df = get_orders(epoch_date)
 

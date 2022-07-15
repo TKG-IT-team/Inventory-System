@@ -92,7 +92,6 @@ def get_default_path():
     
     dictPath = config_tools_data.readConfig()
    
-    SETTING_FP = dictPath["SettingFilePath"]
     CUSTOMER_DATA = dictPath["CustomerDataFilePath"]
     COMBINED_DATA = dictPath["CombinedDataFilePath"]
     return CUSTOMER_DATA, COMBINED_DATA

@@ -1,17 +1,19 @@
-from cmath import nan
-import pandas as pd
-import math
+import config_tools_data
+from functions import convert_ISO
 
-# combined_data = pd.read_excel("Combined Data.xlsx")
-# index_list = []
-# for i, value in combined_data.iterrows():
-#     if i ==1609:
-#         print(math.isnan(value["Name"]))
-#         break  
+def get_since_date():
+    dictPath = config_tools_data.readConfig()
+    since_date = dictPath["SinceDate"]
 
-# print(index_list)
+    try:
+        if len(since_date) != 0:
+            converted_date = convert_ISO(since_date)
+            return converted_date
+        else:
+            # print(since_date)
+            return since_date
+    except AttributeError:
+        critical_msg = "Please enter since date in correct format!"
+        print(critical_msg)
 
-print("'" + "'")
-
-
-# print("Hell0".__contains__("S", "e"))
+print(get_since_date())
