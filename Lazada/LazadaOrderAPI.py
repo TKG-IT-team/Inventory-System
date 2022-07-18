@@ -186,8 +186,8 @@ def generate_full_order_df(default_qty_df):
     unmatchedProducts = []
     if len(df) > 0:
         df = clean_df(df)
-        df, unmatchedProducts = generate_qty_table(df, default_qty_df, "Lazada")
-    return df, unmatchedProducts
+        #df = generate_qty_table(df, default_qty_df, "Lazada")
+    return df
 
 #Remove customer data from cleaned data
 def clean_wo_customer_data(old_df, new_df):
@@ -210,11 +210,8 @@ def generate_new_order_df(default_qty_df, update_date, old_df=pd.DataFrame()): #
         #     trimmed_df = new_df[new_df["Created At"] <= old_df["Created At"].iloc[-1]]
         #     updated_old_df = clean_wo_customer_data(old_df, trimmed_df)
         #     new_df = combine_dfs(updated_old_df, new_df[new_df["Created At"] > old_df["Created At"].iloc[-1]])
-        df, unmatched_products = generate_qty_table(new_df, default_qty_df, "Lazada")
-    else:
-        df = new_df
-        unmatched_products = pd.Series(dtype=str)
-    return df, unmatched_products
+        #df, unmatched_products = generate_qty_table(new_df, default_qty_df, "Lazada")
+    return new_df
 
 # from functions import get_default_path, get_default_qty
 # get_default_path()

@@ -168,14 +168,13 @@ def clean(df):
 def generate_full_order_df(default_qty_df):
     df = pd.DataFrame(get_all_orders())
     df = clean(df)
-    df, unmatchedProducts = generate_qty_table(df, default_qty_df, "Shopify")
-    return df, unmatchedProducts
+    #df, unmatchedProducts = generate_qty_table(df, default_qty_df, "Shopify")
+    return df
 
 #Returns a dataframe of orders since last input date
 def generate_new_order_df(default_qty_df, last_date): #lastDate in ISO 8601 format
     df = get_new_orders(last_date)
     df = clean(df)
-    df, unmatchedProducts = generate_qty_table(df, default_qty_df, "Shopify")
-    return df, unmatchedProducts
-
+    #df, unmatchedProducts = generate_qty_table(df, default_qty_df, "Shopify")
+    return df
 

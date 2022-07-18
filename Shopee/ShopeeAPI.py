@@ -191,8 +191,8 @@ def clean_wo_customer_data(old_df, new_df):
 def generate_full_order_df(defaultQtyDf):
     df = get_orders()
     df = clean_df(df)
-    df, unmatchedProducts = generate_qty_table(df, defaultQtyDf, "Shopee")
-    return df, unmatchedProducts
+    #df, unmatchedProducts = generate_qty_table(df, defaultQtyDf, "Shopee")
+    return df
 
 #Returns a dataframe of orders since last input date
 def generate_new_order_df(default_qty_df, lastDate, old_df=pd.DataFrame()): #lastDate in IS08601 format
@@ -205,16 +205,16 @@ def generate_new_order_df(default_qty_df, lastDate, old_df=pd.DataFrame()): #las
         #     trimmed_df = new_df[new_df["Created At"] <= old_df["Created At"].iloc[-1]]
         #     updated_old_df = clean_wo_customer_data(old_df, trimmed_df)
         #     new_df = combine_dfs(updated_old_df, new_df[new_df["Created At"] > old_df["Created At"].iloc[-1]])
-        df, unmatched_products = generate_qty_table(new_df, default_qty_df, "Shopee")
-        return df, unmatched_products
+        #df, unmatched_products = generate_qty_table(new_df, default_qty_df, "Shopee")
+        return new_df
     else:
         unmatched_products = pd.Series(dtype=str)
-        return new_df, unmatched_products
+        return new_df
 
 #Returns a datafram of all uncensored customer information
 def generate_full_cust_df():
     default_qty = get_default_qty()
-    orders, unmatched_products = generate_full_order_df(default_qty)
+    orders = generate_full_order_df(default_qty)
     # orders = pd.read_excel("orders.xlsx")
     boolean_list = []
     for i, order in orders.iterrows():
