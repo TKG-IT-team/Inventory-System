@@ -168,10 +168,10 @@ def get_orders(last_created_after = '2021-01-01T00:00:00+08:00'):
 #Cleans data in the dataframe
 def clean_df(df):
   
-    df = df[['order_id', 'created_at',  'status', 'Notes', 'name' , 'first_name']] # keep needed columns
+    df = df[['order_id', 'created_at',  'status', 'Notes', 'name' , 'first_name', 'address']] # keep needed columns
 
     df = df.rename(columns={"order_id":"Order No.", "created_at":"Created At","status":"Fulfillment Status", "remark":"Notes",  #Renames columns
-    "first_name":"Name","name":"Product" })
+    "first_name":"Name","address":"Address","name":"Product" })
 
     # df["Product"] = "{'" + df["Product"].values + "':1}"
     df["Platform"] = "Lazada"

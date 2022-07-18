@@ -165,7 +165,7 @@ def clean_df(df):
     "message_to_seller":"Notes","currency":"Currency","item_name":"Product", "name":"Name", "phone":"HP",
     "full_address":"Address", })
     df["Created At"]  = df["Created At"].apply(datetime.fromtimestamp)#Changes timestamp to datetime
-    df = df.reindex(columns=["Order No.", "Created At", "Fulfillment Status", "Notes", "Name", "Product", "Platform"]) #Reorder Columns, "recipient_address"
+    df = df.reindex(columns=["Order No.", "Created At", "Fulfillment Status", "Notes", "Address", "Name", "Product", "Platform"]) #Reorder Columns, "recipient_address"
     
     #Add platform name to dataframe
     df["Platform"] = "Shopee"

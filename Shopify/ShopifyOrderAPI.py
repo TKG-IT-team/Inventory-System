@@ -160,9 +160,8 @@ def clean(df):
     df["Platform"] = "Shopify"
 
     #Dropping unecessary columns and renaming them
-    df.drop(['financial_status', 'address1', 'address2', 'amount', 'currency_code', 'Customer_id'],axis=1,inplace=True) #'product', 'id', 'Customer_id'
-    df = df.rename(columns={'order_number': 'Order No.', 'created_at': 'Created At', 'note' : 'Notes', 'name': 'Name', 'title': 'Product Orders', 'fulfillment_status': "Fulfillment Status", "product": "Product"})
-    
+    df.drop(['financial_status', 'address2', 'amount', 'currency_code', 'Customer_id'],axis=1,inplace=True) #'product', 'id', 'Customer_id'
+    df = df.rename(columns={'order_number': 'Order No.', 'created_at': 'Created At', 'note' : 'Notes', 'name': 'Name', 'address1':'Address', 'title': 'Product Orders', 'fulfillment_status': "Fulfillment Status", "product": "Product"})
     return df
 
 #Generate Full Order Df
