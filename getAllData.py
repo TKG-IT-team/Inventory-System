@@ -35,7 +35,7 @@ if __name__ == "__main__":
     #shopify_full_cust_df.to_excel(CUSTOMER_DATA, index=False)
 
     #Gets orders database
-    default_qty_df = get_default_qty()
+    #default_qty_df = get_default_qty()
     since_date = get_since_date()
 
     if len(since_date) == 0:
