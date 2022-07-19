@@ -40,9 +40,6 @@ if __name__ == "__main__":
     #Gets path setting
     CUSTOMER_DATA, COMBINED_DATA = get_default_path()
     
-    #Get default quantities
-    defaultQtyDf = get_default_qty() 
-    
     #Gets customer database
     # shopify_full_cust_df = pd.read_excel(CUSTOMER_DATA)
 
@@ -52,9 +49,9 @@ if __name__ == "__main__":
     date_dict = {}
     for platform, df in platformDict.items():
         date = get_update_date(df)
+        print(str(platform) + " : " + str(date)) 
         converted_date = convert_ISO(date)
         date_dict[platform] = converted_date
-    # print(date_dict)
 
     #empty dataframe
     updated_shopify = pd.DataFrame()
@@ -64,7 +61,7 @@ if __name__ == "__main__":
     # ###Shopify
     if "Shopify" in platformDict.keys():
         print("Updating Shopify orders...")
-        shopify_new_order_df, unmatched_products = ShopifyOrderAPI.generate_new_order_df(defaultQtyDf, date_dict["Shopify"])
+        shopify_new_order_df = ShopifyOrderAPI.generate_new_order_df(date_dict["Shopify"])
 
         # #Combines Customer and Order Df
         # new_shopify = combine_orders_cust_df(shopify_full_cust_df, shopify_new_order_df)
@@ -74,33 +71,33 @@ if __name__ == "__main__":
         old_shopify = split[0]
         updated_shopify = combine_dfs(old_shopify, shopify_new_order_df)
     else:
-        updated_shopify, unmatchedProducts = ShopifyOrderAPI.generate_full_order_df(defaultQtyDf)
+        updated_shopify = ShopifyOrderAPI.generate_full_order_df()
 
         
     if "Shopee" in platformDict.keys():
         ###Shopee
         print("Updating Shopee orders...")
         split = split_df_based_on_date(platformDict["Shopee"], date_dict["Shopee"])
-        new_shopee, unmatched_products = ShopeeAPI.generate_new_order_df(defaultQtyDf, date_dict["Shopee"], split[1])
+        new_shopee = ShopeeAPI.generate_new_order_df(date_dict["Shopee"], split[1])
 
         #Combines old and new Shopify Df
         old_shopee = split[0]
         updated_shopee = combine_dfs(old_shopee, new_shopee)
     else:
-        updated_shopee, unmatchedProducts = ShopeeAPI.generate_full_order_df(defaultQtyDf)
+        updated_shopee = ShopeeAPI.generate_full_order_df()
 
     if "Lazada" in platformDict.keys():
         ##Lazada
         print("Updating Lazada orders...")
         split = split_df_based_on_date(platformDict["Lazada"], date_dict["Lazada"])
-        new_lazada, unmatched_products = LazadaOrderAPI.generate_new_order_df(defaultQtyDf, date_dict["Lazada"], split[1])
+        new_lazada = LazadaOrderAPI.generate_new_order_df(date_dict["Lazada"], split[1])
 
         #Combines old and new lazada Df
         old_lazada = split[0]
         updated_lazada = combine_dfs(old_lazada, new_lazada)
     else:
-        updated_lazada, unmatchedProducts = LazadaOrderAPI.generate_full_order_df(defaultQtyDf)
+        updated_lazada = LazadaOrderAPI.generate_full_order_df()
 
     #Combines platforms
-    newCombined = combine_dfs(updated_shopify, updated_shopee, updated_lazada) #
+    newCombined = combine_dfs(updated_shopify, updated_shopee, updated_lazada)
     newCombined.to_excel(COMBINED_DATA, index=False)

@@ -181,7 +181,7 @@ def clean_df(df):
     return df
 
 #Generate full order df
-def generate_full_order_df(default_qty_df):
+def generate_full_order_df():
     df = get_orders()
     if len(df) > 0:
         df = clean_df(df)
@@ -199,7 +199,7 @@ def clean_wo_customer_data(old_df, new_df):
     return new_df
     
 #Returns a dataframe of orders since last input date
-def generate_new_order_df(default_qty_df, update_date, old_df=pd.DataFrame()): #lastDate in IS08601 format
+def generate_new_order_df(update_date, old_df=pd.DataFrame()): #lastDate in IS08601 format
     new_df = get_orders(update_date)
 
     if len(new_df)!=0: #If there are new orders since last_date
