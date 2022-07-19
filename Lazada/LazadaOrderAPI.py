@@ -183,10 +183,8 @@ def clean_df(df):
 #Generate full order df
 def generate_full_order_df(default_qty_df):
     df = get_orders()
-    unmatchedProducts = []
     if len(df) > 0:
         df = clean_df(df)
-        #df = generate_qty_table(df, default_qty_df, "Lazada")
     return df
 
 #Remove customer data from cleaned data
@@ -206,11 +204,6 @@ def generate_new_order_df(default_qty_df, update_date, old_df=pd.DataFrame()): #
 
     if len(new_df)!=0: #If there are new orders since last_date
         new_df = clean_df(new_df)
-        # if len(old_df) != 0: #If there are any orders from outdated database to update
-        #     trimmed_df = new_df[new_df["Created At"] <= old_df["Created At"].iloc[-1]]
-        #     updated_old_df = clean_wo_customer_data(old_df, trimmed_df)
-        #     new_df = combine_dfs(updated_old_df, new_df[new_df["Created At"] > old_df["Created At"].iloc[-1]])
-        #df, unmatched_products = generate_qty_table(new_df, default_qty_df, "Lazada")
     return new_df
 
 # from functions import get_default_path, get_default_qty
