@@ -35,6 +35,14 @@ def split_df_based_on_date(order_df, date): #Given date must be in ISO format
             return order_df.iloc[ : i, : ], order_df.iloc[i : , : ]
     return order_df, pd.DataFrame(columns=order_df.columns.tolist())
 
+#Adds new rows to dataframe if it does not exist
+def add_new_row_df(old_df, new_df, str_key_col):
+    combined_df = old_df
+    for i, series in new_df.iterrows():
+        if not series[str_key_col] in combined_df[str_key_col]:
+            combined_df = pd.concat([combined_df, series])
+    return combined_df
+
 if __name__ == "__main__":
 
     #Gets path setting
@@ -72,7 +80,6 @@ if __name__ == "__main__":
         updated_shopify = combine_dfs(old_shopify, shopify_new_order_df)
     else:
         updated_shopify = ShopifyOrderAPI.generate_full_order_df()
-
         
     if "Shopee" in platformDict.keys():
         ###Shopee
@@ -100,4 +107,7 @@ if __name__ == "__main__":
 
     #Combines platforms
     newCombined = combine_dfs(updated_shopify, updated_shopee, updated_lazada)
-    newCombined.to_excel(COMBINED_DATA, index=False)
+    #Add new rows to oldCombined if does not exist
+    final_df = add_new_row_df(oldCombined, newCombined, 'Order No.')
+    final_df.to_excel("TEST.xlsx",index=False)
+    #newCombined.to_excel(COMBINED_DATA, index=False)
