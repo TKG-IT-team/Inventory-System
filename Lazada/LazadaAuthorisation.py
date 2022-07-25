@@ -39,6 +39,6 @@ class Authorisation:
         return response.body['access_token'], response.body['refresh_token']
 
 # #Generate URL
-# Authorisation().concatenate_authorization_url()
+#print(Authorisation().concatenate_authorization_url())
 # #Get access token
-# Authorisation().get_access_token()
+#Authorisation().get_access_token("0_110194_bUY4S4eS639eQEnpHTPeM7Om22436")

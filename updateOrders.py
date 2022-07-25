@@ -38,10 +38,25 @@ def split_df_based_on_date(order_df, date): #Given date must be in ISO format
 #Adds new rows to dataframe if it does not exist
 def add_new_row_df(old_df, new_df, str_key_col):
     combined_df = old_df
+    new_df = new_df.reset_index(drop=True)
     for i, series in new_df.iterrows():
-        if not series[str_key_col] in combined_df[str_key_col]:
-            combined_df = pd.concat([combined_df, series])
+        if (not series[str_key_col] in combined_df[str_key_col].values) and (not str(series[str_key_col]) in combined_df[str_key_col].values):
+            combined_df = pd.concat([combined_df, new_df.iloc[[i]]])
+    combined_df[str_key_col] = combined_df[str_key_col].astype(str)
+    combined_df = combined_df.sort_values(by=str_key_col)
     return combined_df
+
+#Update fullfilled status
+def update_fullfilled_status(old_df, new_df, str_key_col, str_fullfill_col):
+     update_df = old_df
+     super_new_df = pd.DataFrame(new_df)
+     super_new_df.set_index(str_key_col, inplace=True)
+     update_df = update_df.reset_index(drop=True)
+     for i, series in update_df.iterrows():
+         if series[str_key_col] in super_new_df.index:
+             if series[str_fullfill_col] != super_new_df.at[series[str_key_col], str_fullfill_col]:
+                 update_df.at[i,str_fullfill_col] = super_new_df.at[series[str_key_col], str_fullfill_col]
+     return update_df
 
 if __name__ == "__main__":
 
@@ -71,13 +86,15 @@ if __name__ == "__main__":
         print("Updating Shopify orders...")
         shopify_new_order_df = ShopifyOrderAPI.generate_new_order_df(date_dict["Shopify"])
 
+        updated_shopify = shopify_new_order_df
+        
         # #Combines Customer and Order Df
         # new_shopify = combine_orders_cust_df(shopify_full_cust_df, shopify_new_order_df)
         
         #Combines old and new Shopify Df
-        split = split_df_based_on_date(platformDict["Shopify"], date_dict["Shopify"])
-        old_shopify = split[0]
-        updated_shopify = combine_dfs(old_shopify, shopify_new_order_df)
+        #split = split_df_based_on_date(platformDict["Shopify"], date_dict["Shopify"])
+        #old_shopify = split[0]
+        #updated_shopify = combine_dfs(old_shopify, shopify_new_order_df)
     else:
         updated_shopify = ShopifyOrderAPI.generate_full_order_df()
         
@@ -88,8 +105,8 @@ if __name__ == "__main__":
         new_shopee = ShopeeAPI.generate_new_order_df(date_dict["Shopee"], split[1])
 
         #Combines old and new Shopify Df
-        old_shopee = split[0]
-        updated_shopee = combine_dfs(old_shopee, new_shopee)
+        #old_shopee = split[0]
+        #updated_shopee = combine_dfs(old_shopee, new_shopee)
     else:
         updated_shopee = ShopeeAPI.generate_full_order_df()
 
@@ -100,14 +117,16 @@ if __name__ == "__main__":
         new_lazada = LazadaOrderAPI.generate_new_order_df(date_dict["Lazada"], split[1])
 
         #Combines old and new lazada Df
-        old_lazada = split[0]
-        updated_lazada = combine_dfs(old_lazada, new_lazada)
+        #old_lazada = split[0]
+        #updated_lazada = combine_dfs(old_lazada, new_lazada)
     else:
         updated_lazada = LazadaOrderAPI.generate_full_order_df()
 
     #Combines platforms
     newCombined = combine_dfs(updated_shopify, updated_shopee, updated_lazada)
     #Add new rows to oldCombined if does not exist
-    final_df = add_new_row_df(oldCombined, newCombined, 'Order No.')
-    final_df.to_excel("TEST.xlsx",index=False)
+    final_df = update_fullfilled_status(oldCombined, newCombined, r'Order No.', 'Fulfillment Status')
+    final_df = add_new_row_df(final_df, newCombined, 'Order No.')
+    #final_df.to_excel("TEST.xlsx",index=False)
+    final_df.to_excel(COMBINED_DATA,index=False)
     #newCombined.to_excel(COMBINED_DATA, index=False)
