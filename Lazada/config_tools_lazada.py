@@ -1,5 +1,6 @@
 import configparser
 import os
+import pathlib
 
 #Writes access_token and refresh_token onto config
 def write_token_config(access_token, refresh_token):
@@ -21,7 +22,7 @@ def write_token_config(access_token, refresh_token):
     config_file.set("Credentials", "app_secret", app_secret)
 
     # Save config file
-    with open(os.path.dirname(__file__) + '/' + "configurations.ini", 'w') as configfileObj:
+    with open(str(pathlib.Path.cwd()) + '/' + 'Lazada'  + '/' + "configurations.ini", 'w') as configfileObj:
         config_file.write(configfileObj)
         configfileObj.flush()
         configfileObj.close()
@@ -34,7 +35,7 @@ def read_token_config():
     config_file = configparser.ConfigParser()
 
     # Read config file
-    config_file.read(os.path.dirname(__file__) + '/' + "configurations.ini")
+    config_file.read(str(pathlib.Path.cwd()) + '/' + 'Lazada' + '/' + "configurations.ini")
 
     return config_file["Token"]["access_token"], config_file["Token"]["refresh_token"]
 
@@ -46,7 +47,7 @@ def read_credentials_config():
     config_file = configparser.ConfigParser()
 
     # Read config file
-    config_file.read(os.path.dirname(__file__) + '/' + "configurations.ini")
+    config_file.read(str(pathlib.Path.cwd()) + '/' + 'Lazada' + '/' + "configurations.ini")
 
     return config_file["Credentials"]["app_key"], config_file["Credentials"]["app_secret"]
 

@@ -25,7 +25,7 @@ def get_since_date():
         sys.exit()
     
 if __name__ == "__main__":
-    
+
     #Gets path setting and since date
     CUSTOMER_DATA, COMBINED_DATA = get_default_path()
 
@@ -60,7 +60,7 @@ if __name__ == "__main__":
         lazada_full_order_df = LazadaOrderAPI.generate_new_order_df(since_date)
     #Combines Customer and Order Df
     #shopifyCombined = combine_orders_cust_df(shopify_full_cust_df, shopify_full_order_df)
-    
+
     #Combines platforms
     combinedDf = combine_dfs(shopify_full_order_df, shopee_full_order_df, lazada_full_order_df) 
     combinedDf.to_excel(COMBINED_DATA, index=False)
