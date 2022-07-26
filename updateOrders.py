@@ -103,7 +103,7 @@ if __name__ == "__main__":
         print("Updating Shopee orders...")
         split = split_df_based_on_date(platformDict["Shopee"], date_dict["Shopee"])
         new_shopee = ShopeeAPI.generate_new_order_df(date_dict["Shopee"], split[1])
-
+        updated_shopee = new_shopee
         #Combines old and new Shopify Df
         #old_shopee = split[0]
         #updated_shopee = combine_dfs(old_shopee, new_shopee)
@@ -116,6 +116,7 @@ if __name__ == "__main__":
         split = split_df_based_on_date(platformDict["Lazada"], date_dict["Lazada"])
         new_lazada = LazadaOrderAPI.generate_new_order_df(date_dict["Lazada"], split[1])
 
+        updated_lazada = new_lazada
         #Combines old and new lazada Df
         #old_lazada = split[0]
         #updated_lazada = combine_dfs(old_lazada, new_lazada)
@@ -127,6 +128,4 @@ if __name__ == "__main__":
     #Add new rows to oldCombined if does not exist
     final_df = update_fullfilled_status(oldCombined, newCombined, r'Order No.', 'Fulfillment Status')
     final_df = add_new_row_df(final_df, newCombined, 'Order No.')
-    #final_df.to_excel("TEST.xlsx",index=False)
     final_df.to_excel(COMBINED_DATA,index=False)
-    #newCombined.to_excel(COMBINED_DATA, index=False)
