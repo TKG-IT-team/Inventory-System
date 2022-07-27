@@ -27,7 +27,7 @@ def get_since_date():
 if __name__ == "__main__":
 
     #Gets path setting and since date
-    CUSTOMER_DATA, COMBINED_DATA = get_default_path()
+    COMBINED_DATA = get_default_path()
 
     # Gets customers database
     #print("Getting customers from Shopify...")

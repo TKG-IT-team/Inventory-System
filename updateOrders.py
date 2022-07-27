@@ -61,7 +61,7 @@ def update_fullfilled_status(old_df, new_df, str_key_col, str_fullfill_col):
 if __name__ == "__main__":
 
     #Gets path setting
-    CUSTOMER_DATA, COMBINED_DATA = get_default_path()
+    COMBINED_DATA = get_default_path()
     
     #Gets customer database
     # shopify_full_cust_df = pd.read_excel(CUSTOMER_DATA)

@@ -92,9 +92,8 @@ def get_default_path():
     
     dictPath = config_tools_data.readConfig()
    
-    CUSTOMER_DATA = dictPath["CustomerDataFilePath"]
     COMBINED_DATA = dictPath["CombinedDataFilePath"]
-    return CUSTOMER_DATA, COMBINED_DATA
+    return COMBINED_DATA
 
 #Generate quantity table based on the product dictionary
 def generate_qty_table(df, default_qty_df, platform):
