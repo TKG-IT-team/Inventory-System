@@ -52,9 +52,9 @@ def get_new_orders(last_date): #lastDate in ISO 8601 format
 
         df=pd.DataFrame(response.json()['orders'])
         orders=pd.concat([orders,df])
-        lastId = df['id'].iloc[-1]
         if len(df)<250:
             break
+        lastId = df['id'].iloc[-1]
     return(orders)
 
   
@@ -167,12 +167,14 @@ def clean(df):
 #Generate Full Order Df
 def generate_full_order_df():
     df = pd.DataFrame(get_all_orders())
-    df = clean(df)
+    if len(df) > 0:
+        df = clean(df)
     return df
 
 #Returns a dataframe of orders since last input date
 def generate_new_order_df(last_date): #lastDate in ISO 8601 format
     df = get_new_orders(last_date)
-    df = clean(df)
+    if len(df) > 0:
+        df = clean(df)
     return df
 

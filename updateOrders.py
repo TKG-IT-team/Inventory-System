@@ -126,6 +126,8 @@ if __name__ == "__main__":
     #Combines platforms
     newCombined = combine_dfs(updated_shopify, updated_shopee, updated_lazada)
     #Add new rows to oldCombined if does not exist
-    final_df = update_fullfilled_status(oldCombined, newCombined, r'Order No.', 'Fulfillment Status')
-    final_df = add_new_row_df(final_df, newCombined, 'Order No.')
+    final_df = oldCombined
+    if len(newCombined) > 0:
+        final_df = update_fullfilled_status(oldCombined, newCombined, r'Order No.', 'Fulfillment Status')
+        final_df = add_new_row_df(final_df, newCombined, 'Order No.')
     final_df.to_excel(COMBINED_DATA,index=False)
