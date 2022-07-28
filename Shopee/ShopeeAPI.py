@@ -51,6 +51,7 @@ def get_token_shop_level(code): #v2
     resp = requests.post(url, json=body, headers=headers)
     ret = json.loads(resp.content)
     print(ret)
+    
     access_token = ret.get("access_token")
     new_refresh_token = ret.get("refresh_token")
     return access_token, new_refresh_token
@@ -68,8 +69,14 @@ def refresh_token_shop_level(refresh_token): #v2
     headers = { "Content-Type": "application/json"}
     resp = requests.post(url, json=body, headers=headers)
     ret = json.loads(resp.content)
-    access_token = ret.get("access_token")
-    new_refresh_token = ret.get("refresh_token")
+    try:
+        access_token = ret.get("access_token")
+        new_refresh_token = ret.get("refresh_token")
+    except TokenError as token_error:
+        error_msg = "Shopee API: Access token error! Please refer to developer guide to get a valid access token. "
+        print(error_msg)
+        logger.error(f"Shopee API: Token error! \n{token_error}")
+        ctypes.windll.user32.MessageBoxW(0,error_msg, "Error Message", 0)
     return access_token, new_refresh_token
     
 #Gets order list
