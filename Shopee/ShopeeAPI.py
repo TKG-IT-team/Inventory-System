@@ -69,14 +69,9 @@ def refresh_token_shop_level(refresh_token): #v2
     headers = { "Content-Type": "application/json"}
     resp = requests.post(url, json=body, headers=headers)
     ret = json.loads(resp.content)
-    try:
-        access_token = ret.get("access_token")
-        new_refresh_token = ret.get("refresh_token")
-    except TokenError as token_error:
-        error_msg = "Shopee API: Access token error! Please refer to developer guide to get a valid access token. "
-        print(error_msg)
-        logger.error(f"Shopee API: Token error! \n{token_error}")
-        ctypes.windll.user32.MessageBoxW(0,error_msg, "Error Message", 0)
+
+    access_token = ret.get("access_token")
+    new_refresh_token = ret.get("refresh_token")
     return access_token, new_refresh_token
     
 #Gets order list
@@ -154,10 +149,18 @@ def get_orders(last_date = 1577808000): # by deafult, from 2020-1-1 to now, step
     else:
         access_token, refresh_token = refresh_token_shop_level(refresh_token)
     print("Shopee:")
+
+    if isinstance(access_token, type(None)) or isinstance(refresh_token, type(None)):
+        critical_msg = f"Access Token is invalid. Please refer to the developer guide to get an valid access token."
+        print(critical_msg)
+        logger.critical(critical_msg) 
+        ctypes.windll.user32.MessageBoxW(0, f"Shopee API: {critical_msg}", "Error Message", 0)
     print("refresh token: " + refresh_token)
     print ("access_token: " + access_token)
     print("\n")
     config_tools.writeConfig(access_token, refresh_token)
+   
+    
     df = pd.DataFrame() #empty dataframe
     for i in range(last_date, int(datetime.timestamp(datetime.now())), 1296000): 
         str_order_list = get_order_list(access_token, i, i + 1296000)
@@ -209,7 +212,7 @@ def generate_new_order_df(lastDate, old_df=pd.DataFrame()): #lastDate in IS08601
         new_df = clean_df(new_df)
     return new_df
 
-#Returns a datafram of all uncensored customer information
+#Returns a dataframe of all uncensored customer information
 def generate_full_cust_df():
     default_qty = get_default_qty()
     orders, unmatched_products = generate_full_order_df(default_qty)

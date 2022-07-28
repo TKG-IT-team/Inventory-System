@@ -1,5 +1,6 @@
 from lazop_sdk import LazopClient, LazopRequest
 import Lazada.config_tools_lazada as config_tools
+import ctypes
 
 class Authorisation:
     def __init__(self):
@@ -36,6 +37,10 @@ class Authorisation:
         request.add_api_param("refresh_token", refresh_token)
         response = client.execute(request)
         # print(response.body)
+        if (not 'access_token' in response.body) or (not 'refresh_token' in response.body):
+            critical_msg = f"Access Token is invalid. Please refer to the developer guide to get an valid access token."
+            print(critical_msg)
+            ctypes.windll.user32.MessageBoxW(0, f"Lazada API: {critical_msg}", "Error Message", 0)  
         return response.body['access_token'], response.body['refresh_token']
 
 # #Generate URL
