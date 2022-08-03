@@ -8,9 +8,11 @@ from functions import logger
 import config_tools_data
 import sys
 
+SINCE_DATE = "18 July 2022"
+
 def get_since_date():
-    dictPath = config_tools_data.readConfig()
-    since_date = dictPath["SinceDate"]
+    #dictPath = config_tools_data.readConfig()
+    since_date = SINCE_DATE  #dictPath["SinceDate"]
 
     try:
         if len(since_date) != 0:
