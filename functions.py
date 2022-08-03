@@ -90,9 +90,9 @@ def get_default_qty():
 #Returns the default path for setting
 def get_default_path():
     
-    dictPath = config_tools_data.readConfig()
+    #dictPath = config_tools_data.readConfig()
    
-    COMBINED_DATA = dictPath["CombinedDataFilePath"]
+    #COMBINED_DATA = dictPath["CombinedDataFilePath"]
     return COMBINED_DATA
 
 #Generate quantity table based on the product dictionary
